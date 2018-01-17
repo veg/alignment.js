@@ -1,0 +1,32 @@
+{
+  "name": "react-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "3",
+    "d3": "^4.12.2",
+    "react": "^16.2.0",
+    "react-bootstrap": "^0.32.0",
+    "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.9",
+    "file-loader": "^1.1.6",
+    "html-webpack-plugin": "^2.30.1",
+    "npx": "^9.7.1",
+    "style-loader": "^0.19.1",
+    "uglifyjs-webpack-plugin": "^1.1.4",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.9.7",
+    "webpack-merge": "^4.1.1"
+  },
+  "scripts": {
+    "start": "npx webpack-dev-server --open --config webpack.dev.js",
+    "build": "npx webpack --config webpack.prod.js"
+  }
+}
