@@ -7,15 +7,23 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 const d3 = require('d3');
 
+import Alignment from './alignment';
+
+
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = { fasta: null };
+  }
   handleSequenceMenuSelection(key){
     console.log("I will handle the selection!", key);
+  }
+  componentDidMount(){
     d3.text('fasta/CD2.fasta', (error, data) => {
-      console.log(data);
+      this.setState({fasta: data});
     });
   }
   render(){
-    console.log(d3.version);
     return(<div>
       <Navbar onSelect={this.handleSequenceMenuSelection}>
         <Navbar.Header>
@@ -30,6 +38,7 @@ class App extends Component {
           </NavDropdown>
         </Nav>
       </Navbar>
+      <Alignment fasta={this.state.fasta}/>
     </div>);
   }
 }
