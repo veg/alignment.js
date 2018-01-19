@@ -74,8 +74,14 @@ class App extends Component {
             <MenuItem onClick={()=>this.handleExport()}>Export</MenuItem>
           </NavDropdown>
           <NavDropdown title="Examples" id="examples">
-            <MenuItem onClick={()=>this.loadData('CD2')}>CD2</MenuItem>
-            <MenuItem onClick={()=>this.loadData('CVF')}>CVF</MenuItem>
+            {['CD2', 'CVF', 'Flu'].map(name => {
+              return (<MenuItem
+                key={name}
+                onClick={()=>this.loadData(name)}
+              >
+                {name}
+              </MenuItem>);
+            })}
           </NavDropdown>
         </Nav>
       </Navbar>
@@ -94,8 +100,9 @@ class App extends Component {
               type="text"
               id="input_textarea"
               defaultValue={modal_value}
-              cols={75}
+              cols={60}
               rows={25}
+              style={{fontFamily: "Courier"}}
             />
           </Modal.Body>
 

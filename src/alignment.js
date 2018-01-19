@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 const d3 = require('d3');
-const Fasta = require('biojs-io-fasta');
+
+import fastaParser from './fasta';
 
 
 class Alignment extends Component {
   renderAlignment(){
-    var sequences = Fasta.parse(this.props.fasta);
-
+    var sequences = fastaParser(this.props.fasta);
     var margin = {top: 20, right: 10, bottom: 20, left: 10},
         number_of_characters = sequences[0].seq.length,
         number_of_sequences = sequences.length,
