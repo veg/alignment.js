@@ -6,7 +6,7 @@ const Fasta = require('biojs-io-fasta');
 class Alignment extends Component {
   renderAlignment(){
     var sequences = Fasta.parse(this.props.fasta);
-    console.log(sequences);
+
     var margin = {top: 20, right: 10, bottom: 20, left: 10},
         number_of_characters = sequences[0].seq.length,
         number_of_sequences = sequences.length,
@@ -75,8 +75,14 @@ class Alignment extends Component {
       }
     }
   }
+  componentDidMount(){
+    if(this.props.fasta){
+      this.renderAlignment();
+    }
+  }
   componentDidUpdate(){
     if(this.props.fasta){
+      document.getElementById('alignment').innerHTML = '';
       this.renderAlignment();
     }
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem
+  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem,
 } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -15,8 +15,17 @@ class App extends Component {
     super(props);
     this.state = { fasta: null };
   }
-  handleSequenceMenuSelection(key){
-    console.log("I will handle the selection!", key);
+  handleFileChange(e){
+    const files = e.target.files;
+    if (files.length == 1) {
+      const file = files[0],
+        reader = new FileReader();
+      reader.onload = e => {
+        this.setState({fasta: e.target.result});
+      }
+      reader.readAsText(file);
+      document.getElementById('sequences').click();
+    }
   }
   componentDidMount(){
     d3.text('fasta/CD2.fasta', (error, data) => {
@@ -25,16 +34,24 @@ class App extends Component {
   }
   render(){
     return(<div>
-      <Navbar onSelect={this.handleSequenceMenuSelection}>
+      <Navbar>
         <Navbar.Header>
           <Navbar.Brand>Javascript Alignment Viewer</Navbar.Brand>
         </Navbar.Header>
         <Nav>
           <NavDropdown title="Sequences" id="sequences">
-            <MenuItem eventKey='load'>Load file</MenuItem>
-            <MenuItem eventKey='paste'>Paste text</MenuItem>
+            <MenuItem eventKey='paste'>Input text</MenuItem>
+            <li role="presentation">
+              <a role="menuitem">
+                <input type='file' onChange={event=>this.handleFileChange(event)}/>
+              </a>
+            </li>
             <MenuItem divider />
             <MenuItem eventKey='export'>Export</MenuItem>
+          </NavDropdown>
+          <NavDropdown title="Examples" id="examples">
+            <MenuItem eventKey='cd2'>CD2</MenuItem>
+            <MenuItem eventKey='flu'>Flu</MenuItem>
           </NavDropdown>
         </Nav>
       </Navbar>
