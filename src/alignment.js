@@ -80,6 +80,9 @@ class Alignment extends Component {
       this.renderAlignment();
     }
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.fasta.slice(0, 100) != nextProps.fasta.slice(0, 100);
+  }
   componentDidUpdate(){
     if(this.props.fasta){
       document.getElementById('alignment').innerHTML = '';

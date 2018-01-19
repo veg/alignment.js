@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem,
+  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem, Modal, Button
 } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -10,10 +10,15 @@ const d3 = require('d3');
 import Alignment from './alignment';
 
 
+
+
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = { fasta: null };
+    this.state = { fasta: '', modal: null };
+  }
+  componentDidMount(){
+    this.loadData('CD2');
   }
   handleFileChange(e){
     const files = e.target.files;
@@ -27,12 +32,31 @@ class App extends Component {
       document.getElementById('sequences').click();
     }
   }
-  componentDidMount(){
-    d3.text('fasta/CD2.fasta', (error, data) => {
+  handleTextInput(){
+    this.setState({modal: 'input'});
+  }
+  handleExport(){
+    this.setState({modal: 'export'});
+  }
+  handleModalClose(){
+    this.setState({modal: null});
+  }
+  handleTextUpdate(){
+    this.setState({
+      modal: null,
+      fasta: document.getElementById("input_textarea").value
+    });
+  }
+  loadData(dataset){
+    d3.text(`fasta/${dataset}.fasta`, (error, data) => {
       this.setState({fasta: data});
     });
   }
   render(){
+    const modal_title = this.state.modal == 'input'
+      ? 'Paste sequence data' 
+      : 'Export sequence data',
+      modal_value = this.state.modal == 'input' ? null : this.state.fasta;
     return(<div>
       <Navbar>
         <Navbar.Header>
@@ -40,22 +64,57 @@ class App extends Component {
         </Navbar.Header>
         <Nav>
           <NavDropdown title="Sequences" id="sequences">
-            <MenuItem eventKey='paste'>Input text</MenuItem>
+            <MenuItem onClick={()=>this.handleTextInput()}>Input text</MenuItem>
             <li role="presentation">
               <a role="menuitem">
                 <input type='file' onChange={event=>this.handleFileChange(event)}/>
               </a>
             </li>
             <MenuItem divider />
-            <MenuItem eventKey='export'>Export</MenuItem>
+            <MenuItem onClick={()=>this.handleExport()}>Export</MenuItem>
           </NavDropdown>
           <NavDropdown title="Examples" id="examples">
-            <MenuItem eventKey='cd2'>CD2</MenuItem>
-            <MenuItem eventKey='flu'>Flu</MenuItem>
+            <MenuItem onClick={()=>this.loadData('CD2')}>CD2</MenuItem>
+            <MenuItem onClick={()=>this.loadData('CVF')}>CVF</MenuItem>
           </NavDropdown>
         </Nav>
       </Navbar>
-      <Alignment fasta={this.state.fasta}/>
+     
+      <div>
+        <Modal
+          show={Boolean(this.state.modal)}
+          onHide={()=>this.handleModalClose()}
+        >
+          <Modal.Header>
+            <Modal.Title>{modal_title}</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <textarea
+              type="text"
+              id="input_textarea"
+              defaultValue={modal_value}
+              cols={75}
+              rows={25}
+            />
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button onClick={()=>this.handleModalClose()}>Close</Button>
+            {this.state.modal == 'input' ? 
+              <Button
+                bsStyle="primary"
+                onClick={()=>this.handleTextUpdate()}
+              >
+                Save changes
+              </Button>
+            : null }
+          </Modal.Footer>
+        </Modal>
+      </div>
+      
+      <Alignment fasta={this.state.fasta} />
+
     </div>);
   }
 }
