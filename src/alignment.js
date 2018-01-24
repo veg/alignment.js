@@ -23,14 +23,14 @@ class Alignment extends Component {
           "-": 'lightgrey'
         }
     
-    var svg = d3.select('#alignment')
+    var alignment_svg = d3.select('#alignment')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom);
     
-    var labels = svg.append('g')
+    var labels = alignment_svg.append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     
-    var character_group = svg.append('g')
+    var character_group = alignment_svg.append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     
     var site_scale = d3.scaleLinear()
@@ -49,13 +49,13 @@ class Alignment extends Component {
       .scale(axis_scale)
       .tickValues(d3.range(1, number_of_sites, 2));
    
-    svg.append('g')
+    alignment_svg.append('g')
       .attr('class', 'axis')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
       .call(axis);
     
     var character_gs = character_group.selectAll('g')
-      .data(alignment_data)
+      .data(alignment_data.filter(d=>d.i<100 && d.j < 100))
       .enter()
       .append('g')
         .attr('transform', d => {
@@ -78,6 +78,28 @@ class Alignment extends Component {
       .attr('dy', '.25em')
       .text(d=>d.char);
 
+    var labels_svg = d3.select('#labels')
+      .attr('height', height + margin.top + margin.bottom);
+
+    var labels_g = labels_svg.append('g')
+        .attr('transform', 'translate(0,' + margin.top + ')');
+
+    var labels = labels_g.selectAll('text')
+      .data(names)
+      .enter()
+      .append('text')
+        .attr('y', (d,i) => (i+1)*site_size)
+        .attr('text-anchor', 'end')
+        .attr('dy', -site_size/3)
+        .text(d=>d);
+
+    var max_label_width = 0;
+    labels.each(function(d) { 
+      max_label_width = Math.max(max_label_width, this.getComputedTextLength());
+    });
+
+    labels_svg.attr('width', max_label_width+5);
+    labels.attr('x', max_label_width);
   }
   componentDidMount(){
     if(this.props.fasta){
@@ -90,12 +112,18 @@ class Alignment extends Component {
   componentDidUpdate(){
     if(this.props.fasta){
       document.getElementById('alignment').innerHTML = '';
+      document.getElementById('labels').innerHTML = '';
       this.renderAlignment();
     }
   }
   render(){
-    return (<div style={{width: "100%", overflowX: "scroll"}}>
-      <svg id="alignment"></svg>
+    return (<div style={{width: "100%", display: "flex", flexDirection: "row"}}>
+      <div style={{margin: 0, padding: 0}}>
+        <svg id="labels"></svg>
+      </div>
+      <div style={{overflowX: "scroll", margin: 0, padding: 0}}>
+        <svg id="alignment"></svg>
+      </div>
     </div>);
   }
 }
