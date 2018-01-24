@@ -7,20 +7,19 @@ import fastaParser from './fasta';
 class Alignment extends Component {
   renderAlignment(){
     var parsed = fastaParser(this.props.fasta),
-      {characters, names} = parsed;
+      {alignment_data, names} = parsed;
 
-    var margin = {top: 20, right: 10, bottom: 20, left: 10},
+    var margin = {top: 20, right: 0, bottom: 0, left: 0},
         number_of_sequences = names.length,
-        number_of_characters = characters.length/number_of_sequences,
-        character_size = 20,
-        labels_width = 200,
-        width = labels_width + number_of_characters*character_size - margin.left - margin.right,
-        height = number_of_sequences*character_size - margin.top - margin.bottom,
+        number_of_sites = alignment_data.length/number_of_sequences,
+        site_size = 20,
+        width = number_of_sites*site_size,
+        height = number_of_sequences*site_size,
         colors = {
-          A: 'red',
-          G: 'yellow',
-          T: 'blue',
-          C: 'purple',
+          A: 'LightPink',
+          G: 'LightYellow',
+          T: 'LightBlue',
+          C: 'MediumPurple',
           "-": 'lightgrey'
         }
     
@@ -32,69 +31,53 @@ class Alignment extends Component {
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     
     var character_group = svg.append('g')
-        .attr('transform', 'translate(' + (labels_width + margin.left) + ',' + margin.top + ')')
-        .style('width', '500px')
-        .style('overflow-x', 'scroll');
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     
     var site_scale = d3.scaleLinear()
-        .domain([0, number_of_characters])
-        .range([0, width-labels_width]);
+        .domain([1, number_of_sites])
+        .rangeRound([0, width]);
     
     var label_scale = d3.scaleLinear()
-        .domain([0, number_of_sequences])
+        .domain([1, number_of_sequences])
         .range([0, height]);
+
+    var axis_scale = d3.scaleLinear()
+      .domain([1, number_of_sites])
+      .range([site_size/2, width-site_size/2]);
     
     var axis = d3.axisTop()
-      .scale(site_scale)
-      .tickValues(d3.range(0, number_of_characters, 2));
-    
+      .scale(axis_scale)
+      .tickValues(d3.range(1, number_of_sites, 2));
+   
     svg.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(' + (margin.left+labels_width+site_scale(.5)) + ',' + margin.top + ')')
-      .call(axis)
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      .call(axis);
     
     var character_gs = character_group.selectAll('g')
-      .data(characters.filter(d=>d.j < 100))
+      .data(alignment_data)
       .enter()
       .append('g')
-        .attr('transform', d=>'translate(' + site_scale(d.j) + ',' + label_scale(d.i) + ')');
+        .attr('transform', d => {
+          const x = site_size*(d.j-1),
+            y = site_size*(d.i-1);
+          return 'translate(' + x + ',' + y + ')'
+        });
 
     character_gs.append('rect')
       .attr('x', 0)
       .attr('y', 0)
-      .attr('width', site_scale(1))
-      .attr('height', site_scale(1))
+      .attr('width', site_size)
+      .attr('height', site_size)
       .attr('fill', d=>colors[d.char] || 'red');
         
     character_gs.append('text')
-      .attr('transform', 'translate(' + site_scale(.5) + ',' + site_scale(.5) + ')')
+      .attr('x', site_size/2)
+      .attr('y', site_size/2)
       .attr('text-anchor', 'middle')
       .attr('dy', '.25em')
       .text(d=>d.char);
 
-//    for(var i=0; i < number_of_sequences; i++){
-//      labels.append('text')
-//        .attr('transform', 'translate(0,' + label_scale(i+.75) + ')')
-//        .text(sequences[i].name);
-//      for(var j=0; j < number_of_characters; j++){
-//        var g_character = characters.append("g")
-//          .attr('transform', 'translate(' + site_scale(j) + ',' + label_scale(i) + ')');
-//        var character = sequences[i].seq[j];
-//         
-//        g_character.append('rect')
-//          .attr('x', 0)
-//          .attr('y', 0)
-//          .attr('width', site_scale(1))
-//          .attr('height', site_scale(1))
-//          .attr('fill', colors[character] || 'red')
-//        
-//        g_character.append('text')
-//          .attr('transform', 'translate(' + site_scale(.5) + ',' + site_scale(.5) + ')')
-//          .attr('text-anchor', 'middle')
-//          .attr('dy', '.25em')
-//          .text(character)
-//      }
-//    }
   }
   componentDidMount(){
     if(this.props.fasta){
@@ -111,10 +94,7 @@ class Alignment extends Component {
     }
   }
   render(){
-    return (<div 
-        style={{width: "100%", "overflowX": "scroll"}}
-        onScroll={(e)=>console.log('scrolling that div', e)}
-      >
+    return (<div style={{width: "100%", overflowX: "scroll"}}>
       <svg id="alignment"></svg>
     </div>);
   }

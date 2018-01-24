@@ -74,7 +74,7 @@ class App extends Component {
             <MenuItem onClick={()=>this.handleExport()}>Export</MenuItem>
           </NavDropdown>
           <NavDropdown title="Examples" id="examples">
-            {['CD2', 'CVF', 'Flu'].map(name => {
+            {['CD2', 'CVF', 'Flu', 'Simple'].map(name => {
               return (<MenuItem
                 key={name}
                 onClick={()=>this.loadData(name)}
