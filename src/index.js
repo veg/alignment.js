@@ -8,8 +8,7 @@ import 'bootstrap/dist/css/bootstrap-theme.css';
 const d3 = require('d3');
 
 import Alignment from './alignment';
-
-
+require('./jav.css');
 
 
 class App extends Component {
@@ -18,7 +17,7 @@ class App extends Component {
     this.state = { fasta: '', modal: null };
   }
   componentDidMount(){
-    this.loadData('CD2');
+    this.loadData('H3Trunk');
   }
   handleFileChange(e){
     const files = e.target.files;
@@ -58,7 +57,7 @@ class App extends Component {
       : 'Export sequence data',
       modal_value = this.state.modal == 'input' ? null : this.state.fasta;
     return(<div>
-      <Navbar>
+      <Navbar className="navbar-fixed-top">
         <Navbar.Header>
           <Navbar.Brand>Javascript Alignment Viewer</Navbar.Brand>
         </Navbar.Header>
@@ -74,7 +73,7 @@ class App extends Component {
             <MenuItem onClick={()=>this.handleExport()}>Export</MenuItem>
           </NavDropdown>
           <NavDropdown title="Examples" id="examples">
-            {['CD2', 'CVF', 'Flu', 'Simple'].map(name => {
+            {['CD2', 'CVF', 'Flu', 'Simple', 'H3trunk'].map(name => {
               return (<MenuItem
                 key={name}
                 onClick={()=>this.loadData(name)}
@@ -120,7 +119,7 @@ class App extends Component {
         </Modal>
       </div>
       
-      <Alignment fasta={this.state.fasta} />
+      <Alignment width={800} height={600} fasta={this.state.fasta} />
 
     </div>);
   }
