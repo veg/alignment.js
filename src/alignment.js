@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 const d3 = require('d3');
+const _ = require('underscore');
 
 import fastaParser from './fasta';
 
@@ -42,12 +43,18 @@ class Alignment extends Component {
       "-": 'lightgrey'
     };
 
-    if(!this.alignment_data){
-      var parsed = fastaParser(this.props.fasta),
-        {alignment_data, names} = parsed;
-      this.alignment_data = alignment_data;
-      this.names = names;
+    if(!this.seqs){
+      var seqs = fastaParser(this.props.fasta);
     }
+
+    const munged_seqs = _.flatten(
+      seqs.slice(this.state.i, this.state.i+50)
+        .map((row, i) => {
+          return row.seq.slice(this.state.j, this.state.j+50)
+            .split('')
+            .map((mol, j) => {return {mol: mol, i: i, j: j};});
+        })
+    );
 
     return (<div>
       <div>
@@ -68,15 +75,11 @@ class Alignment extends Component {
               val = d+this.state.j%2;
             return <text x={20*x+200+10} y={10} textAnchor='middle'>{val}</text>;
           })}
-          {this.alignment_data.filter(d => {
-            const in_i = this.state.i < d.i && d.i < this.state.i+50,
-              in_j = this.state.j < d.j && d.j < this.state.j+50;
-            return in_i && in_j;
-          }).map(d => {
-            return (<g transform={`translate(${200+20*(d.j-1-this.state.j)},${20*(d.i-this.state.i)})`}>
-              <rect x={0} y={0} width={20} height={20} fill={colors[d.char] || 'red'} />
+          {munged_seqs.map(d => {
+            return (<g transform={`translate(${200+20*d.j},${20*(d.i+1)})`}>
+              <rect x={0} y={0} width={20} height={20} fill={colors[d.mol] || 'red'} />
               <text x={10} y={10} textAnchor='middle' dy='.25em'>
-                {d.char}
+                {d.mol}
               </text>
             </g>);
           }) 
