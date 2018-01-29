@@ -17,7 +17,7 @@ class App extends Component {
     this.state = { fasta: '', modal: null };
   }
   componentDidMount(){
-    this.loadData('CD2');
+    this.loadData('Flu');
   }
   handleFileChange(e){
     const files = e.target.files;
@@ -73,7 +73,7 @@ class App extends Component {
             <MenuItem onClick={()=>this.handleExport()}>Export</MenuItem>
           </NavDropdown>
           <NavDropdown title="Examples" id="examples">
-            {['CD2', 'CVF', 'Flu', 'Simple', 'H3trunk'].map(name => {
+            {['CD2', 'CVF', 'Flu', 'Simple', 'H3trunk', 'H3Full'].map(name => {
               return (<MenuItem
                 key={name}
                 onClick={()=>this.loadData(name)}
