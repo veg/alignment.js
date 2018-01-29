@@ -17,7 +17,7 @@ class App extends Component {
     this.state = { fasta: '', modal: null };
   }
   componentDidMount(){
-    this.loadData('H3full');
+    this.loadData('CD2');
   }
   handleFileChange(e){
     const files = e.target.files;
@@ -119,7 +119,7 @@ class App extends Component {
         </Modal>
       </div>
       
-      <Alignment width={1200} height={600} fasta={this.state.fasta} />
+      <Alignment fasta={this.state.fasta} />
 
     </div>);
   }
