@@ -78,7 +78,7 @@ class Alignment extends Component {
               {d}
             </text>);
           })}
-          {d3.range(this.state.j+1, this.state.j+this.props.width_in_characters-this.state.j%2+1, 2).map((d,i) => {
+          {d3.range(this.state.j+1, Math.min(this.state.j+this.props.width_in_characters-this.state.j%2+1, this.state.number_of_sites), 2).map((d,i) => {
             const x = 2*i+this.state.j%2,
               val = d+this.state.j%2;
             return <text
