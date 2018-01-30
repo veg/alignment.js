@@ -47,7 +47,7 @@ const examples = {
       centerOnHeader: 'CY010004'
     }
   },
-  H3Full: {
+  H3full: {
     purpose: "Display a large alignment.",
   }
 };
