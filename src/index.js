@@ -10,6 +10,16 @@ const d3 = require('d3');
 import Alignment from './alignment';
 require('./jav.css');
 
+const colors = {
+    A: 'LightPink',
+    G: 'LightYellow',
+    T: 'LightBlue',
+    C: 'MediumPurple',
+    "-": 'lightgrey'
+  },
+  nucleotide_color = (character, position, header) => {
+    return colors[character];
+  };
 
 class App extends Component {
   constructor(props){
@@ -56,6 +66,12 @@ class App extends Component {
       ? 'Paste sequence data' 
       : 'Export sequence data',
       modal_value = this.state.modal == 'input' ? null : this.state.fasta;
+
+    const color = (character, position, header) => {
+      if(header=='DUCK_VIETNAM_272_2005' && Math.floor(position/3) == 5) return 'red';
+      return colors[character];
+    };
+
     return(<div>
       <Navbar className="navbar-fixed-top">
         <Navbar.Header>
@@ -119,7 +135,10 @@ class App extends Component {
         </Modal>
       </div>
       
-      <Alignment fasta={this.state.fasta} />
+      <Alignment
+        fasta={this.state.fasta}
+        color={color}
+      />
 
     </div>);
   }

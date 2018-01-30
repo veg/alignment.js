@@ -12,14 +12,22 @@ class Alignment extends Component {
   }
   componentWillReceiveProps(nextProps){
     const fasta = fastaParser(nextProps.fasta),
+      number_of_sequences = fasta.length,
+      number_of_sites = fasta[0].seq.length,
+      headers = fasta.map(d=>d.header),
+      inverse_header_map = _.object(headers, _.range(number_of_sequences)),
       label_width = this.props.label_padding + 8.4 * fasta.map(d=>d.header.length)
         .reduce((a,b)=>Math.max(a,b));
 
     this.setState({
       fasta: fasta,
+      number_of_sequences: number_of_sequences,
+      number_of_sites: number_of_sites,
+      headers: headers,
+      inverse_header_map: inverse_header_map,
       label_width: label_width,
-      i: 0,
-      j: 0
+      i: nextProps.i || 0,
+      j: nextProps.j || 0
     });
   }
   handleWheel(e){
@@ -52,24 +60,24 @@ class Alignment extends Component {
 
     const svg_width = this.state.label_width + this.props.character_size * this.props.width_in_characters,
       svg_height = this.props.character_size*(this.props.height_in_characters+1);
-    console.log(this.state.i, this.state.j);
+
     return (<div>
 
       <div onWheel={e=>this.handleWheel(e)}>
-        <svg id="alignment" width={svg_width} height={svg_height}>
-          {this.state.fasta.slice(this.state.i, this.state.i+this.props.height_in_characters)
+        <svg id="alignment" width={svg_width} height={svg_height} style={{margin: 20}}>
+          {this.state.headers.slice(this.state.i, this.state.i+this.props.height_in_characters)
             .map((d,i) => {
-              return (<text
-                x={this.state.label_width-this.props.label_padding}
-                y={this.props.character_size*(i+1.5)}
-                textAnchor='end'
-                className='seq-label'
-                key={i}
-                dominantBaseline='middle'
-              >
-                {d.header}
-              </text>);
-            })}
+            return (<text
+              x={this.state.label_width-this.props.label_padding}
+              y={this.props.character_size*(i+1.5)}
+              textAnchor='end'
+              className='seq-label'
+              key={i}
+              dominantBaseline='middle'
+            >
+              {d}
+            </text>);
+          })}
           {d3.range(this.state.j+1, this.state.j+this.props.width_in_characters-this.state.j%2+1, 2).map((d,i) => {
             const x = 2*i+this.state.j%2,
               val = d+this.state.j%2;
@@ -84,7 +92,12 @@ class Alignment extends Component {
           })}
           {munged_seqs.map(d => {
             const x = this.state.label_width+this.props.character_size*d.j,
-              y = this.props.character_size*(d.i+1);
+              y = this.props.character_size*(d.i+1),
+              fill = this.props.color(
+                d.mol,
+                d.j+this.state.j,
+                this.state.headers[d.i+this.state.i]
+              );
             return (<g
               transform={`translate(${x},${y})`}
               key={`${d.i}-${d.j}`}
@@ -94,7 +107,7 @@ class Alignment extends Component {
                 y={0}
                 width={this.props.character_size}
                 height={this.props.character_size}
-                fill={this.props.color(d)}
+                fill={fill}
               />
               <text
                 x={this.props.character_size/2}
