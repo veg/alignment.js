@@ -3,6 +3,10 @@ const d3 = require('d3');
 const _ = require('underscore');
 
 import fastaParser from './fasta';
+import { 
+  nucleotide_color,
+  nucleotide_text_color
+} from './colors';
 
 
 class Alignment extends Component {
@@ -146,26 +150,8 @@ class Alignment extends Component {
 }
 
 Alignment.defaultProps = {
-  site_color: (character, position, header) => {
-    var colors = {
-      A: 'LightPink',
-      G: 'LightYellow',
-      T: 'LightBlue',
-      C: 'MediumPurple',
-      "-": 'lightgrey'
-    };
-    return colors[character] || 'red';
-  },
-  text_color: (character, position, header) => {
-    var colors = {
-      A: 'Red',
-      G: 'GoldenRod',
-      T: 'Blue',
-      C: 'DarkMagenta',
-      "-": 'DarkGrey'
-    };
-    return colors[character] || 'red';
-  },
+  site_color: nucleotide_color,
+  text_color: nucleotide_text_color,
   character_size: 20,
   width_in_characters: 50,
   height_in_characters: 20,
