@@ -1,7 +1,7 @@
 {
   "name": "jav",
-  "version": "1.0.1",
-  "main": "src/alignment.js",
+  "version": "1.0.2",
+  "main": "dist/jav.js",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "3",
@@ -15,6 +15,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.9",
     "file-loader": "^1.1.6",
@@ -28,6 +29,7 @@
   },
   "scripts": {
     "start": "npx webpack-dev-server --open --config webpack.dev.js",
-    "build": "npx webpack --config webpack.prod.js"
+    "build-app": "npx webpack --config webpack.prod.js",
+    "build-lib": "npx webpack --config webpack.lib.js"
   }
 }
