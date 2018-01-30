@@ -8,26 +8,39 @@ import fastaParser from './fasta';
 class Alignment extends Component {
   constructor(props){
     super(props);
-    this.state = { i: 0, j: 0 };
+    this.state = {
+      i: props.i || 0,
+      j: props.j || 0
+    };
   }
   componentWillReceiveProps(nextProps){
     const fasta = fastaParser(nextProps.fasta),
       number_of_sequences = fasta.length,
       number_of_sites = fasta[0].seq.length,
       headers = fasta.map(d=>d.header),
-      inverse_header_map = _.object(headers, _.range(number_of_sequences)),
       label_width = this.props.label_padding + 8.4 * fasta.map(d=>d.header.length)
         .reduce((a,b)=>Math.max(a,b));
+
+    if(nextProps.centerOnHeader){
+      var i = Math.floor(headers.indexOf(nextProps.centerOnHeader)-nextProps.height_in_characters/2);
+    } else {
+      var i = nextProps.i || 0;
+    }
+
+    if(nextProps.centerOnSite){
+      var j = Math.floor(nextProps.centerOnSite-nextProps.width_in_characters/2);
+    } else {
+      var j = nextProps.j || 0;
+    }
 
     this.setState({
       fasta: fasta,
       number_of_sequences: number_of_sequences,
       number_of_sites: number_of_sites,
       headers: headers,
-      inverse_header_map: inverse_header_map,
       label_width: label_width,
-      i: nextProps.i || 0,
-      j: nextProps.j || 0
+      i: i,
+      j: j
     });
   }
   handleWheel(e){
@@ -93,7 +106,7 @@ class Alignment extends Component {
           {munged_seqs.map(d => {
             const x = this.state.label_width+this.props.character_size*d.j,
               y = this.props.character_size*(d.i+1),
-              fill = this.props.color(
+              fill = this.props.site_color(
                 d.mol,
                 d.j+this.state.j,
                 this.state.headers[d.i+this.state.i]
@@ -133,7 +146,7 @@ class Alignment extends Component {
 }
 
 Alignment.defaultProps = {
-  color: d => {
+  site_color: (character, position, header) => {
     var colors = {
       A: 'LightPink',
       G: 'LightYellow',
@@ -141,7 +154,17 @@ Alignment.defaultProps = {
       C: 'MediumPurple',
       "-": 'lightgrey'
     };
-    return colors[d.mol] || 'red';
+    return colors[character] || 'red';
+  },
+  text_color: (character, position, header) => {
+    var colors = {
+      A: 'Red',
+      G: 'GoldenRod',
+      T: 'Blue',
+      C: 'DarkMagenta',
+      "-": 'DarkGrey'
+    };
+    return colors[character] || 'red';
   },
   character_size: 20,
   width_in_characters: 50,

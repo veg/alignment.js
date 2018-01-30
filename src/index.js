@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { 
-  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem, Modal, Button
+  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem, Modal, Button, Grid, Row, Col
 } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -69,19 +69,62 @@ const colors = {
   };
 
 const examples = {
-  CD2: {site: nucleotide_color, text: nucleotide_text_color},
-  CD2_AA: {site: amino_acid_color, text: amino_acid_text_color},
-  CVF: {site: nucleotide_color, text: nucleotide_text_color},
-  Flu: {site: highlight_codon_color, text: highlight_codon_text_color}, 
-  Simple: {site: nucleotide_color, text: nucleotide_text_color},
-  H3trunk: {site: nucleotide_color, text: nucleotide_text_color},
-  H3Full: {site: nucleotide_color, text: nucleotide_text_color}
+  loading: {},
+  CD2: {
+    purpose: "Display a nucleotide alignment.",
+    props: {
+      site_color: nucleotide_color,
+      text_color: nucleotide_text_color
+    }
+  },
+  CD2_AA: {
+    purpose: "Display an amino acid alignment.",
+    props: {
+      site_color: amino_acid_color,
+      text_color: amino_acid_text_color
+    }
+  },
+  Flu: {
+    purpose: "Highlight an individual site in an alignment.",
+    props: {
+      site_color: highlight_codon_color,
+      text_color: highlight_codon_text_color,
+      width_in_characters: 30
+    }
+  },
+  Simple: {
+    purpose: "Display a very small alignment.",
+    props: {
+      site_color: nucleotide_color,
+      text_color: nucleotide_text_color
+    }
+  },
+  H3trunk: {
+    purpose: "Begin centered on a given sequence (CY010004) and site (100).",
+    props: {
+      site_color: nucleotide_color,
+      text_color: nucleotide_text_color,
+      centerOnSite: 100,
+      centerOnHeader: 'CY010004'
+    }
+  },
+  H3Full: {
+    purpose: "Display a large alignment.",
+    props: {
+      site_color: nucleotide_color,
+      text_color: nucleotide_text_color
+    }
+  }
 };
 
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = { fasta: '', modal: null };
+    this.state = {
+      fasta: '',
+      modal: null,
+      dataset: 'loading'
+    };
   }
   componentDidMount(){
     this.loadData('CD2');
@@ -143,7 +186,9 @@ class App extends Component {
             <MenuItem onClick={()=>this.handleExport()}>Export</MenuItem>
           </NavDropdown>
           <NavDropdown title="Examples" id="examples">
-            {_.keys(examples).map(name => {
+            {_.keys(examples)
+              .slice(1)
+              .map(name => {
               return (<MenuItem
                 key={name}
                 onClick={()=>this.loadData(name)}
@@ -188,13 +233,20 @@ class App extends Component {
           </Modal.Footer>
         </Modal>
       </div>
-      
-      <Alignment
-        fasta={this.state.fasta}
-        color={this.state.dataset && examples[this.state.dataset].site}
-        text_color={this.state.dataset && examples[this.state.dataset].text}
-      />
-
+     
+      <Grid>
+        <Row>
+          <Col xs={12}>
+            <h4>{examples[this.state.dataset].purpose}</h4>
+          </Col>
+          <Col xs={12}>
+            <Alignment
+              fasta={this.state.fasta}
+              {...examples[this.state.dataset].props}
+            />
+          </Col>
+        </Row>
+      </Grid>
     </div>);
   }
 }
