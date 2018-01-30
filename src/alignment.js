@@ -97,6 +97,11 @@ class Alignment extends Component {
                 d.mol,
                 d.j+this.state.j,
                 this.state.headers[d.i+this.state.i]
+              ),
+              text_fill = this.props.text_color(
+                d.mol,
+                d.j+this.state.j,
+                this.state.headers[d.i+this.state.i]
               );
             return (<g
               transform={`translate(${x},${y})`}
@@ -114,6 +119,7 @@ class Alignment extends Component {
                 y={this.props.character_size/2}
                 textAnchor='middle'
                 dy='.25em'
+                fill={text_fill}
               >
                 {d.mol}
               </text>
