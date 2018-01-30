@@ -1,7 +1,7 @@
 {
-  "name": "react-template",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "jav",
+  "version": "1.0.1",
+  "main": "src/alignment.js",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "3",

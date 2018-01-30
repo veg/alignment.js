@@ -1,2 +1,9 @@
 node_modules
 .DS_Store
+
+index.html
+bundle.js
+*.woff*
+*.svg
+*.ttf
+*.eot
