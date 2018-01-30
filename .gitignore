@@ -3,6 +3,7 @@ node_modules
 
 index.html
 bundle.js
+jav.js
 *.woff*
 *.svg
 *.ttf
