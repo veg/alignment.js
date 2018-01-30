@@ -58,8 +58,8 @@ class Alignment extends Component {
         })
     );
 
-    const svg_width = this.state.label_width + this.props.character_size * this.props.width_in_characters,
-      svg_height = this.props.character_size*(this.props.height_in_characters+1);
+    const svg_width = this.state.label_width + this.props.character_size * Math.min(this.props.width_in_characters, this.state.number_of_sites),
+      svg_height = this.props.character_size*(Math.min(this.props.height_in_characters, this.state.number_of_sequences)+1);
 
     return (<div>
 
