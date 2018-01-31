@@ -37,6 +37,9 @@ const examples = {
       width_in_characters: 30
     }
   },
+  CVF: {
+    purpose: "Display an alignment with lower case letters."
+  },
   Simple: {
     purpose: "Display a very small alignment.",
   },
