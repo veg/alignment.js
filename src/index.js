@@ -17,7 +17,7 @@ class App extends Component {
     this.state = { fasta: '', modal: null };
   }
   componentDidMount(){
-    this.loadData('H3Trunk');
+    this.loadData('CD2');
   }
   handleFileChange(e){
     const files = e.target.files;

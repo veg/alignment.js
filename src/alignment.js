@@ -14,7 +14,7 @@ class Alignment extends Component {
       axis_height = 20,
       number_of_sequences = names.length,
       number_of_sites = alignment_data.length/number_of_sequences,
-      site_size = 20,
+      site_size = 16,
       alignment_width = number_of_sites*site_size,
       height = number_of_sequences*site_size,
       colors = {
@@ -25,13 +25,11 @@ class Alignment extends Component {
         "-": 'lightgrey'
       }
     
-    var alignment_svg = d3.select('#alignment')
+    var alignment_canvas = d3.select('#alignment')
         .attr('width', alignment_width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom);
+    var context = alignment_canvas.node().getContext("2d");
 
-    var character_group = alignment_svg.append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-    
     var site_scale = d3.scaleLinear()
         .domain([1, number_of_sites])
         .rangeRound([0, alignment_width]);
@@ -44,30 +42,6 @@ class Alignment extends Component {
       .domain([1, number_of_sites])
       .range([site_size/2, alignment_width-site_size/2]);
     
-    var character_gs = character_group.selectAll('g')
-      .data(alignment_data.filter(d=>d.i<100 && d.j < 100))
-      .enter()
-      .append('g')
-        .attr('transform', d => {
-          const x = site_size*(d.j-1),
-            y = site_size*(d.i-1);
-          return 'translate(' + x + ',' + y + ')';
-        });
-
-    character_gs.append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', site_size)
-      .attr('height', site_size)
-      .attr('fill', d=>colors[d.char] || 'red');
-        
-    character_gs.append('text')
-      .attr('x', site_size/2)
-      .attr('y', site_size/2)
-      .attr('text-anchor', 'middle')
-      .attr('dy', '.25em')
-      .text(d=>d.char);
-
     var labels_svg = d3.select('#labels')
       .attr('height', height + margin.top + margin.bottom);
 
@@ -124,6 +98,25 @@ class Alignment extends Component {
       .style("width", (this.props.width-label_width)+"px")
       .style("height", (this.props.height-axis_height)+"px");
 
+    context.fillStyle = "#fff";
+    context.rect(0,0,alignment_canvas.attr("width"),alignment_canvas.attr("height"));
+    context.font = "12px Courier";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fill();
+    
+    // select our dummy nodes and draw the data to canvas.
+    alignment_data.forEach(function(d) {
+      const x = site_size*(d.j-1),
+        y = site_size*(d.i-1);
+      context.beginPath();
+      context.fillStyle = colors[d.char];
+      context.rect(x, y, site_size, site_size);
+      context.fill();
+      context.fillStyle = "black";
+      context.fillText(d.char, x+site_size/2, y+site_size/2);
+      context.closePath();
+    });
   }
   componentDidMount(){
     if(this.props.fasta){
@@ -158,7 +151,7 @@ class Alignment extends Component {
         <svg id="labels"></svg>
       </div>
       <div id="alignment-div" className="jav-container" style={{overflow: "scroll"}}>
-        <svg id="alignment"></svg>
+        <canvas id="alignment"></canvas>
       </div>
     </div>);
   }
