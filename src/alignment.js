@@ -7,29 +7,14 @@ import fastaParser from './fasta';
 
 class Alignment extends Component {
   renderAlignment(){
-    var parsed = fastaParser(this.props.fasta),
-      {alignment_data, names} = parsed;
-
-    var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    var { alignment_data, names, site_size } = this,
+      margin = {top: 0, right: 0, bottom: 0, left: 0},
       axis_height = 20,
       number_of_sequences = names.length,
       number_of_sites = alignment_data.length/number_of_sequences,
-      site_size = 16,
-      alignment_width = number_of_sites*site_size,
       height = number_of_sequences*site_size,
-      colors = {
-        A: 'LightPink',
-        G: 'LightYellow',
-        T: 'LightBlue',
-        C: 'MediumPurple',
-        "-": 'lightgrey'
-      }
+      alignment_width = number_of_sites*site_size;
     
-    var alignment_canvas = d3.select('#alignment')
-        .attr('width', alignment_width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom);
-    var context = alignment_canvas.node().getContext("2d");
-
     var site_scale = d3.scaleLinear()
         .domain([1, number_of_sites])
         .rangeRound([0, alignment_width]);
@@ -61,6 +46,11 @@ class Alignment extends Component {
     labels.each(function(d) { 
       label_width = Math.max(label_width, this.getComputedTextLength());
     });
+
+    var alignment_canvas = d3.select('#alignment')
+        .attr('width', this.props.width - label_width)
+        .attr('height', this.props.height - axis_height);
+    var context = alignment_canvas.node().getContext("2d");
 
     labels_svg.attr('width', label_width+5);
     labels.attr('x', label_width);
@@ -105,7 +95,21 @@ class Alignment extends Component {
     context.textBaseline = "middle";
     context.fill();
     
-    // select our dummy nodes and draw the data to canvas.
+    this.draw();
+  }
+  draw() {
+    var { alignment_data, names, site_size } = this;
+    var context = d3.select('#alignment')
+      .node()
+      .getContext("2d");
+    var colors = {
+      A: 'LightPink',
+      G: 'LightYellow',
+      T: 'LightBlue',
+      C: 'MediumPurple',
+      "-": 'lightgrey'
+    };
+    context.setTransform(1, 0, 0, 1, this.x, 0);
     alignment_data.forEach(function(d) {
       const x = site_size*(d.j-1),
         y = site_size*(d.i-1);
@@ -119,14 +123,19 @@ class Alignment extends Component {
     });
   }
   componentDidMount(){
+    var self = this;
     if(this.props.fasta){
       this.renderAlignment();
     }
     $('#alignment-div').on('scroll', function () {
-        $('#labels-div').scrollTop($(this).scrollTop());
+      $('#labels-div').scrollTop($(this).scrollTop());
     });
     $('#alignment-div').on('scroll', function () {
-        $('#axis-div').scrollLeft($(this).scrollLeft());
+      $('#axis-div').scrollLeft($(this).scrollLeft());
+    });
+    $('#alignment-div').on('wheel', function (e) {
+      self.x +=  e.originalEvent.deltaX;
+      self.draw();
     });
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -136,6 +145,13 @@ class Alignment extends Component {
     if(this.props.fasta){
       document.getElementById('alignment').innerHTML = '';
       document.getElementById('labels').innerHTML = '';
+
+      var parsed = fastaParser(this.props.fasta),
+        {alignment_data, names} = parsed;
+      this.alignment_data = alignment_data;
+      this.names = names;
+      this.site_size = 20; 
+      this.x = 0;
       this.renderAlignment();
     }
   }
