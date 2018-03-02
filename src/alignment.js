@@ -127,14 +127,11 @@ class Alignment extends Component {
     if(this.props.fasta){
       this.renderAlignment();
     }
-    $('#alignment-div').on('scroll', function () {
-      $('#labels-div').scrollTop($(this).scrollTop());
-    });
-    $('#alignment-div').on('scroll', function () {
-      $('#axis-div').scrollLeft($(this).scrollLeft());
-    });
     $('#alignment-div').on('wheel', function (e) {
-      self.x +=  e.originalEvent.deltaX;
+      console.log(e.originalEvent.deltaX);
+      $('#axis-div').scrollLeft(-self.x);
+      const new_x = self.x +=  e.originalEvent.deltaX;
+      self.x = Math.min(self.x, 0);
       self.draw();
     });
   }
