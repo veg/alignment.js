@@ -119,7 +119,7 @@ class App extends Component {
         </Modal>
       </div>
       
-      <Alignment width={800} height={600} fasta={this.state.fasta} />
+      <Alignment width={1200} height={800} fasta={this.state.fasta} />
 
     </div>);
   }
