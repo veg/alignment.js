@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 const d3 = require('d3');
+const $ = require('jquery');
 const _ = require('underscore');
 
 import fastaParser from './fasta';
@@ -10,141 +11,215 @@ import {
 
 
 class Alignment extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      i: props.i || 0,
-      j: props.j || 0
-    };
+  renderAlignment(){
+    var { alignment_data, site_size, axis_height } = this,
+      margin = {top: 0, right: 0, bottom: 0, left: 0};
+    var { label_padding } = this.props;
+    this.number_of_sequences = alignment_data.length,
+    this.number_of_sites = alignment_data[0].seq.length,
+    this.height = this.number_of_sequences*site_size,
+    this.alignment_width = this.number_of_sites*site_size,
+    this.names = alignment_data.map(d => d.header);
+    var site_scale = d3.scaleLinear()
+        .domain([1, this.number_of_sites])
+        .rangeRound([0, this.alignment_width]);
+    
+    var label_scale = d3.scaleLinear()
+        .domain([1, this.number_of_sequences])
+        .range([0, this.height]);
+
+    var axis_scale = d3.scaleLinear()
+      .domain([1, this.number_of_sites])
+      .range([site_size/2, this.alignment_width-site_size/2]);
+    
+    var labels_svg = d3.select('#labels')
+      .attr('height', this.height + margin.top + margin.bottom);
+
+    var labels_g = labels_svg.append('g')
+        .attr('transform', 'translate(-' + label_padding + ',' + margin.top + ')');
+
+    var labels = labels_g.selectAll('text')
+      .data(this.names)
+      .enter()
+      .append('text')
+        .attr('y', (d,i) => (i+1)*site_size)
+        .attr('text-anchor', 'end')
+        .attr('dy', -site_size/3)
+        .text(d=>d);
+
+    var label_width = 0;
+    labels.each(function(d) { 
+      label_width = Math.max(label_width, this.getComputedTextLength());
+    });
+    label_width += label_padding;
+    this.label_width = label_width;
+    const computed_width = Math.min(label_width + this.number_of_sites*this.site_size, this.props.width),
+      computed_height = Math.min(axis_height + this.number_of_sequences*this.site_size, this.props.height);
+    this.computed_width = computed_width;
+    this.computed_height = computed_height;
+    d3.select('#jsav-div')
+      .style('width', computed_width + 'px')
+      .style('height', computed_height + 'px');
+
+    var alignment_canvas = d3.select('#alignment')
+        .attr('width', computed_width - label_width)
+        .attr('height', computed_height - axis_height);
+    var context = alignment_canvas.node().getContext("2d");
+
+    labels_svg.attr('width', label_width+5);
+    labels.attr('x', label_width);
+
+    var placeholder_svg = d3.select('#placeholder')
+      .attr('width', label_width)
+      .attr('height', axis_height);
+
+    var axis_svg = d3.select('#axis')
+      .attr('width', this.alignment_width)
+      .attr('height', axis_height);
+
+    var axis = d3.axisTop()
+      .scale(axis_scale)
+      .tickValues(d3.range(1, this.number_of_sites, 2));
+   
+    axis_svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', 'translate(' + margin.left + ',' + 19 + ')')
+      .call(axis);
+
+    d3.select('#placeholder-div')
+      .style("width", label_width+"px")
+      .style("height", axis_height+"px");
+
+    d3.select('#axis-div')
+      .style("width", (computed_width-label_width)+"px")
+      .style("height", axis_height+"px");
+
+    d3.select('#labels-div')
+      .style("width", label_width + "px")
+      .style("height", (computed_height-axis_height)+"px");
+
+    d3.select('#alignment-div')
+      .style("width", (computed_width-label_width)+"px")
+      .style("height", (computed_height-axis_height)+"px");
+
+    context.fillStyle = "#fff";
+    context.rect(0,0,alignment_canvas.attr("width"),alignment_canvas.attr("height"));
+    context.font = "14px Courier";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fill();
+    
+    if(this.props.centerOnSite) {
+      const full_width = this.number_of_sites*this.site_size,
+        max_x = -(full_width - this.computed_width + this.label_width),
+        new_x = -(site_size*this.props.centerOnSite - computed_width/2);
+      this.x = Math.max(Math.min(new_x, 0), max_x);
+    } else {
+      this.x = 0;
+    }
+    if(this.props.centerOnHeader) {
+      const header_index = this.names.indexOf(this.props.centerOnHeader)+1,
+        full_height = this.number_of_sequences*this.site_size,
+        max_y = -(full_height - this.computed_height + this.axis_height),
+        new_y = -(site_size*header_index - computed_height/2);
+      this.y = Math.max(Math.min(new_y, 0), max_y);
+    } else {
+      this.y = 0;
+    }
+    this.draw(this.x, this.y);
   }
-  componentWillReceiveProps(nextProps){
-    const fasta = fastaParser(nextProps.fasta),
-      number_of_sequences = fasta.length,
-      number_of_sites = fasta[0].seq.length,
-      headers = fasta.map(d=>d.header),
-      label_width = this.props.label_padding + 8.4 * fasta.map(d=>d.header.length)
-        .reduce((a,b)=>Math.max(a,b));
-
-    if(nextProps.centerOnHeader){
-      var i = Math.floor(headers.indexOf(nextProps.centerOnHeader)-nextProps.height_in_characters/2);
-    } else {
-      var i = nextProps.i || 0;
-    }
-
-    if(nextProps.centerOnSite){
-      var j = Math.floor(nextProps.centerOnSite-nextProps.width_in_characters/2);
-    } else {
-      var j = nextProps.j || 0;
-    }
-
-    this.setState({
-      fasta: fasta,
-      number_of_sequences: number_of_sequences,
-      number_of_sites: number_of_sites,
-      headers: headers,
-      label_width: label_width,
-      i: i,
-      j: j
+  draw(x, y) {
+    var { alignment_data, site_size } = this,
+      { site_color, text_color } = this.props;
+    var context = d3.select('#alignment')
+      .node()
+      .getContext("2d");
+    $('#axis-div').scrollLeft(-x);
+    $('#labels-div').scrollTop(-y);
+    const start_site = Math.max(-Math.floor(x/site_size)-1, 0),
+      end_site = start_site + Math.ceil((this.props.width-this.label_width)/site_size)+1,
+      start_seq = Math.max(-Math.floor(y/site_size)-1, 0),
+      end_seq = start_seq + Math.ceil((this.props.height-this.axis_height)/site_size)+1;
+    const individual_sites = _.flatten(
+      alignment_data.filter((row, i) => {
+        const after_start = i >= start_seq,
+          before_finish = i <= end_seq;
+        return after_start && before_finish;
+      }).map((row, i) => {
+        return row.seq.
+          slice(start_site, end_site)
+          .split('')
+          .map((mol, j) => {
+            return {
+              mol: mol,
+              j: start_site + j + 1,
+              i: start_seq + i + 1,
+              header: row.header
+            };
+        });
+      })
+    );
+    context.setTransform(1, 0, 0, 1, x, y);
+    individual_sites.forEach(function(d) {
+      const x = site_size*(d.j-1),
+        y = site_size*(d.i-1);
+      context.beginPath();
+      context.fillStyle = site_color(d.mol, d.j, d.header);
+      context.rect(x, y, site_size, site_size);
+      context.fill();
+      context.fillStyle = text_color(d.mol, d.j, d.header);
+      context.fillText(d.mol, x+site_size/2, y+site_size/2);
+      context.closePath();
     });
   }
-  handleWheel(e){
-    const current_i = this.state.i,
-      current_j = this.state.j,
-      number_of_sequences = this.state.fasta.length,
-      number_of_sites = this.state.fasta[0].seq.length,
-      upper_i_bound = number_of_sequences-this.props.height_in_characters,
-      upper_j_bound = number_of_sites-this.props.width_in_characters,
-      i_move = current_i + Math.floor(e.deltaY/10),
-      j_move = current_j + Math.floor(e.deltaX/10);
-    this.setState({
-      i: Math.max(Math.min(i_move, upper_i_bound), 0),
-      j: Math.max(Math.min(j_move, upper_j_bound), 0)
+  componentDidMount(){
+    var self = this;
+    if(this.props.fasta){
+      this.renderAlignment();
+    }
+    $('#alignment-div').on('wheel', function (e) {
+      e.preventDefault();
+      const new_x = self.x + e.originalEvent.deltaX;
+      const new_y = self.y + e.originalEvent.deltaY;
+      const number_of_sequences = self.alignment_data.length,
+        number_of_sites = self.alignment_data[0].seq.length,
+        full_width = number_of_sites*self.site_size,
+        full_height = number_of_sequences*self.site_size,
+        max_x = -(full_width-self.computed_width+self.label_width),
+        max_y = -(full_height-self.computed_height+self.axis_height);
+      self.x = Math.max(Math.min(new_x, 0), max_x);
+      self.y = Math.max(Math.min(new_y, 0), max_y);
+      self.draw(self.x, self.y);
     });
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.fasta.slice(0, 100) != nextProps.fasta.slice(0, 100);
+  }
+  componentDidUpdate(){
+    if(this.props.fasta){
+      document.getElementById('alignment').innerHTML = '';
+      document.getElementById('labels').innerHTML = '';
+
+      this.alignment_data = fastaParser(this.props.fasta);
+      this.axis_height = 20;
+      this.site_size = 20; 
+      this.renderAlignment();
+    }
   }
   render(){
-    if(!this.props.fasta){
-      return <div><p>Loading...</p></div>;
-    };
-
-    const munged_seqs = _.flatten(
-      this.state.fasta.slice(this.state.i, this.state.i+this.props.height_in_characters)
-        .map((row, i) => {
-          return row.seq.slice(this.state.j, this.state.j+this.props.width_in_characters)
-            .split('')
-            .map((mol, j) => {return {mol: mol, i: i, j: j};});
-        })
-    );
-
-    const svg_width = this.state.label_width + this.props.character_size * Math.min(this.props.width_in_characters, this.state.number_of_sites),
-      svg_height = this.props.character_size*(Math.min(this.props.height_in_characters, this.state.number_of_sequences)+1);
-
-    return (<div>
-
-      <div onWheel={e=>this.handleWheel(e)}>
-        <svg id="alignment" width={svg_width} height={svg_height} style={{margin: 20}}>
-          {this.state.headers.slice(this.state.i, this.state.i+this.props.height_in_characters)
-            .map((d,i) => {
-            return (<text
-              x={this.state.label_width-this.props.label_padding}
-              y={this.props.character_size*(i+1.5)}
-              textAnchor='end'
-              className='seq-label'
-              key={i}
-              dominantBaseline='middle'
-            >
-              {d}
-            </text>);
-          })}
-          {d3.range(this.state.j+1, Math.min(this.state.j+this.props.width_in_characters-this.state.j%2+1, this.state.number_of_sites), 2).map((d,i) => {
-            const x = 2*i+this.state.j%2,
-              val = d+this.state.j%2;
-            return <text
-              x={this.props.character_size*x+this.state.label_width+this.props.character_size/2}
-              y={10}
-              textAnchor='middle'
-              key={i}
-            >
-              {val}
-            </text>;
-          })}
-          {munged_seqs.map(d => {
-            const x = this.state.label_width+this.props.character_size*d.j,
-              y = this.props.character_size*(d.i+1),
-              fill = this.props.site_color(
-                d.mol,
-                d.j+this.state.j,
-                this.state.headers[d.i+this.state.i]
-              ),
-              text_fill = this.props.text_color(
-                d.mol,
-                d.j+this.state.j,
-                this.state.headers[d.i+this.state.i]
-              );
-            return (<g
-              transform={`translate(${x},${y})`}
-              key={`${d.i}-${d.j}`}
-            >
-              <rect
-                x={0}
-                y={0}
-                width={this.props.character_size}
-                height={this.props.character_size}
-                fill={fill}
-              />
-              <text
-                x={this.props.character_size/2}
-                y={this.props.character_size/2}
-                textAnchor='middle'
-                dy='.25em'
-                fill={text_fill}
-              >
-                {d.mol}
-              </text>
-            </g>);
-          }) 
-        }</svg>
+    return (<div id="jsav-div">
+      <div id="placeholder-div" className="jav-container">
+        <svg id="placeholder"></svg>
       </div>
-
+      <div id="axis-div" className="jav-container" style={{overflow: "scroll", overflowX: "hidden"}}>
+        <svg id="axis"></svg>
+      </div>
+      <div id="labels-div" className="jav-container" style={{overflow: "scroll", overflowY: "hidden"}}>
+        <svg id="labels"></svg>
+      </div>
+      <div id="alignment-div" className="jav-container" style={{overflow: "scroll"}}>
+        <canvas id="alignment"></canvas>
+      </div>
     </div>);
   }
 }
@@ -152,10 +227,7 @@ class Alignment extends Component {
 Alignment.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
-  character_size: 20,
-  width_in_characters: 50,
-  height_in_characters: 20,
-  label_padding: 20
+  label_padding: 10
 }
 
 module.exports = Alignment;

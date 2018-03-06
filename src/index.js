@@ -30,7 +30,7 @@ const examples = {
     }
   },
   Flu: {
-    purpose: "Highlight an individual site in an alignment.",
+    purpose: "Highlight individual sites in an alignment.",
     props: {
       site_color: highlight_codon_color,
       text_color: highlight_codon_text_color,
@@ -180,6 +180,8 @@ class App extends Component {
           <Col xs={12}>
             <Alignment
               fasta={this.state.fasta}
+              width={1200}
+              height={800}
               {...examples[this.state.dataset].props}
             />
           </Col>

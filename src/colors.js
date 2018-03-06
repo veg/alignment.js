@@ -70,7 +70,7 @@ const nucleotide_colors = {
     return nucleotide_text_colors[character];
   },
   highlight_codon_color = (character, position, header) => {
-    if(header=='DUCK_VIETNAM_272_2005' && Math.floor(position/3) == 3) return 'red';
+    if(header=='DUCK_VIETNAM_272_2005' && Math.floor((position-1)/3) == 3) return 'red';
     return character == "-" ? "white" : "GhostWhite";
   },
   highlight_codon_text_color = (character, position, header) => {
