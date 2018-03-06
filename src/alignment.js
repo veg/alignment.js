@@ -13,32 +13,32 @@ import {
 class Alignment extends Component {
   renderAlignment(){
     var { alignment_data, site_size, axis_height } = this,
-      margin = {top: 0, right: 0, bottom: 0, left: 0},
-      number_of_sequences = alignment_data.length,
-      number_of_sites = alignment_data[0].seq.length,
-      height = number_of_sequences*site_size,
-      alignment_width = number_of_sites*site_size,
-      names = alignment_data.map(d => d.header);
+      margin = {top: 0, right: 0, bottom: 0, left: 0};
+    this.number_of_sequences = alignment_data.length,
+    this.number_of_sites = alignment_data[0].seq.length,
+    this.height = this.number_of_sequences*site_size,
+    this.alignment_width = this.number_of_sites*site_size,
+    this.names = alignment_data.map(d => d.header);
     var site_scale = d3.scaleLinear()
-        .domain([1, number_of_sites])
-        .rangeRound([0, alignment_width]);
+        .domain([1, this.number_of_sites])
+        .rangeRound([0, this.alignment_width]);
     
     var label_scale = d3.scaleLinear()
-        .domain([1, number_of_sequences])
-        .range([0, height]);
+        .domain([1, this.number_of_sequences])
+        .range([0, this.height]);
 
     var axis_scale = d3.scaleLinear()
-      .domain([1, number_of_sites])
-      .range([site_size/2, alignment_width-site_size/2]);
+      .domain([1, this.number_of_sites])
+      .range([site_size/2, this.alignment_width-site_size/2]);
     
     var labels_svg = d3.select('#labels')
-      .attr('height', height + margin.top + margin.bottom);
+      .attr('height', this.height + margin.top + margin.bottom);
 
     var labels_g = labels_svg.append('g')
         .attr('transform', 'translate(0,' + margin.top + ')');
 
     var labels = labels_g.selectAll('text')
-      .data(names)
+      .data(this.names)
       .enter()
       .append('text')
         .attr('y', (d,i) => (i+1)*site_size)
@@ -51,10 +51,10 @@ class Alignment extends Component {
       label_width = Math.max(label_width, this.getComputedTextLength());
     });
     this.label_width = label_width;
-    const computed_width = Math.min(label_width + number_of_sites*site_size, this.props.width),
-      computed_height = Math.min(axis_height + number_of_sequences*site_size, this.props.height);
+    const computed_width = Math.min(label_width + this.number_of_sites*this.site_size, this.props.width),
+      computed_height = Math.min(axis_height + this.number_of_sequences*this.site_size, this.props.height);
     this.computed_width = computed_width;
-    this.computed_height= computed_height;
+    this.computed_height = computed_height;
     d3.select('#jsav-div')
       .style('width', computed_width + 'px')
       .style('height', computed_height + 'px');
@@ -72,12 +72,12 @@ class Alignment extends Component {
       .attr('height', axis_height);
 
     var axis_svg = d3.select('#axis')
-      .attr('width', alignment_width)
+      .attr('width', this.alignment_width)
       .attr('height', axis_height);
 
     var axis = d3.axisTop()
       .scale(axis_scale)
-      .tickValues(d3.range(1, number_of_sites, 2));
+      .tickValues(d3.range(1, this.number_of_sites, 2));
    
     axis_svg.append('g')
       .attr('class', 'axis')
@@ -107,14 +107,33 @@ class Alignment extends Component {
     context.textBaseline = "middle";
     context.fill();
     
-    this.draw();
+    if(this.props.centerOnSite) {
+      const full_width = this.number_of_sites*this.site_size,
+        max_x = -(full_width - this.computed_width + this.label_width),
+        new_x = -(site_size*this.props.centerOnSite - computed_width/2);
+      this.x = Math.max(Math.min(new_x, 0), max_x);
+    } else {
+      this.x = 0;
+    }
+    if(this.props.centerOnHeader) {
+      const header_index = this.names.indexOf(this.props.centerOnHeader)+1,
+        full_height = this.number_of_sequences*this.site_size,
+        max_y = -(full_height - this.computed_height + this.axis_height),
+        new_y = -(site_size*header_index - computed_height/2);
+      this.y = Math.max(Math.min(new_y, 0), max_y);
+    } else {
+      this.y = 0;
+    }
+    this.draw(this.x, this.y);
   }
-  draw() {
-    var { alignment_data, site_size, x, y } = this,
+  draw(x, y) {
+    var { alignment_data, site_size } = this,
       { site_color, text_color } = this.props;
     var context = d3.select('#alignment')
       .node()
       .getContext("2d");
+    $('#axis-div').scrollLeft(-x);
+    $('#labels-div').scrollTop(-y);
     const start_site = Math.max(-Math.floor(x/site_size)-1, 0),
       end_site = start_site + Math.ceil((this.props.width-this.label_width)/site_size)+1,
       start_seq = Math.max(-Math.floor(y/site_size)-1, 0),
@@ -158,8 +177,6 @@ class Alignment extends Component {
     }
     $('#alignment-div').on('wheel', function (e) {
       e.preventDefault();
-      $('#axis-div').scrollLeft(-self.x);
-      $('#labels-div').scrollTop(-self.y);
       const new_x = self.x + e.originalEvent.deltaX;
       const new_y = self.y + e.originalEvent.deltaY;
       const number_of_sequences = self.alignment_data.length,
@@ -170,7 +187,7 @@ class Alignment extends Component {
         max_y = -(full_height-self.computed_height+self.axis_height);
       self.x = Math.max(Math.min(new_x, 0), max_x);
       self.y = Math.max(Math.min(new_y, 0), max_y);
-      self.draw();
+      self.draw(self.x, self.y);
     });
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -184,8 +201,6 @@ class Alignment extends Component {
       this.alignment_data = fastaParser(this.props.fasta);
       this.axis_height = 20;
       this.site_size = 20; 
-      this.x = 0;
-      this.y = 0;
       this.renderAlignment();
     }
   }
