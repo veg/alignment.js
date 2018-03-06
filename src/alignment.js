@@ -47,10 +47,17 @@ class Alignment extends Component {
       label_width = Math.max(label_width, this.getComputedTextLength());
     });
     this.label_width = label_width;
+    const computed_width = Math.min(label_width + number_of_sites*site_size, this.props.width),
+      computed_height = Math.min(axis_height + number_of_sequences*site_size, this.props.height);
+    this.computed_width = computed_width;
+    this.computed_height= computed_height;
+    d3.select('#jsav-div')
+      .style('width', computed_width + 'px')
+      .style('height', computed_height + 'px');
 
     var alignment_canvas = d3.select('#alignment')
-        .attr('width', this.props.width - label_width)
-        .attr('height', this.props.height - axis_height);
+        .attr('width', computed_width - label_width)
+        .attr('height', computed_height - axis_height);
     var context = alignment_canvas.node().getContext("2d");
 
     labels_svg.attr('width', label_width+5);
@@ -78,20 +85,20 @@ class Alignment extends Component {
       .style("height", axis_height+"px");
 
     d3.select('#axis-div')
-      .style("width", (this.props.width-label_width)+"px")
+      .style("width", (computed_width-label_width)+"px")
       .style("height", axis_height+"px");
 
     d3.select('#labels-div')
       .style("width", label_width+"px")
-      .style("height", (this.props.height-axis_height)+"px");
+      .style("height", (computed_height-axis_height)+"px");
 
     d3.select('#alignment-div')
-      .style("width", (this.props.width-label_width)+"px")
-      .style("height", (this.props.height-axis_height)+"px");
+      .style("width", (computed_width-label_width)+"px")
+      .style("height", (computed_height-axis_height)+"px");
 
     context.fillStyle = "#fff";
     context.rect(0,0,alignment_canvas.attr("width"),alignment_canvas.attr("height"));
-    context.font = "12px Courier";
+    context.font = "bold 14px Courier";
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.fill();
@@ -151,18 +158,19 @@ class Alignment extends Component {
       this.renderAlignment();
     }
     $('#alignment-div').on('wheel', function (e) {
+      e.preventDefault();
       $('#axis-div').scrollLeft(-self.x);
       $('#labels-div').scrollTop(-self.y);
-      const new_x = self.x +=  e.originalEvent.deltaX;
-      const new_y = self.y +=  e.originalEvent.deltaY;
+      const new_x = self.x + e.originalEvent.deltaX;
+      const new_y = self.y + e.originalEvent.deltaY;
       const number_of_sequences = self.alignment_data.length,
         number_of_sites = self.alignment_data[0].seq.length,
         full_width = number_of_sites*self.site_size,
         full_height = number_of_sequences*self.site_size,
-        max_x = -(full_width-self.props.width-self.label_width),
-        max_y = full_height-self.props.height-self.axis_height;
-      self.x = Math.min(self.x, 0);
-      self.y = Math.min(self.y, 0);
+        max_x = -(full_width-self.computed_width+self.label_width),
+        max_y = -(full_height-self.computed_height+self.axis_height);
+      self.x = Math.max(Math.min(new_x, 0), max_x);
+      self.y = Math.max(Math.min(new_y, 0), max_y);
       self.draw();
     });
   }
@@ -180,11 +188,10 @@ class Alignment extends Component {
       this.x = 0;
       this.y = 0;
       this.renderAlignment();
-      console.log(this.props.width-this.label_width, this.props.height-this.axis_height);
     }
   }
   render(){
-    return (<div style={{width: this.props.width, height: this.props.height}}>
+    return (<div id="jsav-div">
       <div id="placeholder-div" className="jav-container">
         <svg id="placeholder"></svg>
       </div>
