@@ -14,6 +14,7 @@ class Alignment extends Component {
   renderAlignment(){
     var { alignment_data, site_size, axis_height } = this,
       margin = {top: 0, right: 0, bottom: 0, left: 0};
+    var { label_padding } = this.props;
     this.number_of_sequences = alignment_data.length,
     this.number_of_sites = alignment_data[0].seq.length,
     this.height = this.number_of_sequences*site_size,
@@ -35,7 +36,7 @@ class Alignment extends Component {
       .attr('height', this.height + margin.top + margin.bottom);
 
     var labels_g = labels_svg.append('g')
-        .attr('transform', 'translate(0,' + margin.top + ')');
+        .attr('transform', 'translate(-' + label_padding + ',' + margin.top + ')');
 
     var labels = labels_g.selectAll('text')
       .data(this.names)
@@ -50,6 +51,7 @@ class Alignment extends Component {
     labels.each(function(d) { 
       label_width = Math.max(label_width, this.getComputedTextLength());
     });
+    label_width += label_padding;
     this.label_width = label_width;
     const computed_width = Math.min(label_width + this.number_of_sites*this.site_size, this.props.width),
       computed_height = Math.min(axis_height + this.number_of_sequences*this.site_size, this.props.height);
@@ -93,7 +95,7 @@ class Alignment extends Component {
       .style("height", axis_height+"px");
 
     d3.select('#labels-div')
-      .style("width", label_width+"px")
+      .style("width", label_width + "px")
       .style("height", (computed_height-axis_height)+"px");
 
     d3.select('#alignment-div')
@@ -225,7 +227,7 @@ class Alignment extends Component {
 Alignment.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
-  label_padding: 20
+  label_padding: 10
 }
 
 module.exports = Alignment;
