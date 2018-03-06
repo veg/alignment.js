@@ -4,6 +4,10 @@ const $ = require('jquery');
 const _ = require('underscore');
 
 import fastaParser from './fasta';
+import { 
+  nucleotide_color,
+  nucleotide_text_color
+} from './colors';
 
 
 class Alignment extends Component {
@@ -98,7 +102,7 @@ class Alignment extends Component {
 
     context.fillStyle = "#fff";
     context.rect(0,0,alignment_canvas.attr("width"),alignment_canvas.attr("height"));
-    context.font = "bold 14px Courier";
+    context.font = "14px Courier";
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.fill();
@@ -106,17 +110,11 @@ class Alignment extends Component {
     this.draw();
   }
   draw() {
-    var { alignment_data, site_size, x, y } = this;
+    var { alignment_data, site_size, x, y } = this,
+      { site_color, text_color } = this.props;
     var context = d3.select('#alignment')
       .node()
       .getContext("2d");
-    var colors = {
-      A: 'LightPink',
-      G: 'LightYellow',
-      T: 'LightBlue',
-      C: 'MediumPurple',
-      "-": 'lightgrey'
-    };
     const start_site = Math.max(-Math.floor(x/site_size)-1, 0),
       end_site = start_site + Math.ceil((this.props.width-this.label_width)/site_size)+1,
       start_seq = Math.max(-Math.floor(y/site_size)-1, 0),
@@ -133,8 +131,9 @@ class Alignment extends Component {
           .map((mol, j) => {
             return {
               mol: mol,
-              j: start_site+j+1,
-              i: start_seq+i+1
+              j: start_site + j + 1,
+              i: start_seq + i + 1,
+              header: row.header
             };
         });
       })
@@ -144,10 +143,10 @@ class Alignment extends Component {
       const x = site_size*(d.j-1),
         y = site_size*(d.i-1);
       context.beginPath();
-      context.fillStyle = colors[d.mol];
+      context.fillStyle = site_color(d.mol, d.j, d.header);
       context.rect(x, y, site_size, site_size);
       context.fill();
-      context.fillStyle = "black";
+      context.fillStyle = text_color(d.mol, d.j, d.header);
       context.fillText(d.mol, x+site_size/2, y+site_size/2);
       context.closePath();
     });
@@ -206,6 +205,12 @@ class Alignment extends Component {
       </div>
     </div>);
   }
+}
+
+Alignment.defaultProps = {
+  site_color: nucleotide_color,
+  text_color: nucleotide_text_color,
+  label_padding: 20
 }
 
 module.exports = Alignment;

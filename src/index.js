@@ -1,20 +1,68 @@
 import React, { Component } from 'react';
 import { 
-  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem, Modal, Button
+  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem, Modal, Button, Grid, Row, Col
 } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 const d3 = require('d3');
+const _ = require('underscore');
 
 import Alignment from './alignment';
+import { 
+  highlight_codon_color,
+  highlight_codon_text_color,
+  amino_acid_color,
+  amino_acid_text_color
+} from './colors';
 require('./jav.css');
 
+const examples = {
+  loading: {},
+  CD2: {
+    purpose: "Display a nucleotide alignment.",
+  },
+  CD2_AA: {
+    purpose: "Display an amino acid alignment.",
+    props: {
+      site_color: amino_acid_color,
+      text_color: amino_acid_text_color
+    }
+  },
+  Flu: {
+    purpose: "Highlight individual sites in an alignment.",
+    props: {
+      site_color: highlight_codon_color,
+      text_color: highlight_codon_text_color,
+      width_in_characters: 30
+    }
+  },
+  CVF: {
+    purpose: "Display an alignment with lower case letters."
+  },
+  Simple: {
+    purpose: "Display a very small alignment.",
+  },
+  H3trunk: {
+    purpose: "Begin centered on a given sequence (CY010004) and site (100).",
+    props: {
+      centerOnSite: 100,
+      centerOnHeader: 'CY010004'
+    }
+  },
+  H3full: {
+    purpose: "Display a large alignment.",
+  }
+};
 
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = { fasta: '', modal: null };
+    this.state = {
+      fasta: '',
+      modal: null,
+      dataset: 'loading'
+    };
   }
   componentDidMount(){
     this.loadData('CD2');
@@ -48,7 +96,10 @@ class App extends Component {
   }
   loadData(dataset){
     d3.text(`fasta/${dataset}.fasta`, (error, data) => {
-      this.setState({fasta: data});
+      this.setState({
+        dataset: dataset,
+        fasta: data
+      });
     });
   }
   render(){
@@ -73,7 +124,9 @@ class App extends Component {
             <MenuItem onClick={()=>this.handleExport()}>Export</MenuItem>
           </NavDropdown>
           <NavDropdown title="Examples" id="examples">
-            {['CD2', 'CVF', 'Flu', 'Simple', 'H3trunk'].map(name => {
+            {_.keys(examples)
+              .slice(1)
+              .map(name => {
               return (<MenuItem
                 key={name}
                 onClick={()=>this.loadData(name)}
@@ -118,9 +171,22 @@ class App extends Component {
           </Modal.Footer>
         </Modal>
       </div>
-      
-      <Alignment width={1200} height={800} fasta={this.state.fasta} />
-
+     
+      <Grid>
+        <Row>
+          <Col xs={12}>
+            <h4>{examples[this.state.dataset].purpose}</h4>
+          </Col>
+          <Col xs={12}>
+            <Alignment
+              fasta={this.state.fasta}
+              width={1200}
+              height={800}
+              {...examples[this.state.dataset].props}
+            />
+          </Col>
+        </Row>
+      </Grid>
     </div>);
   }
 }
