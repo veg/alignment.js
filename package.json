@@ -1,7 +1,7 @@
 {
   "name": "jsav",
   "version": "1.0.3",
-  "main": "src/alignment.js",
+  "main": "dist/alignment.js",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "3",

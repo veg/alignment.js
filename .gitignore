@@ -1,9 +1,9 @@
 node_modules
 .DS_Store
 
-index.html
-bundle.js
-jav.js
+dist/index.html
+dist/bundle.js
+dist/alignment.js
 *.woff*
 *.svg
 *.ttf

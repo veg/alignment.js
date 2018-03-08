@@ -4,14 +4,17 @@ const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin'),
   common = require('./webpack.common.js');
 
 module.exports = merge(common, {
-  plugins: [
-    new UglifyJsWebpackPlugin()
-  ],
   output: {
     path: path.resolve(__dirname, "dist"),
-    library: "jav",
-    libraryTarget: "umd",
-    filename: "jav.js"
+    library: "alignment",
+    libraryTarget: "commonjs2",
+    filename: "alignment.js"
   },
-  entry: path.resolve(__dirname, 'src', 'alignment.js')
+  entry: path.resolve(__dirname, 'src', 'alignment.js'),
+  externals: [
+    'react',
+    'react-bootstrap',
+    'd3',
+    'underscore'
+  ]
 });
