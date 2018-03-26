@@ -9,6 +9,8 @@ import {
   nucleotide_text_color
 } from './colors';
 
+require('./jav.css');
+
 
 class Alignment extends Component {
   renderAlignment(){
@@ -175,6 +177,10 @@ class Alignment extends Component {
   componentDidMount(){
     var self = this;
     if(this.props.fasta){
+      this.alignment_data = fastaParser(this.props.fasta);
+      this.axis_height = 20;
+      this.site_size = 20; 
+
       this.renderAlignment();
     }
     $('#alignment-div').on('wheel', function (e) {

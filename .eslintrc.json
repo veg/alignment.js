@@ -1,0 +1,27 @@
+{
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/react-in-jsx-scope": 2,
+    "no-unused-vars": [1, {"vars":"all", "args":"none"}],
+    "no-self-assign": 1,
+    "no-unreachable": 2,
+    "no-debugger": 1,
+    "no-console":1
+  },
+  "plugins": [
+    "react"
+  ]
+}
