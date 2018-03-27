@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { 
-  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem, Modal, Button, Grid, Row, Col
+  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem, Modal, Button, Grid, Row, Col, Glyphicon
 } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import html2canvas from 'html2canvas';
+
 const d3 = require('d3');
 const _ = require('underscore');
 
@@ -15,6 +17,7 @@ import {
   amino_acid_color,
   amino_acid_text_color
 } from './colors';
+import canvasToImage from 'canvas-to-image';
 require('./jav.css');
 
 const examples = {
@@ -102,6 +105,24 @@ class App extends Component {
       });
     });
   }
+  drawPicture(){
+    html2canvas(document.getElementById('jsav-div'))
+      .then(canvas => {
+        /* There is an overflow bug in html2canvas... below hints at a solution
+        var context = canvas.getContext("2d");
+        context.beginPath();
+        context.fillStyle = "#f00";
+        context.rect(300, 100, 50, 50);
+        context.fill();
+        context.closePath();
+        */
+        var a = document.createElement('a');
+        a.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        a.download = 'somefilename.png';
+        a.click();
+        a.remove();
+      });
+  }
   render(){
     const modal_title = this.state.modal == 'input'
       ? 'Paste sequence data' 
@@ -174,8 +195,13 @@ class App extends Component {
      
       <Grid>
         <Row>
-          <Col xs={12}>
+          <Col xs={10}>
             <h4>{examples[this.state.dataset].purpose}</h4>
+          </Col>
+          <Col xs={2}>
+            <Button className="pull-right" onClick={()=>this.drawPicture()}>
+              <Glyphicon glyph='picture' /> Save Image
+            </Button>
           </Col>
           <Col xs={12}>
             <Alignment
