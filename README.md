@@ -1,4 +1,4 @@
-# jsav
+# alignment.js
 Javascript alignment viewer.
 
 
@@ -7,8 +7,8 @@ Javascript alignment viewer.
 Install a local copy:
 
 ```
-git clone https://github.com/stephenshank/jsav
-cd jav
+git clone https://github.com/stephenshank/alignment.js
+cd alignment.js
 yarn
 ```
 
