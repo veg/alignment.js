@@ -19,6 +19,9 @@ require('./jav.css');
 
 const examples = {
   loading: {},
+  NGS: {
+    purpose: "Display NGS reads mapped to a reference genome.",
+  },
   CD2: {
     purpose: "Display a nucleotide alignment.",
   },
@@ -65,7 +68,7 @@ class App extends Component {
     };
   }
   componentDidMount(){
-    this.loadData('CD2');
+    this.loadData('NGS');
   }
   handleFileChange(e){
     const files = e.target.files;

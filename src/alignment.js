@@ -14,7 +14,9 @@ require('./jav.css');
 
 class Alignment extends Component {
   renderAlignment(){
-    var { alignment_data, site_size, axis_height } = this,
+    // stopgap
+    this.reference = true;
+    var { alignment_data, site_size, axis_height, reference } = this,
       margin = {top: 0, right: 0, bottom: 0, left: 0};
     var { label_padding } = this.props;
     this.number_of_sequences = alignment_data.length,
@@ -41,7 +43,7 @@ class Alignment extends Component {
         .attr('transform', 'translate(-' + label_padding + ',' + margin.top + ')');
 
     var labels = labels_g.selectAll('text')
-      .data(this.names)
+      .data(this.names.filter((name, i) => i > 0))
       .enter()
       .append('text')
         .attr('y', (d,i) => (i+1)*site_size)
@@ -55,6 +57,7 @@ class Alignment extends Component {
     });
     label_width += label_padding;
     this.label_width = label_width;
+
     const computed_width = Math.min(label_width + this.number_of_sites*this.site_size, this.props.width),
       computed_height = Math.min(axis_height + this.number_of_sequences*this.site_size, this.props.height);
     this.computed_width = computed_width;
@@ -66,7 +69,11 @@ class Alignment extends Component {
     var alignment_canvas = d3.select('#alignment')
         .attr('width', computed_width - label_width)
         .attr('height', computed_height - axis_height);
-    var context = alignment_canvas.node().getContext("2d");
+    var alignment_context = alignment_canvas.node().getContext("2d");
+    var reference_canvas = d3.select('#reference-alignment')
+        .attr('width', computed_width - label_width)
+        .attr('height', site_size);
+    var reference_context = reference_canvas.node().getContext("2d");
 
     labels_svg.attr('width', label_width+5);
     labels.attr('x', label_width);
@@ -88,6 +95,25 @@ class Alignment extends Component {
       .attr('transform', 'translate(' + margin.left + ',' + 19 + ')')
       .call(axis);
 
+    var reference_label_svg = d3.select('#reference-label')
+      .attr('width', label_width)
+      .attr('height', site_size);
+
+    var reference_label_g = reference_label_svg.append('g')
+        .attr('transform', 'translate(-' + label_padding + ',' + margin.top + ')');
+
+    reference_label_g.append('text')
+      .attr('y', (d,i) => (i+1)*site_size)
+      .attr('text-anchor', 'end')
+      .attr('dy', -site_size/3)
+      .attr('width', label_width+5)
+      .attr('x', label_width)
+      .text(this.names[0]);
+
+    var reference_alignment_canvas = d3.select('#reference-alignment')
+        .attr('width', computed_width - label_width)
+        .attr('height', site_size);
+
     d3.select('#placeholder-div')
       .style("width", label_width+"px")
       .style("height", axis_height+"px");
@@ -95,6 +121,14 @@ class Alignment extends Component {
     d3.select('#axis-div')
       .style("width", (computed_width-label_width)+"px")
       .style("height", axis_height+"px");
+
+    d3.select('#reference-label-div')
+      .style("width", label_width+"px")
+      .style("height", site_size+"px");
+
+    d3.select('#reference-alignment-div')
+      .style("width", (computed_width-label_width)+"px")
+      .style("height", site_size+"px");
 
     d3.select('#labels-div')
       .style("width", label_width + "px")
@@ -104,12 +138,19 @@ class Alignment extends Component {
       .style("width", (computed_width-label_width)+"px")
       .style("height", (computed_height-axis_height)+"px");
 
-    context.fillStyle = "#fff";
-    context.rect(0,0,alignment_canvas.attr("width"),alignment_canvas.attr("height"));
-    context.font = "14px Courier";
-    context.textAlign = "center";
-    context.textBaseline = "middle";
-    context.fill();
+    alignment_context.fillStyle = "#fff";
+    alignment_context.rect(0,0,alignment_canvas.attr("width"),alignment_canvas.attr("height"));
+    alignment_context.font = "14px Courier";
+    alignment_context.textAlign = "center";
+    alignment_context.textBaseline = "middle";
+    alignment_context.fill();
+    
+    reference_context.fillStyle = "#fff";
+    reference_context.rect(0,0,alignment_canvas.attr("width"),alignment_canvas.attr("height"));
+    reference_context.font = "14px Courier";
+    reference_context.textAlign = "center";
+    reference_context.textBaseline = "middle";
+    reference_context.fill();
     
     if(this.props.centerOnSite) {
       const full_width = this.number_of_sites*this.site_size,
@@ -133,7 +174,7 @@ class Alignment extends Component {
   draw(x, y) {
     var { alignment_data, site_size } = this,
       { site_color, text_color } = this.props;
-    var context = d3.select('#alignment')
+    var alignment_context = d3.select('#alignment')
       .node()
       .getContext("2d");
     $('#axis-div').scrollLeft(-x);
@@ -144,7 +185,7 @@ class Alignment extends Component {
       end_seq = start_seq + Math.ceil((this.props.height-this.axis_height)/site_size)+1;
     const individual_sites = _.flatten(
       alignment_data.filter((row, i) => {
-        const after_start = i >= start_seq,
+        const after_start = i >= (start_seq+1),
           before_finish = i <= end_seq;
         return after_start && before_finish;
       }).map((row, i) => {
@@ -161,17 +202,41 @@ class Alignment extends Component {
         });
       })
     );
-    context.setTransform(1, 0, 0, 1, x, y);
+    alignment_context.setTransform(1, 0, 0, 1, x, y);
     individual_sites.forEach(function(d) {
       const x = site_size*(d.j-1),
         y = site_size*(d.i-1);
-      context.beginPath();
-      context.fillStyle = site_color(d.mol, d.j, d.header);
-      context.rect(x, y, site_size, site_size);
-      context.fill();
-      context.fillStyle = text_color(d.mol, d.j, d.header);
-      context.fillText(d.mol, x+site_size/2, y+site_size/2);
-      context.closePath();
+      alignment_context.beginPath();
+      alignment_context.fillStyle = site_color(d.mol, d.j, d.header);
+      alignment_context.rect(x, y, site_size, site_size);
+      alignment_context.fill();
+      alignment_context.fillStyle = text_color(d.mol, d.j, d.header);
+      alignment_context.fillText(d.mol, x+site_size/2, y+site_size/2);
+      alignment_context.closePath();
+    });
+
+    const reference_context = d3.select("#reference-alignment")
+      .node()
+      .getContext("2d");
+    reference_context.setTransform(1, 0, 0, 1, x, 0);
+    alignment_data[0].seq
+      .slice(start_site, end_site)
+      .split('')
+      .map((mol, j) => {
+      return  {
+        mol: mol,
+        j: start_site + j + 1,
+        header: alignment_data[0].header
+      };
+    }).forEach(function(d) {
+      const x = site_size*(d.j-1);
+      reference_context.beginPath();
+      reference_context.fillStyle = site_color(d.mol, d.j, d.header);
+      reference_context.rect(x, 0, site_size, site_size);
+      reference_context.fill();
+      reference_context.fillStyle = text_color(d.mol, d.j, d.header);
+      reference_context.fillText(d.mol, x+site_size/2, site_size/2);
+      reference_context.closePath();
     });
   }
   componentDidMount(){
@@ -219,6 +284,12 @@ class Alignment extends Component {
       </div>
       <div id="axis-div" className="jav-container" style={{overflow: "scroll", overflowX: "hidden"}}>
         <svg id="axis"></svg>
+      </div>
+      <div id="reference-label-div" className="jav-container">
+        <svg id="reference-label"></svg>
+      </div>
+      <div id="reference-alignment-div" className="jav-container" style={{overflow: "scroll", overflowX: "hidden"}}>
+        <canvas id="reference-alignment"></canvas>
       </div>
       <div id="labels-div" className="jav-container" style={{overflow: "scroll", overflowY: "hidden"}}>
         <svg id="labels"></svg>
