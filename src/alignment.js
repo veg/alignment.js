@@ -24,6 +24,7 @@ class Alignment extends Component {
     this.height = this.number_of_sequences*site_size,
     this.alignment_width = this.number_of_sites*site_size,
     this.names = alignment_data.map(d => d.header);
+    this.guide_width = 300;
     var site_scale = d3.scaleLinear()
         .domain([1, this.number_of_sites])
         .rangeRound([0, this.alignment_width]);
@@ -62,6 +63,7 @@ class Alignment extends Component {
       computed_height = Math.min(axis_height + this.number_of_sequences*this.site_size, this.props.height);
     this.computed_width = computed_width;
     this.computed_height = computed_height;
+    this.guide_height = computed_height-axis_height-site_size;
     d3.select('#jsav-div')
       .style('width', computed_width + 'px')
       .style('height', computed_height + 'px');
@@ -111,15 +113,34 @@ class Alignment extends Component {
       .text(this.names[0]);
 
     var reference_alignment_canvas = d3.select('#reference-alignment')
-        .attr('width', computed_width - label_width)
+        .attr('width', computed_width-label_width-this.guide_width)
         .attr('height', site_size);
+
+    var legend_svg = d3.select('#legend')
+      .attr('width', this.guide_width)
+      .attr('height', axis_height);
+
+    var guide_svg = d3.select('#guide')
+      .attr('width', this.guide_width)
+      .attr('height', computed_height-axis_height-site_size)
+
+    guide_svg.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', this.guide_width)
+      .attr('height', computed_height-axis_height-site_size)
+      .attr('fill', 'WhiteSmoke');
 
     d3.select('#placeholder-div')
       .style("width", label_width+"px")
       .style("height", axis_height+"px");
 
     d3.select('#axis-div')
-      .style("width", (computed_width-label_width)+"px")
+      .style("width", (computed_width-label_width-this.guide_width)+"px")
+      .style("height", axis_height+"px");
+
+    d3.select('#legend-div')
+      .style("width", this.guide_width+"px")
       .style("height", axis_height+"px");
 
     d3.select('#reference-label-div')
@@ -127,16 +148,24 @@ class Alignment extends Component {
       .style("height", site_size+"px");
 
     d3.select('#reference-alignment-div')
-      .style("width", (computed_width-label_width)+"px")
+      .style("width", (computed_width-label_width-this.guide_width)+"px")
       .style("height", site_size+"px");
+
+    d3.select('#reference-placeholder-div')
+      .style("width", this.guide_width+"px")
+      .style("height",site_size+"px");
 
     d3.select('#labels-div')
       .style("width", label_width + "px")
-      .style("height", (computed_height-axis_height)+"px");
+      .style("height", (computed_height-axis_height-site_size)+"px");
 
     d3.select('#alignment-div')
-      .style("width", (computed_width-label_width)+"px")
-      .style("height", (computed_height-axis_height)+"px");
+      .style("width", (computed_width-label_width-this.guide_width)+"px")
+      .style("height", (computed_height-axis_height-site_size)+"px");
+
+    d3.select('#guide-div')
+      .style("width", this.guide_width+"px")
+      .style("height", this.guide_height+"px");
 
     alignment_context.fillStyle = "#fff";
     alignment_context.rect(0,0,alignment_canvas.attr("width"),alignment_canvas.attr("height"));
@@ -151,6 +180,21 @@ class Alignment extends Component {
     reference_context.textAlign = "center";
     reference_context.textBaseline = "middle";
     reference_context.fill();
+
+    const { guide_width, guide_height, number_of_sites, number_of_sequences }  = this;
+    const draw = this.draw.bind(this);
+    const self = this;
+
+    console.log(alignment_data);
+
+    guide_svg.on("click", function() {
+      var coords = d3.mouse(this);
+      const x = -number_of_sites*site_size*coords[0]/guide_width,
+        y = -number_of_sequences*site_size*coords[1]/guide_height;
+      self.x = x;
+      self.y = y;
+      draw(x, y);
+    });
     
     if(this.props.centerOnSite) {
       const full_width = this.number_of_sites*this.site_size,
@@ -169,7 +213,40 @@ class Alignment extends Component {
     } else {
       this.y = 0;
     }
-    this.draw(this.x, this.y);
+    draw(this.x, this.y);
+
+    guide_svg.selectAll('line')
+      .data(alignment_data.map(function(row){
+        var start = false, end = false;
+        for(let i=0; !start || !end; i++) {
+          if(!start && row.seq[i] != '-') {
+            start = i;
+          }
+          if(!end && row.seq[row.seq.length-i-1] != '-') {
+            end = row.seq.length-i-1;
+          }
+        }
+        return [start, end];
+      }))
+      .enter()
+      .append('line')
+        .attr('x1', d=>guide_width*d[0]/number_of_sites)
+        .attr('y1', (d,i) => guide_height*i/number_of_sequences)
+        .attr('x2', d=>guide_width*d[1]/number_of_sites)
+        .attr('y2', (d,i) => guide_height*i/number_of_sequences)
+        .style('stroke', 'red')
+        .style('stroke-width', '1px');
+
+     guide_svg.append('rect')
+      .attr('id', 'guide-rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', this.guide_width*(computed_width-label_width-this.guide_width)/(site_size*this.number_of_sites))
+      .attr('height', (computed_height-axis_height-site_size)*(computed_height-axis_height-site_size)/(site_size*this.number_of_sequences) )
+      .attr('fill', 'darkgrey')
+      .attr('fill-opacity', .8)
+      .attr('stroke', 'white')
+      .attr('stroke-width', 1);
   }
   draw(x, y) {
     var { alignment_data, site_size } = this,
@@ -180,7 +257,7 @@ class Alignment extends Component {
     $('#axis-div').scrollLeft(-x);
     $('#labels-div').scrollTop(-y);
     const start_site = Math.max(-Math.floor(x/site_size)-1, 0),
-      end_site = start_site + Math.ceil((this.props.width-this.label_width)/site_size)+1,
+      end_site = start_site + Math.ceil((this.props.width-this.label_width-this.guide_width)/site_size)+1,
       start_seq = Math.max(-Math.floor(y/site_size)-1, 0),
       end_seq = start_seq + Math.ceil((this.props.height-this.axis_height)/site_size)+1;
     const individual_sites = _.flatten(
@@ -238,6 +315,14 @@ class Alignment extends Component {
       reference_context.fillText(d.mol, x+site_size/2, site_size/2);
       reference_context.closePath();
     });
+
+    const guide_x = this.guide_width*(this.site_size-x)/(this.number_of_sites*this.site_size),
+      guide_y = this.guide_height*(this.site_size-y)/(this.number_of_sequences*this.site_size);
+
+    d3.select('#guide-rect')
+      .attr('x', guide_x)
+      .attr('y', guide_y);
+
   }
   componentDidMount(){
     var self = this;
@@ -248,7 +333,7 @@ class Alignment extends Component {
 
       this.renderAlignment();
     }
-    $('#alignment-div').on('wheel', function (e) {
+    const handleWheel = function (e) {
       e.preventDefault();
       const new_x = self.x + e.originalEvent.deltaX;
       const new_y = self.y + e.originalEvent.deltaY;
@@ -256,12 +341,14 @@ class Alignment extends Component {
         number_of_sites = self.alignment_data[0].seq.length,
         full_width = number_of_sites*self.site_size,
         full_height = number_of_sequences*self.site_size,
-        max_x = -(full_width-self.computed_width+self.label_width),
+        max_x = -(full_width-self.computed_width+self.label_width+self.guide_width),
         max_y = -(full_height-self.computed_height+self.axis_height);
       self.x = Math.max(Math.min(new_x, 0), max_x);
       self.y = Math.max(Math.min(new_y, 0), max_y);
       self.draw(self.x, self.y);
-    });
+    }
+    $('#alignment-div').on('wheel', handleWheel);
+    $('#guide-div').on('wheel', handleWheel);
   }
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.fasta.slice(0, 100) != nextProps.fasta.slice(0, 100);
@@ -285,17 +372,25 @@ class Alignment extends Component {
       <div id="axis-div" className="jav-container" style={{overflow: "scroll", overflowX: "hidden"}}>
         <svg id="axis"></svg>
       </div>
+      <div id="legend-div" className="jav-container">
+        <svg id="legend"></svg>
+      </div>
       <div id="reference-label-div" className="jav-container">
         <svg id="reference-label"></svg>
       </div>
       <div id="reference-alignment-div" className="jav-container" style={{overflow: "scroll", overflowX: "hidden"}}>
         <canvas id="reference-alignment"></canvas>
       </div>
+      <div id="reference-placeholder-div" className="jav-container">
+      </div>
       <div id="labels-div" className="jav-container" style={{overflow: "scroll", overflowY: "hidden"}}>
         <svg id="labels"></svg>
       </div>
       <div id="alignment-div" className="jav-container" style={{overflow: "scroll"}}>
         <canvas id="alignment"></canvas>
+      </div>
+      <div id="guide-div" className="jav-container" style={{overflow: "scroll", overflowY: "hidden"}}>
+        <svg id="guide"></svg>
       </div>
     </div>);
   }

@@ -183,7 +183,7 @@ class App extends Component {
           <Col xs={12}>
             <Alignment
               fasta={this.state.fasta}
-              width={1200}
+              width={1400}
               height={800}
               {...examples[this.state.dataset].props}
             />
