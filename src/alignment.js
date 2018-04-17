@@ -94,8 +94,49 @@ class Alignment extends Component {
    
     axis_svg.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(' + margin.left + ',' + 19 + ')')
+      .attr('transform', 'translate(' + margin.left + ',' + (axis_height-1) + ')')
       .call(axis);
+
+    var bar_data = _.toArray(this.props.json.posteriors);
+
+    var axis_bars = axis_svg.selectAll('.bar')
+      .data(bar_data)
+      .enter()
+      .append('g')
+        .attr('class', 'bar')
+        .attr('transform', (d,i) => 'translate(' + (i*site_size) + ',0)');
+
+    var bar_axis_scale = d3.scaleLinear()
+      .domain([0, 1])
+      .range([0, 130]);
+
+    axis_bars.append('rect')
+      .attr('x', 2)
+      .attr('y', 0)
+      .attr('width', site_size-2)
+      .attr('height', d=>bar_axis_scale(d['A'][1]))
+      .attr('fill', 'LightPink');
+
+    axis_bars.append('rect')
+      .attr('x', 2)
+      .attr('y', d=>bar_axis_scale(d['A'][1]))
+      .attr('width', site_size-2)
+      .attr('height', d=>bar_axis_scale(d['G'][1]))
+      .attr('fill', 'LemonChiffon');
+
+    axis_bars.append('rect')
+      .attr('x', 2)
+      .attr('y', d=>bar_axis_scale(d['A'][1]+d['G'][1]))
+      .attr('width', site_size-2)
+      .attr('height', d=>bar_axis_scale(d['C'][1]))
+      .attr('fill', 'MediumPurple');
+
+    axis_bars.append('rect')
+      .attr('x', 2)
+      .attr('y', d=>bar_axis_scale(d['A'][1]+d['G'][1]+d['C'][1]))
+      .attr('width', site_size-2)
+      .attr('height', d=>bar_axis_scale(d['T'][1]))
+      .attr('fill', 'LightBlue');
 
     var reference_label_svg = d3.select('#reference-label')
       .attr('width', label_width)
@@ -185,8 +226,6 @@ class Alignment extends Component {
     const draw = this.draw.bind(this);
     const self = this;
 
-    console.log(alignment_data);
-
     guide_svg.on("click", function() {
       var coords = d3.mouse(this);
       const x = -number_of_sites*site_size*coords[0]/guide_width,
@@ -235,7 +274,8 @@ class Alignment extends Component {
         .attr('x2', d=>guide_width*d[1]/number_of_sites)
         .attr('y2', (d,i) => guide_height*i/number_of_sequences)
         .style('stroke', 'red')
-        .style('stroke-width', '1px');
+        .style('stroke-width', '1px')
+        .style('opacity', .5);
 
      guide_svg.append('rect')
       .attr('id', 'guide-rect')
@@ -328,7 +368,7 @@ class Alignment extends Component {
     var self = this;
     if(this.props.fasta){
       this.alignment_data = fastaParser(this.props.fasta);
-      this.axis_height = 20;
+      this.axis_height = 150;
       this.site_size = 20; 
 
       this.renderAlignment();
@@ -359,7 +399,7 @@ class Alignment extends Component {
       document.getElementById('labels').innerHTML = '';
 
       this.alignment_data = fastaParser(this.props.fasta);
-      this.axis_height = 20;
+      this.axis_height = 150;
       this.site_size = 20; 
       this.renderAlignment();
     }
