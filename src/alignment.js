@@ -84,6 +84,21 @@ class Alignment extends Component {
       .attr('width', label_width)
       .attr('height', axis_height);
 
+    var bar_axis = d3.axisLeft()
+      .scale(d3.scaleLinear().domain([1,0]).range([0, 120]));
+
+    placeholder_svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', `translate(${label_width-1},10)`)
+      .call(bar_axis);
+
+    placeholder_svg.append('text')
+      .attr('x', .75*label_width)
+      .attr('y', 70)
+      .attr('text-anchor', 'middle')
+      .attr('transform', `rotate(270 ${.75*label_width}, 70)`)
+      .text('Posterior probability');
+
     var axis_svg = d3.select('#axis')
       .attr('width', this.alignment_width)
       .attr('height', axis_height);
@@ -108,32 +123,32 @@ class Alignment extends Component {
 
     var bar_axis_scale = d3.scaleLinear()
       .domain([0, 1])
-      .range([0, 130]);
+      .range([0, 120]);
 
     axis_bars.append('rect')
       .attr('x', 2)
-      .attr('y', 0)
+      .attr('y', 10)
       .attr('width', site_size-2)
       .attr('height', d=>bar_axis_scale(d['A'][1]))
       .attr('fill', 'LightPink');
 
     axis_bars.append('rect')
       .attr('x', 2)
-      .attr('y', d=>bar_axis_scale(d['A'][1]))
+      .attr('y', d=>10+bar_axis_scale(d['A'][1]))
       .attr('width', site_size-2)
       .attr('height', d=>bar_axis_scale(d['G'][1]))
       .attr('fill', 'LemonChiffon');
 
     axis_bars.append('rect')
       .attr('x', 2)
-      .attr('y', d=>bar_axis_scale(d['A'][1]+d['G'][1]))
+      .attr('y', d=>10+bar_axis_scale(d['A'][1]+d['G'][1]))
       .attr('width', site_size-2)
       .attr('height', d=>bar_axis_scale(d['C'][1]))
       .attr('fill', 'MediumPurple');
 
     axis_bars.append('rect')
       .attr('x', 2)
-      .attr('y', d=>bar_axis_scale(d['A'][1]+d['G'][1]+d['C'][1]))
+      .attr('y', d=>10+bar_axis_scale(d['A'][1]+d['G'][1]+d['C'][1]))
       .attr('width', site_size-2)
       .attr('height', d=>bar_axis_scale(d['T'][1]))
       .attr('fill', 'LightBlue');
@@ -160,6 +175,29 @@ class Alignment extends Component {
     var legend_svg = d3.select('#legend')
       .attr('width', this.guide_width)
       .attr('height', axis_height);
+
+    var legend_boxes = legend_svg.selectAll('.legend-box')
+      .data([
+        { mol: 'A', color: 'LightPink' },
+        { mol: 'G', color: 'LemonChiffon' },
+        { mol: 'C', color: 'MediumPurple' },
+        { mol: 'T', color: 'LightBlue' }
+      ])
+      .enter()
+      .append('g');
+
+    legend_boxes.append('rect')
+      .attr('x', 20)
+      .attr('y', (d,i) => 15+30*i)
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('fill', d=>d.color);
+
+    legend_boxes.append('text')
+      .attr('x', 50)
+      .attr('y', (d,i) => 30+30*i)
+      .attr('text-anchor', 'start')
+      .text(d=>d.mol);
 
     var guide_svg = d3.select('#guide')
       .attr('width', this.guide_width)
@@ -275,7 +313,7 @@ class Alignment extends Component {
         .attr('y2', (d,i) => guide_height*i/number_of_sequences)
         .style('stroke', 'red')
         .style('stroke-width', '1px')
-        .style('opacity', .5);
+        .style('opacity', .4);
 
      guide_svg.append('rect')
       .attr('id', 'guide-rect')

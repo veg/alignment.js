@@ -181,7 +181,7 @@ class App extends Component {
         </Modal>
       </div>
      
-      <Grid>
+      <Grid fluid>
         <Row>
           <Col xs={12}>
             <h4>{examples[this.state.dataset].purpose}</h4>
