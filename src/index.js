@@ -98,15 +98,12 @@ class App extends Component {
     });
   }
   loadData(dataset){
-    d3.text(`fasta/${dataset}.fasta`, (error, fasta) => {
-      d3.text('fasta/NGS.qual', (error, qual) => {
-        d3.json('fasta/NGS.json', (error, json) => {
-          this.setState({
-            dataset: dataset,
-            fasta: fasta,
-            qual: qual,
-            json: json
-          });
+    d3.text(`data/${dataset}.fasta`, (error, fasta) => {
+      d3.json('data/NGS.json', (error, json) => {
+        this.setState({
+          dataset: dataset,
+          fasta: fasta,
+          json: json
         });
       });
     });
@@ -189,7 +186,6 @@ class App extends Component {
           <Col xs={12}>
             <Alignment
               fasta={this.state.fasta}
-              qual={this.state.qual}
               json={this.state.json}
               width={1600}
               height={1100}
