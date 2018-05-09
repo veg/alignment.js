@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { 
-  Nav, Navbar, NavbarBrand, NavDropdown, MenuItem, Modal, Button, Grid, Row, Col
-} from 'react-bootstrap';
 import ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'bootstrap'
 const d3 = require('d3');
 const _ = require('underscore');
+const $ = require('jquery');
 
 import Alignment from './alignment';
 import { 
@@ -15,7 +12,7 @@ import {
   amino_acid_color,
   amino_acid_text_color
 } from './colors';
-require('./jav.css');
+require('./app.scss');
 
 const examples = {
   loading: {},
@@ -81,9 +78,11 @@ class App extends Component {
   }
   handleTextInput(){
     this.setState({modal: 'input'});
+    $("#myModal").modal("show") 
   }
   handleExport(){
     this.setState({modal: 'export'});
+    $("#myModal").modal("show") 
   }
   handleModalClose(){
     this.setState({modal: null});
@@ -103,91 +102,128 @@ class App extends Component {
     });
   }
   render(){
-    const modal_title = this.state.modal == 'input'
-      ? 'Paste sequence data' 
-      : 'Export sequence data',
-      modal_value = this.state.modal == 'input' ? null : this.state.fasta;
-    return(<div>
-      <Navbar className="navbar-fixed-top">
-        <Navbar.Header>
-          <Navbar.Brand>Javascript Alignment Viewer</Navbar.Brand>
-        </Navbar.Header>
-        <Nav>
-          <NavDropdown title="Sequences" id="sequences">
-            <MenuItem onClick={()=>this.handleTextInput()}>Input text</MenuItem>
-            <li role="presentation">
-              <a role="menuitem">
-                <input type='file' onChange={event=>this.handleFileChange(event)}/>
-              </a>
-            </li>
-            <MenuItem divider />
-            <MenuItem onClick={()=>this.handleExport()}>Export</MenuItem>
-          </NavDropdown>
-          <NavDropdown title="Examples" id="examples">
-            {_.keys(examples)
-              .slice(1)
-              .map(name => {
-              return (<MenuItem
-                key={name}
-                onClick={()=>this.loadData(name)}
-              >
-                {name}
-              </MenuItem>);
-            })}
-          </NavDropdown>
-        </Nav>
-      </Navbar>
-     
+    return(
       <div>
-        <Modal
-          show={Boolean(this.state.modal)}
-          onHide={()=>this.handleModalClose()}
+
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <a className="navbar-brand" href="#">Javascript Alignment Viewer</a>
+          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Sequences
+                </a>
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a className="dropdown-item" onClick={()=>this.handleTextInput()}>Input Text</a>
+                  <a className="dropdown-item" href="#">
+                    <input type='file' onChange={event=>this.handleFileChange(event)}/>
+                  </a>
+                  <div className="dropdown-divider"></div>
+                  <a className="dropdown-item" onClick={()=>this.handleExport()}>Export</a>
+                </div>
+              </li>
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Examples
+                </a>
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  {_.keys(examples)
+                    .slice(1)
+                    .map(name => {
+                      return (
+                        <a
+                          className="dropdown-item"
+                          key={name}
+                          onClick={()=>this.loadData(name)}
+                        >
+                          {name}
+                        </a>
+                      );
+                  })}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div
+          className="modal fade"
+          id="myModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="myModalLabel"
         >
-          <Modal.Header>
-            <Modal.Title>{modal_title}</Modal.Title>
-          </Modal.Header>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content" > 
+              <div className="modal-header">
+                <h4 className="modal-title" id="myModalLabel">
+                  { this.state.modal == 'input' ? 'Paste sequence data' : 'Export sequence data' }
+                </h4>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body" >
+                {this.state.modal == 'input' ? (
+                  <textarea
+                    type="text"
+                    id="input_textarea"
+                    type="text"
+                    cols={45}
+                    rows={25}
+                    style={{fontFamily: "Courier"}}
+                  />
+                ) : (
+                  <div style={{overflow:"auto"}}>
+                    {this.state.fasta}
+                  </div> )}
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn.btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                {this.state.modal == 'input' ? 
+                  <button
+                    onClick={()=>this.handleTextUpdate()}
+                  >
+                    Save changes
+                  </button>
+                : null }
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <Modal.Body>
-            <textarea
-              type="text"
-              id="input_textarea"
-              defaultValue={modal_value}
-              cols={60}
-              rows={25}
-              style={{fontFamily: "Courier"}}
-            />
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button onClick={()=>this.handleModalClose()}>Close</Button>
-            {this.state.modal == 'input' ? 
-              <Button
-                bsStyle="primary"
-                onClick={()=>this.handleTextUpdate()}
-              >
-                Save changes
-              </Button>
-            : null }
-          </Modal.Footer>
-        </Modal>
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <h4>{examples[this.state.dataset].purpose}</h4>
+            </div>
+            <div className="col-12">
+              <Alignment
+                fasta={this.state.fasta}
+                width={1200}
+                height={800}
+                {...examples[this.state.dataset].props}
+              />
+            </div>
+          </div>
+        </div>
+       
       </div>
-     
-      <Grid>
-        <Row>
-          <Col xs={12}>
-            <h4>{examples[this.state.dataset].purpose}</h4>
-          </Col>
-          <Col xs={12}>
-            <Alignment
-              fasta={this.state.fasta}
-              width={1200}
-              height={800}
-              {...examples[this.state.dataset].props}
-            />
-          </Col>
-        </Row>
-      </Grid>
-    </div>);
+    );
   }
 }
 
