@@ -9,7 +9,7 @@ import {
   nucleotide_text_color
 } from './colors';
 
-require('./jav.css');
+require('./app.scss');
 
 
 class Alignment extends Component {
