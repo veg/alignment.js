@@ -6,11 +6,6 @@ const _ = require('underscore');
 
 class BaseAlignment extends Component {
   componentDidMount() {
-    const context = document.getElementById('alignmentjs-alignment')
-      .getContext('2d');
-    context.font = "14px Courier";
-    context.textAlign = "center";
-    context.textBaseline = "middle";
   }
   componentDidUpdate(){
     this.draw(0,0);
@@ -47,6 +42,9 @@ class BaseAlignment extends Component {
     );
     const context = document.getElementById('alignmentjs-alignment')
       .getContext('2d');
+    context.font = "14px Courier";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
     context.setTransform(1, 0, 0, 1, -x_pixel, -y_pixel);
     individual_sites.forEach(function(d) {
       const x = site_size*(d.j-1),

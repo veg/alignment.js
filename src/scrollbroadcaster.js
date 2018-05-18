@@ -32,17 +32,13 @@ class ScrollBroadcaster {
       Math.max(0, y_fraction_candidate),
       this.upper_y_fraction
     );
-    const wheel_event = new CustomEvent(
-      'alignmentjs_wheel_event',
-      { 
-        detail: {
-          x_fraction: this.x_fraction,
-          y_fraction: this.y_fraction,
-          x_pixel: this.x_fraction*this.full_pixel_width,
-          y_pixel: this.y_fraction*this.full_pixel_height
-        }
-      }
-    );
+    const detail = {
+        x_fraction: this.x_fraction,
+        y_fraction: this.y_fraction,
+        x_pixel: this.x_fraction*this.full_pixel_width,
+        y_pixel: this.y_fraction*this.full_pixel_height
+      },
+      wheel_event = new CustomEvent( 'alignmentjs_wheel_event', { detail: detail });
     this.listeners.forEach(element=>element.dispatchEvent(wheel_event));
   }
 }

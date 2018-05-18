@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 const d3 = require('d3');
 const $ = require('jquery');
 const _ = require('underscore');
-
+const text_width = require('text-width');
 
 import fastaParser from './fasta';
 import BaseAlignment from './basealignment';
@@ -19,27 +19,28 @@ require('./app.scss');
 
 
 class Alignment extends Component {
+  constructor(props) {
+    super(props);
+    this.label_width = 200;
+  }
   componentDidMount(){
-    this.initialize();
+    this.initialize(this.props.fasta);
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    const old_slice = this.props.fasta.slice(0, 100),
-      new_slice = nextProps.fasta.slice(0, 100);
-    return old_slice != new_slice;
+  componentWillUpdate(nextProps){
+    this.initialize(nextProps.fasta);
   }
-  componentDidUpdate(){
-    this.initialize();
-  }
-  initialize() {
-    const { fasta } = this.props; 
+  initialize(fasta) {
     if(fasta) {
-      const { site_size, width, height, label_width, axis_height } = this.props;
+      const { site_size, width, height, axis_height } = this.props;
       this.sequence_data = fastaParser(fasta);
+      this.label_width = this.props.label_padding + this.sequence_data
+        .map(record=>text_width(record.header, { family: 'Courier', size: 14 }))
+        .reduce((a,b)=>Math.max(a,b), 0);
       const full_pixel_width = site_size*this.sequence_data.number_of_sites,
         full_pixel_height = site_size*this.sequence_data.number_of_sequences;
       this.scroll_broadcaster = new ScrollBroadcaster(
         { width: full_pixel_width, height: full_pixel_height },
-        { width: width-label_width, height: height-axis_height },
+        { width: width-this.label_width, height: height-axis_height },
         ['alignmentjs-alignment', 'alignmentjs-axis-div']
       );
       const { scroll_broadcaster } = this;
@@ -47,35 +48,31 @@ class Alignment extends Component {
         e.preventDefault();
         scroll_broadcaster.handleWheel(e);
       });
-      this.setState({received_sequence_data: true});
     }
   }
   render() {
-    if (this.props.fasta && !this.sequence_data) {
-      this.sequence_data = fastaParser(this.props.fasta);
-    }
     return (<div
       id="alignmentjs-main-div"
       style={{width:this.props.width, height: this.props.height}}
     >
       <Placeholder
-        width={this.props.label_width}
+        width={this.label_width}
         height={this.props.axis_height}
       />
       <Axis 
-        width={this.props.width-this.props.label_width}
+        width={this.props.width-this.label_width}
         height={this.props.axis_height}
         site_size={this.props.site_size}
         sequence_data={this.sequence_data}
       />
       <Labels
-        width={this.props.label_width}
+        width={this.label_width}
         height={this.props.height-this.props.axis_height}
         sequence_data={this.sequence_data}
         site_size={this.props.site_size}
       />
       <BaseAlignment
-        width={this.props.width-this.props.label_width}
+        width={this.props.width-this.label_width}
         height={this.props.height-this.props.axis_height}
         sequence_data={this.sequence_data}
         site_color={this.props.site_color}
@@ -89,10 +86,8 @@ class Alignment extends Component {
 Alignment.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
-  label_width: 200,
   label_padding: 10,
   site_size: 20,
-  label_width: 200,
   axis_height: 20
 }
 

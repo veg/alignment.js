@@ -62,7 +62,7 @@ class App extends Component {
     };
   }
   componentDidMount(){
-    this.loadData('Flu');
+    this.loadData('H3trunk');
   }
   handleFileChange(e){
     const files = e.target.files;
