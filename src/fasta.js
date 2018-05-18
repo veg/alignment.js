@@ -19,6 +19,8 @@ function fastaParser(fasta){
       start = i+1;
     }
   }
+  seqs.number_of_sequences = seqs.length;
+  seqs.number_of_sites = seqs[0].seq.length;
   return seqs;
 }
 

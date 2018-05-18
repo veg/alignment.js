@@ -14,6 +14,7 @@ import {
 } from './colors';
 require('./app.scss');
 
+
 const examples = {
   loading: {},
   CD2: {
@@ -30,8 +31,7 @@ const examples = {
     purpose: "Highlight individual sites in an alignment.",
     props: {
       site_color: highlight_codon_color,
-      text_color: highlight_codon_text_color,
-      width_in_characters: 30
+      text_color: highlight_codon_text_color
     }
   },
   CVF: {
@@ -62,7 +62,7 @@ class App extends Component {
     };
   }
   componentDidMount(){
-    this.loadData('CD2');
+    this.loadData('Flu');
   }
   handleFileChange(e){
     const files = e.target.files;
