@@ -6,13 +6,13 @@ const _ = require('underscore');
 
 class BaseAlignment extends Component {
   componentDidMount() {
-  }
-  componentDidUpdate(){
-    this.draw(0,0);
     document.getElementById('alignmentjs-alignment')
       .addEventListener('alignmentjs_wheel_event', e => {
         this.draw(e.detail.x_pixel, e.detail.y_pixel);
       });
+  }
+  componentDidUpdate(){
+    this.draw(0,0);
   }
   draw(x_pixel, y_pixel) {
     const { width, height, site_size, site_color, text_color } = this.props,

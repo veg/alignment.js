@@ -44,6 +44,8 @@ class Alignment extends Component {
         ['alignmentjs-alignment', 'alignmentjs-axis-div']
       );
       const { scroll_broadcaster } = this;
+      
+      $('#alignmentjs-main-div').off('wheel');
       $('#alignmentjs-main-div').on('wheel', function (e) {
         e.preventDefault();
         scroll_broadcaster.handleWheel(e);

@@ -11,10 +11,6 @@ class Axis extends Component {
       d3.select('#alignmentjs-axis-div')
         .style("width", width+"px")
         .style("height", height+"px");
-      document.getElementById('alignmentjs-axis-div')
-        .addEventListener('alignmentjs_wheel_event', function(e) {
-          $('#alignmentjs-axis-div').scrollLeft(e.detail.x_pixel);
-        });
       const { number_of_sites } = this.props.sequence_data,
         alignment_width = site_size*number_of_sites;
       
@@ -37,6 +33,10 @@ class Axis extends Component {
     }
   }
   componentDidMount() {
+    document.getElementById('alignmentjs-axis-div')
+      .addEventListener('alignmentjs_wheel_event', function(e) {
+        $('#alignmentjs-axis-div').scrollLeft(e.detail.x_pixel);
+      });
     this.initialize();
   }
   componentDidUpdate() {

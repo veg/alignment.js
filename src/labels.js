@@ -6,13 +6,13 @@ const $ = require('jquery');
 class Labels extends Component {
   initialize() {
     if(this.props.sequence_data) {
-      document.getElementById('alignmentjs-axis-div')
-        .addEventListener('alignmentjs_wheel_event', function(e) {
-          $('#alignmentjs-labels-div').scrollTop(e.detail.y_pixel);
-        });
     } 
   }
   componentDidMount() {
+    document.getElementById('alignmentjs-axis-div')
+      .addEventListener('alignmentjs_wheel_event', function(e) {
+        $('#alignmentjs-labels-div').scrollTop(e.detail.y_pixel);
+      });
     this.initialize();
   }
   componentDidUpdate() {
