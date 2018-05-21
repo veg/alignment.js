@@ -36,10 +36,10 @@ class Alignment extends Component {
       this.label_width = this.props.label_padding + this.sequence_data
         .map(record=>text_width(record.header, { family: 'Courier', size: 14 }))
         .reduce((a,b)=>Math.max(a,b), 0);
-      const full_pixel_width = site_size*this.sequence_data.number_of_sites,
-        full_pixel_height = site_size*this.sequence_data.number_of_sequences;
+      this.full_pixel_width = site_size*this.sequence_data.number_of_sites;
+      this.full_pixel_height = site_size*this.sequence_data.number_of_sequences;
       this.scroll_broadcaster = new ScrollBroadcaster(
-        { width: full_pixel_width, height: full_pixel_height },
+        { width: this.full_pixel_width, height: this.full_pixel_height },
         { width: width-this.label_width, height: height-axis_height },
         ['alignmentjs-alignment', 'alignmentjs-axis-div']
       );
@@ -53,29 +53,36 @@ class Alignment extends Component {
     }
   }
   render() {
+    const { full_pixel_width, full_pixel_height, label_width } = this,
+      width = full_pixel_width ? 
+        Math.min(label_width+full_pixel_width, this.props.width) :
+        this.props.width,
+      height = full_pixel_height ?
+        Math.min(full_pixel_height+this.props.axis_height, this.props.height) :
+        this.props.height;
     return (<div
       id="alignmentjs-main-div"
-      style={{width:this.props.width, height: this.props.height}}
+      style={{width:width, height: height}}
     >
       <Placeholder
         width={this.label_width}
         height={this.props.axis_height}
       />
       <Axis 
-        width={this.props.width-this.label_width}
+        width={width-this.label_width}
         height={this.props.axis_height}
         site_size={this.props.site_size}
         sequence_data={this.sequence_data}
       />
       <Labels
         width={this.label_width}
-        height={this.props.height-this.props.axis_height}
+        height={height-this.props.axis_height}
         sequence_data={this.sequence_data}
         site_size={this.props.site_size}
       />
       <BaseAlignment
-        width={this.props.width-this.label_width}
-        height={this.props.height-this.props.axis_height}
+        width={width-this.label_width}
+        height={height-this.props.axis_height}
         sequence_data={this.sequence_data}
         site_color={this.props.site_color}
         text_color={this.props.text_color}
