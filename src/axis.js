@@ -18,8 +18,9 @@ class Axis extends Component {
         .domain([1, number_of_sites])
         .range([site_size/2, alignment_width-site_size/2]);
 
-      var axis_svg = d3.select('#alignmentjs-axis')
-        .attr('width', alignment_width)
+      var axis_svg = d3.select('#alignmentjs-axis');
+      axis_svg.html('');
+      axis_svg.attr('width', alignment_width)
         .attr('height', height);
 
       var axis = d3.axisTop()
@@ -30,6 +31,8 @@ class Axis extends Component {
         .attr('class', 'axis')
         .attr('transform', `translate(0, ${height-1})`)
         .call(axis);
+      
+      $('#alignmentjs-axis-div').scrollLeft(this.props.x_pixel);
     }
   }
   componentDidMount() {

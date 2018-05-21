@@ -12,7 +12,7 @@ class BaseAlignment extends Component {
       });
   }
   componentDidUpdate(){
-    this.draw(0,0);
+    this.draw(this.props.x_pixel || 0, this.props.y_pixel || 0);
   }
   draw(x_pixel, y_pixel) {
     const { width, height, site_size, site_color, text_color } = this.props,

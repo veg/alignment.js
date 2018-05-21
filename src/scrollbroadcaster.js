@@ -1,12 +1,11 @@
 class ScrollBroadcaster {
-  constructor(full_pixel_dimensions, viewport_pixel_dimensions, listener_ids) {
+  constructor(full_pixel_dimensions, viewport_pixel_dimensions, initial_pixels, listener_ids) {
     this.full_pixel_width = full_pixel_dimensions.width;
     this.full_pixel_height = full_pixel_dimensions.height;
     this.viewport_pixel_width = viewport_pixel_dimensions.width;
     this.viewport_pixel_height = viewport_pixel_dimensions.height;
-    this.x_fraction = 0;
-
-    this.y_fraction = 0;
+    this.x_fraction = initial_pixels.x_pixel/this.full_pixel_width || 0;
+    this.y_fraction = initial_pixels.y_pixel/this.full_pixel_height || 0;
     this.upper_x_fraction = Math.max(
       1-this.viewport_pixel_width/this.full_pixel_width,
       0

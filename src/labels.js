@@ -4,21 +4,16 @@ const $ = require('jquery');
 
 
 class Labels extends Component {
-  initialize() {
-    if(this.props.sequence_data) {
-    } 
-  }
   componentDidMount() {
     document.getElementById('alignmentjs-axis-div')
       .addEventListener('alignmentjs_wheel_event', function(e) {
         $('#alignmentjs-labels-div').scrollTop(e.detail.y_pixel);
       });
-    this.initialize();
   }
-  componentDidUpdate() {
-    this.initialize();
+  componentDidUpdate(nextProps) {
+    $('#alignmentjs-labels-div').scrollTop(this.props.y_pixel);
+    
   }
-  
   render(){
     if(!this.props.sequence_data) {
       return (<div
