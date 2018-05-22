@@ -62,7 +62,7 @@ class App extends Component {
     };
   }
   componentDidMount(){
-    this.loadData('H3trunk');
+    this.loadData('CD2');
   }
   handleFileChange(e){
     const files = e.target.files;
@@ -73,8 +73,8 @@ class App extends Component {
         this.setState({fasta: e.target.result});
       }
       reader.readAsText(file);
-      document.getElementById('sequences').click();
     }
+    document.body.click();
   }
   handleTextInput(){
     this.setState({modal: 'input'});
@@ -84,10 +84,8 @@ class App extends Component {
     this.setState({modal: 'export'});
     $("#myModal").modal("show") 
   }
-  handleModalClose(){
-    this.setState({modal: null});
-  }
   handleTextUpdate(){
+    $("#myModal").modal("hide") 
     this.setState({
       modal: null,
       fasta: document.getElementById("input_textarea").value
