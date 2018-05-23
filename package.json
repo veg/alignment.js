@@ -1,7 +1,7 @@
 {
   "name": "alignment.js",
   "version": "1.0.5",
-  "main": "dist/alignment.js",
+  "main": "lib/alignment.js",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.1.1",

@@ -5,12 +5,12 @@ const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin'),
 
 module.exports = merge(common, {
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "lib"),
     library: "alignment",
     libraryTarget: "commonjs2",
     filename: "alignment.js"
   },
-  entry: path.resolve(__dirname, 'src', 'alignment.js'),
+  entry: path.resolve(__dirname, 'src', 'library.js'),
   externals: [
     'react',
     'react-bootstrap',

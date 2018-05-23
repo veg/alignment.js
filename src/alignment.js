@@ -76,7 +76,6 @@ class Alignment extends Component {
         height={this.props.axis_height}
       />
       <Axis 
-        width={width-this.label_width}
         height={this.props.axis_height}
         site_size={this.props.site_size}
         sequence_data={this.sequence_data}

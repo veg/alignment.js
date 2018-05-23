@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { 
+  nucleotide_color,
+  nucleotide_text_color
+} from './colors';
 
 const d3 = require('d3');
 const _ = require('underscore');
@@ -72,5 +76,9 @@ class BaseAlignment extends Component {
   }
 }
 
+BaseAlignment.defaultProps = {
+  site_color: nucleotide_color,
+  text_color: nucleotide_text_color
+};
 
 module.exports = BaseAlignment;
