@@ -1,6 +1,6 @@
 {
   "name": "alignment.js",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "lib/alignment.js",
   "license": "MIT",
   "dependencies": {
