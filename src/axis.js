@@ -60,4 +60,8 @@ class Axis extends Component {
   }
 }
 
+Axis.defaultProps = {
+  x_pixel: 0,
+  site_size: 20
+}
 module.exports = Axis;

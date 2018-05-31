@@ -22,12 +22,36 @@ class Alignment extends Component {
   constructor(props) {
     super(props);
     this.label_width = 200;
+    this.initialize(this.props);
   }
   componentDidMount(){
-    this.initialize(this.props);
+    this.setScrollingEvents(this.props);
+  }
+  setScrollingEvents(props) {
+    if(props.fasta) {
+      const { width, height, axis_height } = props;
+      this.scroll_broadcaster = new ScrollBroadcaster(
+        { width: this.full_pixel_width, height: this.full_pixel_height },
+        { width: width-this.label_width, height: height-axis_height },
+        { x_pixel: this.x_pixel, y_pixel: this.y_pixel },
+        [
+          'alignmentjs-alignment',
+          'alignmentjs-axis-div',
+          'alignmentjs-labels-div'
+        ]
+      );
+      const { scroll_broadcaster } = this;
+      scroll_broadcaster.setListeners();
+      $('#alignmentjs-main-div').off('wheel');
+      $('#alignmentjs-main-div').on('wheel', function (e) {
+        e.preventDefault();
+        scroll_broadcaster.handleWheel(e);
+      });
+    }
   }
   componentWillUpdate(nextProps){
     this.initialize(nextProps);
+    this.setScrollingEvents(nextProps);
   }
   initialize(props) {
     if(props.fasta) {
@@ -44,19 +68,6 @@ class Alignment extends Component {
       this.y_pixel = centerOnHeader ? site_size*this.sequence_data
         .map(record=>record.header)
         .indexOf(centerOnHeader) - height/2 : 0;
-
-      this.scroll_broadcaster = new ScrollBroadcaster(
-        { width: this.full_pixel_width, height: this.full_pixel_height },
-        { width: width-this.label_width, height: height-axis_height },
-        { x_pixel: this.x_pixel, y_pixel: this.y_pixel },
-        ['alignmentjs-alignment', 'alignmentjs-axis-div']
-      );
-      const { scroll_broadcaster } = this;
-      $('#alignmentjs-main-div').off('wheel');
-      $('#alignmentjs-main-div').on('wheel', function (e) {
-        e.preventDefault();
-        scroll_broadcaster.handleWheel(e);
-      });
     }
   }
   render() {

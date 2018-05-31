@@ -9,18 +9,25 @@ const _ = require('underscore');
 
 
 class BaseAlignment extends Component {
+  constructor(props) {
+    super(props);
+    this.canvas_id = props.id + '-alignment';
+  }
   componentDidMount() {
-    document.getElementById('alignmentjs-alignment')
+    document.getElementById(this.canvas_id)
       .addEventListener('alignmentjs_wheel_event', e => {
         this.draw(e.detail.x_pixel, e.detail.y_pixel);
       });
+    if(this.props.sequence_data) {
+      this.draw(this.props.x_pixel || 0, this.props.y_pixel || 0);
+    }
   }
   componentDidUpdate(){
     this.draw(this.props.x_pixel || 0, this.props.y_pixel || 0);
   }
   draw(x_pixel, y_pixel) {
+    if(this.props.disableVerticalScrolling) y_pixel = 0;
     const { width, height, site_size, site_color, text_color } = this.props,
-      { number_of_sites, number_of_sequences } = this.props.sequence_data,
       start_site = Math.floor(x_pixel/site_size),
       end_site = Math.ceil((x_pixel+width)/site_size),
       start_seq = Math.floor(y_pixel/site_size), 
@@ -44,7 +51,7 @@ class BaseAlignment extends Component {
         });
       })
     );
-    const context = document.getElementById('alignmentjs-alignment')
+    const context = document.getElementById(this.canvas_id)
       .getContext('2d');
     context.font = "14px Courier";
     context.textAlign = "center";
@@ -63,14 +70,15 @@ class BaseAlignment extends Component {
     });
   }
   render() {
+    const div_id = this.props.id + '-alignment-div';
     return (<div
-      id="alignmentjs-alignment-div"
+      id={div_id}
       className="alignmentjs-container"
     >
       <canvas
         width={this.props.width}
         height={this.props.height}
-        id="alignmentjs-alignment"
+        id={this.canvas_id}
       />
     </div>);
   }
@@ -78,7 +86,8 @@ class BaseAlignment extends Component {
 
 BaseAlignment.defaultProps = {
   site_color: nucleotide_color,
-  text_color: nucleotide_text_color
+  text_color: nucleotide_text_color,
+  id: 'alignmentjs'
 };
 
 module.exports = BaseAlignment;

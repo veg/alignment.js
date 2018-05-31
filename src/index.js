@@ -6,6 +6,7 @@ const _ = require('underscore');
 const $ = require('jquery');
 
 import Alignment from './alignment';
+import ScaffoldViewer from './scaffold_viewer';
 import { 
   highlight_codon_color,
   highlight_codon_text_color,
@@ -58,11 +59,13 @@ class App extends Component {
     this.state = {
       fasta: '',
       modal: null,
-      dataset: 'loading'
+      dataset: 'loading',
+      viewing: 'alignment'
     };
   }
   componentDidMount(){
-    this.loadData('CD2');
+    //this.loadData('CD2');
+    this.loadScaffoldData();
   }
   handleFileChange(e){
     const files = e.target.files;
@@ -95,11 +98,23 @@ class App extends Component {
     d3.text(`fasta/${dataset}.fasta`, (error, data) => {
       this.setState({
         dataset: dataset,
-        fasta: data
+        fasta: data,
+        viewing: 'alignment'
+      });
+    });
+  }
+  loadScaffoldData(){
+    d3.text('fasta/scaffold.fasta', (error, data) => {
+      this.setState({
+        fasta: data,
+        viewing: 'scaffold'
       });
     });
   }
   render(){
+    const message = this.state.viewing == 'alignment' ?
+      examples[this.state.dataset].purpose :
+      'NGS Scaffold viewer';
     return(
       <div>
 
@@ -142,6 +157,11 @@ class App extends Component {
                       );
                   })}
                 </div>
+              </li>
+              <li>
+                <a className="nav-link" onClick={()=>this.loadScaffoldData()}>
+                  Scaffold viewer
+                </a>
               </li>
             </ul>
           </div>
@@ -207,15 +227,21 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <h4>{examples[this.state.dataset].purpose}</h4>
+              <h4>{message}</h4>
             </div>
             <div className="col-12">
-              <Alignment
-                fasta={this.state.fasta}
-                width={1200}
-                height={800}
-                {...examples[this.state.dataset].props}
-              />
+              { this.state.viewing == 'alignment' ? 
+                <Alignment
+                  fasta={this.state.fasta}
+                  width={1200}
+                  height={800}
+                  {...examples[this.state.dataset].props}
+                /> :
+                <ScaffoldViewer
+                  fasta={this.state.fasta}
+                  width={1200}
+                  height={800}
+                /> }
             </div>
           </div>
         </div>

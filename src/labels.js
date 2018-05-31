@@ -4,25 +4,29 @@ const $ = require('jquery');
 
 
 class Labels extends Component {
+  constructor(props) {
+    super(props);
+    this.div_id = props.id+'-labels-div';
+  }
   componentDidMount() {
-    document.getElementById('alignmentjs-axis-div')
+    const { div_id } = this;
+    document.getElementById(div_id)
       .addEventListener('alignmentjs_wheel_event', function(e) {
-        $('#alignmentjs-labels-div').scrollTop(e.detail.y_pixel);
+        $(`#${div_id}`).scrollTop(e.detail.y_pixel);
       });
   }
   componentDidUpdate(nextProps) {
-    $('#alignmentjs-labels-div').scrollTop(this.props.y_pixel);
-    
+    $(`#${this.div_id}`).scrollTop(this.props.y_pixel);
   }
   render(){
     if(!this.props.sequence_data) {
       return (<div
-        id="alignmentjs-labels-div"
+        id={this.div_id}
         className="alignmentjs-container"
       />);
     }
     const { width, height, site_size } = this.props,
-      { number_of_sequences } = this.props.sequence_data,
+      number_of_sequences = this.props.sequence_data.length,
       styles = {
         overflowX: "scroll",
         overflowY: "hidden",
@@ -32,7 +36,7 @@ class Labels extends Component {
       alignment_height = site_size*number_of_sequences,
       labels = this.props.sequence_data.map(record=>record.header);
     return(<div
-      id="alignmentjs-labels-div"
+      id={this.div_id}
       className="alignmentjs-container"
       style={styles}
     >
@@ -58,7 +62,8 @@ class Labels extends Component {
 }
 
 Labels.defaultProps = {
-  label_padding: 10
+  label_padding: 10,
+  id: 'alignmentjs'
 }
 
 module.exports = Labels;
