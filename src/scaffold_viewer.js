@@ -90,7 +90,6 @@ class ScaffoldViewer extends Component {
       },
       reference_sequence_data = this.sequence_data.slice(0,1),
       remaining_sequence_data = this.sequence_data.slice(1);
-    debugger;
     return (<div
       style={container_style}
       id='alignmentjs-main-div'
