@@ -13,6 +13,7 @@ import {
   amino_acid_color,
   amino_acid_text_color
 } from "./colors";
+import NavBar from "./NavBar";
 require("./app.scss");
 
 const examples = {
@@ -78,22 +79,22 @@ class App extends Component {
     }
     document.body.click();
   }
-  handleTextInput() {
+  handleTextInput = () => {
     this.setState({ modal: "input" });
     $("#myModal").modal("show");
-  }
-  handleExport() {
+  };
+  handleExport = () => {
     this.setState({ modal: "export" });
     $("#myModal").modal("show");
-  }
-  handleTextUpdate() {
+  };
+  handleTextUpdate = () => {
     $("#myModal").modal("hide");
     this.setState({
       modal: null,
       fasta: document.getElementById("input_textarea").value
     });
-  }
-  loadData(dataset) {
+  };
+  loadData = dataset => {
     d3.text(`fasta/${dataset}.fasta`, (error, data) => {
       this.setState({
         dataset: dataset,
@@ -101,15 +102,15 @@ class App extends Component {
         viewing: "alignment"
       });
     });
-  }
-  loadScaffoldData() {
+  };
+  loadScaffoldData = () => {
     d3.text("fasta/scaffold.fasta", (error, data) => {
       this.setState({
         fasta: data,
         viewing: "scaffold"
       });
     });
-  }
+  };
   render() {
     const message =
       this.state.viewing == "alignment"
@@ -117,155 +118,23 @@ class App extends Component {
         : "NGS Scaffold viewer";
     return (
       <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <a className="navbar-brand" href="#">
-            Javascript Alignment Viewer
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Sequences
-                </a>
-                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a
-                    className="dropdown-item"
-                    onClick={() => this.handleTextInput()}
-                  >
-                    Input Text
-                  </a>
-                  <a className="dropdown-item" href="#">
-                    <input
-                      type="file"
-                      onChange={event => this.handleFileChange(event)}
-                    />
-                  </a>
-                  <div className="dropdown-divider" />
-                  <a
-                    className="dropdown-item"
-                    onClick={() => this.handleExport()}
-                  >
-                    Export
-                  </a>
-                </div>
-              </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Examples
-                </a>
-                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  {_.keys(examples)
-                    .slice(1)
-                    .map(name => {
-                      return (
-                        <a
-                          className="dropdown-item"
-                          key={name}
-                          onClick={() => this.loadData(name)}
-                        >
-                          {name}
-                        </a>
-                      );
-                    })}
-                </div>
-              </li>
-              <li>
-                <a className="nav-link" onClick={() => this.loadScaffoldData()}>
-                  Scaffold viewer
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-        <div
-          className="modal fade"
-          id="myModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="myModalLabel"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title" id="myModalLabel">
-                  {this.state.modal == "input"
-                    ? "Paste sequence data"
-                    : "Export sequence data"}
-                </h4>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                {this.state.modal == "input" ? (
-                  <textarea
-                    type="text"
-                    id="input_textarea"
-                    type="text"
-                    cols={45}
-                    rows={25}
-                    style={{ fontFamily: "Courier" }}
-                  />
-                ) : (
-                  <div style={{ overflow: "auto" }}>{this.state.fasta}</div>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn.btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                {this.state.modal == "input" ? (
-                  <button onClick={() => this.handleTextUpdate()}>
-                    Save changes
-                  </button>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        </div>
+        <NavBar
+          handleTextInput={this.handleTextInput}
+          handleFileChange={this.handleFileChange}
+          handleExport={this.handleExport}
+          alignmentsToView={examples}
+          loadData={this.loadData}
+          modal={this.state.modal}
+          fasta={this.state.fasta}
+          handleTextUpdate={this.handleTextUpdate}
+        />
 
         <div className="container">
           <div className="row">
             <div className="col-12">
               <h4>{message}</h4>
             </div>
+
             <div className="col-12">
               {this.state.viewing == "alignment" ? (
                 <Alignment
