@@ -13,7 +13,7 @@ import {
   amino_acid_color,
   amino_acid_text_color
 } from "./colors";
-import NavBar from "./NavBar";
+import NavBar from "./NavBar.jsx";
 require("./app.scss");
 
 const examples = {
@@ -67,7 +67,7 @@ class App extends Component {
     //this.loadData('CD2');
     this.loadScaffoldData();
   }
-  handleFileChange(e) {
+  handleFileChange = e => {
     const files = e.target.files;
     if (files.length == 1) {
       const file = files[0],
@@ -78,7 +78,7 @@ class App extends Component {
       reader.readAsText(file);
     }
     document.body.click();
-  }
+  };
   handleTextInput = () => {
     this.setState({ modal: "input" });
     $("#myModal").modal("show");
@@ -127,6 +127,7 @@ class App extends Component {
           modal={this.state.modal}
           fasta={this.state.fasta}
           handleTextUpdate={this.handleTextUpdate}
+          loadScaffoldData={this.loadScaffoldData}
         />
 
         <div className="container">
