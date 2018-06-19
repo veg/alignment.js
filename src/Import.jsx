@@ -40,7 +40,10 @@ class Import extends Component {
               >
                 Import
               </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+              <div
+                className="dropdown-menu dropdown-menu-right"
+                aria-labelledby="navbarDropdown"
+              >
                 <a
                   className="dropdown-item"
                   onClick={() => this.showImportModal()}
