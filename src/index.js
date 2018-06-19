@@ -58,7 +58,6 @@ class App extends Component {
     super(props);
     this.state = {
       fasta: "",
-      modal: null,
       dataset: "loading",
       viewing: "alignment"
     };
@@ -79,18 +78,9 @@ class App extends Component {
     }
     document.body.click();
   };
-  handleTextInput = () => {
-    this.setState({ modal: "input" });
-    $("#myModal").modal("show");
-  };
-  handleExport = () => {
-    this.setState({ modal: "export" });
-    $("#myModal").modal("show");
-  };
   handleTextUpdate = () => {
     $("#myModal").modal("hide");
     this.setState({
-      modal: null,
       fasta: document.getElementById("input_textarea").value
     });
   };
@@ -119,12 +109,9 @@ class App extends Component {
     return (
       <div>
         <NavBar
-          handleTextInput={this.handleTextInput}
           handleFileChange={this.handleFileChange}
-          handleExport={this.handleExport}
           alignmentsToView={examples}
           loadData={this.loadData}
-          modal={this.state.modal}
           fasta={this.state.fasta}
           handleTextUpdate={this.handleTextUpdate}
           loadScaffoldData={this.loadScaffoldData}

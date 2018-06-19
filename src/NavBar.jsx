@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import "bootstrap";
 
-import LoadData from "./LoadData.jsx";
+import Import from "./Import.jsx";
+import Export from "./Export.jsx";
 import DropDownOfAlignmentsToView from "./DropDownOfAlignmentsToView.jsx";
 
 function NavBar(props) {
@@ -12,15 +12,7 @@ function NavBar(props) {
           Javascript Alignment Viewer
         </a>
         <div className="collapse navbar-collapse">
-          <ul className="navbar-nav mr-auto">
-            <LoadData
-              handleTextInput={props.handleTextInput}
-              handleFileChange={props.handleFileChange}
-              handleExport={props.handleExport}
-              modal={props.modal}
-              fasta={props.fasta}
-              handleTextUpdate={props.handleTextUpdate}
-            />
+          <ul className="navbar-nav ">
             <DropDownOfAlignmentsToView
               alignmentsToView={props.alignmentsToView}
               loadData={props.loadData}
@@ -30,6 +22,13 @@ function NavBar(props) {
                 Scaffold viewer
               </a>
             </li>
+          </ul>
+          <ul className="navbar-nav ml-auto">
+            <Import
+              handleFileChange={props.handleFileChange}
+              handleTextUpdate={props.handleTextUpdate}
+            />
+            <Export fasta={props.fasta} />
           </ul>
         </div>
       </nav>

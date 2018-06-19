@@ -30,23 +30,11 @@ class BaseAlignment extends Component {
       start_seq = Math.floor(y_pixel / site_size),
       end_seq = Math.ceil((y_pixel + height) / site_size);
 
-    /*
-    console.log('---updated---')
-    console.log('start_site: ' + start_site)
-    console.log('end_site: ' + end_site)
-    console.log('start_seq: ' + start_seq)
-    console.log('end_seq: ' + end_seq)
-    console.log('sequence_data: ' )
-    console.log(this.props.sequence_data)
-    */
-
     const individual_sites = _.flatten(
       this.props.sequence_data
         .filter((row, i) => {
           const after_start = i >= start_seq;
           const before_finish = i <= end_seq;
-          //console.log('after_start: ' + after_start)
-          //console.log('before_finish: ' + before_finish)
           return after_start && before_finish;
         })
         .map((row, i) => {
@@ -54,13 +42,6 @@ class BaseAlignment extends Component {
             .slice(start_site, end_site)
             .split("")
             .map((mol, j) => {
-              /*
-              console.log('mol: ' + mol)
-              console.log('j: ' + j)
-              console.log('i: ' + i)
-              console.log('header: ' + row.header)
-              */
-
               return {
                 mol: mol,
                 j: start_site + j + 1,
