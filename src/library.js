@@ -1,9 +1,9 @@
-import Alignment from "./alignment";
-import BaseAlignment from "./basealignment";
-import Axis from "./axis";
-import Labels from "./labels";
-import fastaParser from "./fasta";
-import ScrollBroadcaster from "./scrollbroadcaster";
+import Alignment from "./components/Alignment.jsx";
+import BaseAlignment from ".components/BaseAlignment.jsx";
+import Axis from ".components/SiteAxis.jsx";
+import Labels from ".components/SequenceAxis.jsx";
+import fastaParser from ".helpers/fasta";
+import ScrollBroadcaster from ".helpers/ScrollBroadcaster";
 
 require("./app.scss");
 

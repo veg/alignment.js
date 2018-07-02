@@ -2,7 +2,7 @@ const path = require("path"),
   HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: path.resolve("src", "index.js"),
+  entry: path.resolve("src", "index.jsx"),
   plugins: [
     new HtmlWebpackPlugin({
       title: "Javascript Alignment Viewer"

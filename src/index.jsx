@@ -5,16 +5,16 @@ const d3 = require("d3");
 const _ = require("underscore");
 const $ = require("jquery");
 
-import Alignment from "./alignment";
-import ScaffoldViewer from "./scaffold_viewer";
+import Alignment from "./components/Alignment.jsx";
+import ScaffoldViewer from "./components/ScaffoldViewer.jsx";
 import {
   highlight_codon_color,
   highlight_codon_text_color,
   amino_acid_color,
   amino_acid_text_color
-} from "./colors";
-import NavBar from "./NavBar.jsx";
-import AlignmentWithSiteBarPlot from "./AlignmentWithSiteBarPlot.jsx";
+} from "./helpers/colors";
+import NavBar from "./components/navComponents/NavBar.jsx";
+import AlignmentWithSiteBarPlot from "./components/AlignmentWithSiteBarPlot.jsx";
 require("./app.scss");
 
 const examples = {

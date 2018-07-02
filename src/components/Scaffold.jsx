@@ -7,7 +7,8 @@ class Scaffold extends Component {
     document
       .getElementById("alignmentjs-scaffold-div")
       .addEventListener("alignmentjs_wheel_event", e => {
-        d3.select("#alignmentjs-guide-rect")
+        d3
+          .select("#alignmentjs-guide-rect")
           .attr("x", e.detail.x_fraction * this.props.width)
           .attr("y", e.detail.y_fraction * this.props.height);
       });
@@ -28,10 +29,12 @@ class Scaffold extends Component {
       number_of_sites = sequence_data[0].seq.length,
       number_of_sequences = sequence_data.length,
       guide_width =
-        (this.props.width * scroll_broadcaster.viewport_pixel_width) /
+        this.props.width *
+        scroll_broadcaster.viewport_pixel_width /
         scroll_broadcaster.full_pixel_width,
       guide_height =
-        (this.props.height * scroll_broadcaster.viewport_pixel_height) /
+        this.props.height *
+        scroll_broadcaster.viewport_pixel_height /
         scroll_broadcaster.full_pixel_height,
       line_style = { stroke: "red", strokeWidth: "1px" };
     return (
@@ -39,7 +42,7 @@ class Scaffold extends Component {
         <svg width={width} height={height} id="alignmentjs-scaffold">
           <rect x={0} y={0} width={width} height={height} fill="WhiteSmoke" />
           {sequence_data.map((row, index) => {
-            const y = (height * index) / number_of_sequences;
+            const y = height * index / number_of_sequences;
             var start = false,
               end = false;
             for (let i = 0; !start || !end; i++) {
@@ -52,8 +55,8 @@ class Scaffold extends Component {
             }
             return (
               <line
-                x1={(width * start) / number_of_sites}
-                x2={(width * end) / number_of_sites}
+                x1={width * start / number_of_sites}
+                x2={width * end / number_of_sites}
                 y1={y}
                 y2={y}
                 key={index}

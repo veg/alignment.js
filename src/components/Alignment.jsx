@@ -4,15 +4,15 @@ const $ = require("jquery");
 const _ = require("underscore");
 const text_width = require("text-width");
 
-import fastaParser from "./fasta";
-import BaseAlignment from "./basealignment";
+import fastaParser from "./../helpers/fasta";
+import BaseAlignment from "./BaseAlignment.jsx";
 import SiteAxis from "./SiteAxis.jsx";
-import Placeholder from "./placeholder";
+import Placeholder from "./Placeholder.jsx";
 import SequenceAxis from "./SequenceAxis.jsx";
-import ScrollBroadcaster from "./scrollbroadcaster";
-import { nucleotide_color, nucleotide_text_color } from "./colors";
+import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
+import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 
-require("./app.scss");
+//require("./app.scss");
 
 class Alignment extends Component {
   constructor(props) {
