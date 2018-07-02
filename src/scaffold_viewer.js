@@ -6,9 +6,9 @@ const text_width = require("text-width");
 
 import fastaParser from "./fasta";
 import BaseAlignment from "./basealignment";
-import Axis from "./axis";
+import SiteAxis from "./SiteAxis.jsx";
 import Placeholder from "./placeholder";
-import Labels from "./labels";
+import SequenceAxis from "./SequenceAxis.jsx";
 import Scaffold from "./scaffold";
 import ScrollBroadcaster from "./scrollbroadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./colors";
@@ -100,13 +100,13 @@ class ScaffoldViewer extends Component {
     return (
       <div style={container_style} id="alignmentjs-main-div">
         <div id="alignmentjs-axis-placeholder1" />
-        <Axis
+        <SiteAxis
           width={alignment_width}
           height={20}
           sequence_data={this.sequence_data}
         />
         <div id="alignmentjs-axis-placeholder2" />
-        <Labels
+        <SequenceAxis
           width={this.label_width}
           height={this.props.site_size}
           sequence_data={reference_sequence_data}
@@ -125,7 +125,7 @@ class ScaffoldViewer extends Component {
           disableVerticalScrolling
         />
         <div id="alignmentjs-reference-placeholder" />
-        <Labels
+        <SequenceAxis
           width={this.label_width}
           height={800}
           sequence_data={remaining_sequence_data}

@@ -7,7 +7,8 @@ class Axis extends Component {
   initialize() {
     if (this.props.sequence_data) {
       const { width, height, site_size } = this.props;
-      d3.select("#alignmentjs-axis-div")
+      d3
+        .select("#alignmentjs-axis-div")
         .style("width", width + "px")
         .style("height", height + "px");
       const { number_of_sites } = this.props.sequence_data,

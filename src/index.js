@@ -14,6 +14,7 @@ import {
   amino_acid_text_color
 } from "./colors";
 import NavBar from "./NavBar.jsx";
+import AlignmentWithSiteBarPlot from "./AlignmentWithSiteBarPlot.jsx";
 require("./app.scss");
 
 const examples = {
@@ -59,12 +60,14 @@ class App extends Component {
     this.state = {
       fasta: "",
       dataset: "loading",
-      viewing: "alignment"
+      viewing: "siteBarPlot"
+      //viewing: "alignment"
     };
   }
   componentDidMount() {
     //this.loadData('CD2');
-    this.loadScaffoldData();
+    //this.loadScaffoldData();
+    this.changeView("siteBarPlot");
   }
   handleFileChange = e => {
     const files = e.target.files;
@@ -101,11 +104,25 @@ class App extends Component {
       });
     });
   };
+  changeView = view => {
+    const views = {
+      scaffold: { data: "fasta/scaffold.fasta" },
+      siteBarPlot: { data: "fasta/siteBarPlot.fasta" }
+    };
+    d3.text(views[view].data, (error, data) => {
+      this.setState({
+        fasta: data,
+        viewing: view
+      });
+    });
+  };
   render() {
     const message =
       this.state.viewing == "alignment"
         ? examples[this.state.dataset].purpose
-        : "NGS Scaffold viewer";
+        : this.state.viewing == "scaffold"
+          ? "NGS Scaffold viewer"
+          : "Example Site Bar Plot (adenine richness)";
     return (
       <div>
         <NavBar
@@ -115,6 +132,7 @@ class App extends Component {
           fasta={this.state.fasta}
           handleTextUpdate={this.handleTextUpdate}
           loadScaffoldData={this.loadScaffoldData}
+          changeView={this.changeView}
         />
 
         <div className="container">
@@ -131,11 +149,18 @@ class App extends Component {
                   height={800}
                   {...examples[this.state.dataset].props}
                 />
-              ) : (
+              ) : this.state.viewing == "scaffold" ? (
                 <ScaffoldViewer
                   fasta={this.state.fasta}
                   width={1200}
                   height={800}
+                />
+              ) : (
+                <AlignmentWithSiteBarPlot
+                  fasta={this.state.fasta}
+                  width={1200}
+                  height={800}
+                  siteBarPlot_height={60}
                 />
               )}
             </div>

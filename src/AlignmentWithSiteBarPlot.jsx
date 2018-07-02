@@ -11,10 +11,13 @@ import Placeholder from "./placeholder";
 import SequenceAxis from "./SequenceAxis.jsx";
 import ScrollBroadcaster from "./scrollbroadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./colors";
+//import SiteBarPlot from "./SiteBarPlot.jsx";
+//toremove
+import TestBarPlot from "./TestBarPlot.jsx";
 
 require("./app.scss");
 
-class Alignment extends Component {
+class AlignmentWithSiteBarPlot extends Component {
   constructor(props) {
     super(props);
     this.label_width = 200;
@@ -86,8 +89,19 @@ class Alignment extends Component {
             this.props.height
           )
         : this.props.height;
+    const adenineRichness = [0.33, 0, 0, 0, 0, 0.66, 1, 0.33, 0, 0, 0, 0.33];
     return (
       <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
+        {/*<SiteBarPlot
+          style={{gridColumn: "1/3"}}
+          height={this.props.siteBarPlot_height}
+          width={width}
+          sequenceAxisWidth={10}
+          site_size={this.props.site_size}
+          siteData={adenineRichness}
+          x_pixel={this.x_pixel}
+        />
+        */}
         <Placeholder width={this.label_width} height={this.props.axis_height} />
         <SiteAxis
           height={this.props.axis_height}
@@ -112,12 +126,13 @@ class Alignment extends Component {
           x_pixel={this.x_pixel}
           y_pixel={this.y_pixel}
         />
+        <TestBarPlot width={width} height={200} />
       </div>
     );
   }
 }
 
-Alignment.defaultProps = {
+AlignmentWithSiteBarPlot.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
   label_padding: 10,
@@ -125,4 +140,4 @@ Alignment.defaultProps = {
   axis_height: 20
 };
 
-module.exports = Alignment;
+module.exports = AlignmentWithSiteBarPlot;
