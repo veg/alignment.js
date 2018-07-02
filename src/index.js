@@ -79,7 +79,7 @@ class App extends Component {
     document.body.click();
   };
   handleTextUpdate = () => {
-    $("#myModal").modal("hide");
+    $("#importModal").modal("hide");
     this.setState({
       fasta: document.getElementById("input_textarea").value
     });
