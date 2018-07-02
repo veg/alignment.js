@@ -29,11 +29,12 @@ class BaseAlignment extends Component {
       end_site = Math.ceil((x_pixel + width) / site_size),
       start_seq = Math.floor(y_pixel / site_size),
       end_seq = Math.ceil((y_pixel + height) / site_size);
+
     const individual_sites = _.flatten(
       this.props.sequence_data
         .filter((row, i) => {
-          const after_start = i >= start_seq,
-            before_finish = i <= end_seq;
+          const after_start = i >= start_seq;
+          const before_finish = i <= end_seq;
           return after_start && before_finish;
         })
         .map((row, i) => {
