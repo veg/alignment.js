@@ -13,9 +13,10 @@ class BaseSiteBarPlotAxis extends React.Component {
 
   createBarPlotAxis() {
     var data = this.props.data;
-    var height = this.props.height;
     var label_width = this.props.label_width;
     var max_value = this.props.max_value && d3.max(data);
+    var padding_bottom = 15;
+    var height = this.props.height - padding_bottom;
 
     var bar_axis = d3.axisLeft().scale(
       d3
@@ -27,7 +28,7 @@ class BaseSiteBarPlotAxis extends React.Component {
     var axis = d3
       .select(".baseSiteBarPlotAxis")
       .attr("width", label_width)
-      .attr("height", height);
+      .attr("height", height + padding_bottom);
 
     axis
       .append("g")
@@ -37,10 +38,10 @@ class BaseSiteBarPlotAxis extends React.Component {
 
     axis
       .append("text")
-      .attr("x", 0)
-      .attr("y", label_width + 5)
+      .attr("x", 11)
+      .attr("y", label_width - 20)
       .attr("transform", `rotate(270 ${0.75 * label_width}, 70)`)
-      .text("Nucleotide %");
+      .text(this.props.axis_label);
   }
 
   render() {

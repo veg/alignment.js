@@ -12,11 +12,16 @@ class BaseSiteBarPlot extends React.Component {
     this.setListeners();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    this.transitionBarPlot();
+  }
+
   createBarPlot() {
     var data = this.props.data;
-    var height = this.props.height;
     var displayWidth = this.props.displayWidth;
     var max_value = this.props.max_value && d3.max(data);
+    var padding_bottom = 15;
+    var height = this.props.height - padding_bottom;
 
     var barChartScale = d3
       .scaleLinear()
@@ -28,7 +33,7 @@ class BaseSiteBarPlot extends React.Component {
     var chart = d3
       .select(".baseSiteBarPlot")
       .attr("width", displayWidth)
-      .attr("height", height);
+      .attr("height", height + padding_bottom);
 
     var bar = chart
       .selectAll("g")
@@ -37,10 +42,9 @@ class BaseSiteBarPlot extends React.Component {
       .append("g")
       .attr("transform", function(d, i) {
         return "translate(" + i * barWidth + ", 10)";
-      });
-
-    bar
+      })
       .append("rect")
+      .attr("class", "bars")
       .attr("y", function(d) {
         return barChartScale(d);
       })
@@ -50,6 +54,41 @@ class BaseSiteBarPlot extends React.Component {
       .attr("width", barWidth - 2)
       .attr("fill", this.props.fillColor)
       .attr("stroke", this.props.outlineColor);
+  }
+
+  transitionBarPlot() {
+    var data = this.props.data;
+    var height = this.props.height;
+    var max_value = this.props.max_value && d3.max(data);
+
+    var barChartScale = d3
+      .scaleLinear()
+      .domain([max_value, 0])
+      .range([0, height]);
+
+    var changeColor = d3
+      .transition()
+      .delay(300)
+      .duration(300)
+      .ease(d3.easeLinear);
+
+    var changeHeight = d3
+      .transition()
+      .duration(500)
+      .ease(d3.easeSin);
+
+    d3
+      .selectAll(".bars")
+      .data(this.props.data)
+      .transition(changeHeight)
+      .attr("y", function(d) {
+        return barChartScale(d);
+      })
+      .attr("height", function(d) {
+        return height - barChartScale(d);
+      })
+      .style("fill", this.props.fillColor)
+      .style("stroke", this.props.outlineColor);
   }
 
   setListeners() {

@@ -14,7 +14,7 @@ import {
   amino_acid_text_color
 } from "./helpers/colors";
 import NavBar from "./components/navComponents/NavBar.jsx";
-import AlignmentWithBarPlotsExample from "./components/AlignmentWithBarPlotsExample.jsx";
+import SiteBarPlotExample from "./components/SiteBarPlotExample.jsx";
 require("./app.scss");
 
 const examples = {
@@ -60,14 +60,12 @@ class App extends Component {
     this.state = {
       fasta: null,
       dataset: "loading",
-      //viewing: "siteBarPlot"
       viewing: "alignment"
     };
   }
 
   componentDidMount() {
     this.loadData("CD2");
-    //this.changeView("siteBarPlot");
   }
 
   handleFileChange = e => {
@@ -103,7 +101,7 @@ class App extends Component {
   changeView = view => {
     const views = {
       scaffold: { data: "fasta/scaffold.fasta" },
-      siteBarPlot: { data: "fasta/BarPlotExampleSmall.fasta" }
+      siteBarPlot: { data: "fasta/CD2.fasta" }
     };
     d3.text(views[view].data, (error, data) => {
       this.setState({
@@ -153,7 +151,7 @@ class App extends Component {
                   height={800}
                 />
               ) : (
-                <AlignmentWithBarPlotsExample
+                <SiteBarPlotExample
                   fasta={this.state.fasta}
                   width={1200}
                   height={800}

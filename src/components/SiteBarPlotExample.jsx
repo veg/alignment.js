@@ -15,12 +15,12 @@ import { siteComposition } from "./../helpers/nucleotideComposition";
 import BaseSiteBarPlot from "./BaseSiteBarPlot.jsx";
 import BaseSiteBarPlotAxis from "./BaseSiteBarPlotAxis.jsx";
 
-class AlignmentWithSiteBarPlot extends Component {
+class SiteBarPlotExample extends Component {
   constructor(props) {
     super(props);
     this.label_width = 200;
     this.state = {
-      nucleotideInView: "T",
+      nucleotideInView: "A",
       siteNucleotideData: null
     };
   }
@@ -102,6 +102,10 @@ class AlignmentWithSiteBarPlot extends Component {
     this.setState({ siteNucleotideData: siteNucleotideData });
   };
 
+  switchNucleotide = nucleotide => {
+    this.setState({ nucleotideInView: nucleotide });
+  };
+
   render() {
     if (this.state.siteNucleotideData == null) {
       return <div>Loading Data...</div>;
@@ -121,56 +125,63 @@ class AlignmentWithSiteBarPlot extends Component {
     const barPlotHeight = 120;
 
     return (
-      <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
-        {/*<Placeholder width={this.label_width} height={barPlotHeight} />*/}
-        <BaseSiteBarPlotAxis
-          label_width={this.label_width}
-          data={this.state.siteNucleotideData[this.state.nucleotideInView]}
-          height={barPlotHeight}
-          max_value={1}
-        />
-        <BaseSiteBarPlot
-          data={this.state.siteNucleotideData[this.state.nucleotideInView]}
-          displayWidth={width - this.label_width}
-          siteSize={this.props.site_size}
-          height={barPlotHeight}
-          fillColor={this.props.site_color(this.state.nucleotideInView)}
-          outlineColor={this.props.text_color(this.state.nucleotideInView)}
-          x_pixel={this.x_pixel}
-          max_value={1}
-        />
+      <div>
+        <SwitchNucleotideButtons switchNucleotide={this.switchNucleotide} />
 
-        <Placeholder width={this.label_width} height={this.props.axis_height} />
-        <SiteAxis
-          height={this.props.axis_height}
-          site_size={this.props.site_size}
-          sequence_data={this.sequence_data}
-          x_pixel={this.x_pixel}
-        />
+        <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
+          <BaseSiteBarPlotAxis
+            label_width={this.label_width}
+            data={this.state.siteNucleotideData[this.state.nucleotideInView]}
+            height={barPlotHeight}
+            max_value={1}
+            axis_label={"Nucleotide %"}
+          />
+          <BaseSiteBarPlot
+            data={this.state.siteNucleotideData[this.state.nucleotideInView]}
+            displayWidth={width - this.label_width}
+            siteSize={this.props.site_size}
+            height={barPlotHeight}
+            fillColor={this.props.site_color(this.state.nucleotideInView)}
+            outlineColor={this.props.text_color(this.state.nucleotideInView)}
+            x_pixel={this.x_pixel}
+            max_value={1}
+          />
 
-        <SequenceAxis
-          width={this.label_width}
-          height={height - this.props.axis_height}
-          sequence_data={this.sequence_data}
-          site_size={this.props.site_size}
-          y_pixel={this.y_pixel}
-        />
-        <BaseAlignment
-          width={width - this.label_width}
-          height={height - this.props.axis_height}
-          sequence_data={this.sequence_data}
-          site_color={this.props.site_color}
-          text_color={this.props.text_color}
-          site_size={this.props.site_size}
-          x_pixel={this.x_pixel}
-          y_pixel={this.y_pixel}
-        />
+          <Placeholder
+            width={this.label_width}
+            height={this.props.axis_height}
+          />
+          <SiteAxis
+            height={this.props.axis_height}
+            site_size={this.props.site_size}
+            sequence_data={this.sequence_data}
+            x_pixel={this.x_pixel}
+          />
+
+          <SequenceAxis
+            width={this.label_width}
+            height={height - this.props.axis_height}
+            sequence_data={this.sequence_data}
+            site_size={this.props.site_size}
+            y_pixel={this.y_pixel}
+          />
+          <BaseAlignment
+            width={width - this.label_width}
+            height={height - this.props.axis_height}
+            sequence_data={this.sequence_data}
+            site_color={this.props.site_color}
+            text_color={this.props.text_color}
+            site_size={this.props.site_size}
+            x_pixel={this.x_pixel}
+            y_pixel={this.y_pixel}
+          />
+        </div>
       </div>
     );
   }
 }
 
-AlignmentWithSiteBarPlot.defaultProps = {
+SiteBarPlotExample.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
   label_padding: 10,
@@ -178,4 +189,45 @@ AlignmentWithSiteBarPlot.defaultProps = {
   axis_height: 20
 };
 
-module.exports = AlignmentWithSiteBarPlot;
+class SwitchNucleotideButtons extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="btn-group btn-group-toggle" data-toggle="buttons">
+        <label
+          className="btn btn-light active"
+          onClick={() => this.props.switchNucleotide("A")}
+        >
+          <input type="radio" />
+          A
+        </label>
+        <label
+          className="btn btn-light"
+          onClick={() => this.props.switchNucleotide("C")}
+        >
+          <input type="radio" />
+          C
+        </label>
+        <label
+          className="btn btn-light"
+          onClick={() => this.props.switchNucleotide("G")}
+        >
+          <input type="radio" />
+          G
+        </label>
+        <label
+          className="btn btn-light"
+          onClick={() => this.props.switchNucleotide("T")}
+        >
+          <input type="radio" />
+          T
+        </label>
+      </div>
+    );
+  }
+}
+
+module.exports = SiteBarPlotExample;
