@@ -16,10 +16,11 @@ class BaseSiteBarPlot extends React.Component {
     var data = this.props.data;
     var height = this.props.height;
     var displayWidth = this.props.displayWidth;
+    var max_value = this.props.max_value && d3.max(data);
 
     var barChartScale = d3
       .scaleLinear()
-      .domain([d3.max(data), 0])
+      .domain([max_value, 0])
       .range([0, height]);
 
     var barWidth = this.props.siteSize;
@@ -35,7 +36,7 @@ class BaseSiteBarPlot extends React.Component {
       .enter()
       .append("g")
       .attr("transform", function(d, i) {
-        return "translate(" + i * barWidth + ",0)";
+        return "translate(" + i * barWidth + ", 10)";
       });
 
     bar
@@ -46,7 +47,7 @@ class BaseSiteBarPlot extends React.Component {
       .attr("height", function(d) {
         return height - barChartScale(d);
       })
-      .attr("width", barWidth - 1)
+      .attr("width", barWidth - 2)
       .attr("fill", this.props.fillColor)
       .attr("stroke", this.props.outlineColor);
   }

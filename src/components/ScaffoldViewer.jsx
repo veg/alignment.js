@@ -13,8 +13,6 @@ import Scaffold from "./Scaffold.jsx";
 import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 
-//require("./app.scss");
-
 class ScaffoldViewer extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +34,6 @@ class ScaffoldViewer extends Component {
     }
   }
   componentWillUpdate(nextProps) {
-    console.log("cv cwu");
     this.initialize(nextProps);
     this.setScrollingEvents(nextProps);
   }

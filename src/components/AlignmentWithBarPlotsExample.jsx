@@ -13,6 +13,7 @@ import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 import { siteComposition } from "./../helpers/nucleotideComposition";
 import BaseSiteBarPlot from "./BaseSiteBarPlot.jsx";
+import BaseSiteBarPlotAxis from "./BaseSiteBarPlotAxis.jsx";
 
 class AlignmentWithSiteBarPlot extends Component {
   constructor(props) {
@@ -25,6 +26,8 @@ class AlignmentWithSiteBarPlot extends Component {
   }
 
   componentDidMount() {
+    this.initialize(this.props);
+    this.getSiteNucleotideData(this.sequence_data);
     this.setScrollingEvents(this.props);
   }
 
@@ -100,6 +103,10 @@ class AlignmentWithSiteBarPlot extends Component {
   };
 
   render() {
+    if (this.state.siteNucleotideData == null) {
+      return <div>Loading Data...</div>;
+    }
+
     const { full_pixel_width, full_pixel_height, label_width } = this,
       width = full_pixel_width
         ? Math.min(label_width + full_pixel_width, this.props.width)
@@ -111,14 +118,17 @@ class AlignmentWithSiteBarPlot extends Component {
           )
         : this.props.height;
 
-    const barPlotHeight = 80;
+    const barPlotHeight = 120;
 
-    if (this.state.siteNucleotideData == null) {
-      return <div>Loading Data</div>;
-    }
     return (
       <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
-        <Placeholder width={this.label_width} height={barPlotHeight} />
+        {/*<Placeholder width={this.label_width} height={barPlotHeight} />*/}
+        <BaseSiteBarPlotAxis
+          label_width={this.label_width}
+          data={this.state.siteNucleotideData[this.state.nucleotideInView]}
+          height={barPlotHeight}
+          max_value={1}
+        />
         <BaseSiteBarPlot
           data={this.state.siteNucleotideData[this.state.nucleotideInView]}
           displayWidth={width - this.label_width}
@@ -127,6 +137,7 @@ class AlignmentWithSiteBarPlot extends Component {
           fillColor={this.props.site_color(this.state.nucleotideInView)}
           outlineColor={this.props.text_color(this.state.nucleotideInView)}
           x_pixel={this.x_pixel}
+          max_value={1}
         />
 
         <Placeholder width={this.label_width} height={this.props.axis_height} />

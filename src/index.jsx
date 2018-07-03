@@ -60,15 +60,14 @@ class App extends Component {
     this.state = {
       fasta: null,
       dataset: "loading",
-      viewing: "BarPlotExample"
-      //viewing: "alignment"
+      //viewing: "siteBarPlot"
+      viewing: "alignment"
     };
   }
 
   componentDidMount() {
-    //this.loadData('CD2');
-    //this.loadScaffoldData();
-    this.changeView("BarPlotExample");
+    this.loadData("CD2");
+    //this.changeView("siteBarPlot");
   }
 
   handleFileChange = e => {
@@ -101,19 +100,10 @@ class App extends Component {
     });
   };
 
-  loadScaffoldData = () => {
-    d3.text("fasta/scaffold.fasta", (error, data) => {
-      this.setState({
-        fasta: data,
-        viewing: "scaffold"
-      });
-    });
-  };
-
   changeView = view => {
     const views = {
       scaffold: { data: "fasta/scaffold.fasta" },
-      BarPlotExample: { data: "fasta/BarPlotExample.fasta" }
+      siteBarPlot: { data: "fasta/BarPlotExampleSmall.fasta" }
     };
     d3.text(views[view].data, (error, data) => {
       this.setState({
