@@ -3,7 +3,7 @@ import React, { Component } from "react";
 const d3 = require("d3");
 const $ = require("jquery");
 
-class Axis extends Component {
+class SiteAxis extends Component {
   initialize() {
     if (this.props.sequence_data) {
       const { width, height, site_size } = this.props;
@@ -65,8 +65,8 @@ class Axis extends Component {
   }
 }
 
-Axis.defaultProps = {
+SiteAxis.defaultProps = {
   x_pixel: 0,
   site_size: 20
 };
-module.exports = Axis;
+module.exports = SiteAxis;

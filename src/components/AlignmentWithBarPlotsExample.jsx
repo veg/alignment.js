@@ -11,21 +11,33 @@ import Placeholder from "./Placeholder.jsx";
 import SequenceAxis from "./SequenceAxis.jsx";
 import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
-//import SiteBarPlot from "./SiteBarPlot.jsx";
-//toremove
-import TestBarPlot from "./TestBarPlot.jsx";
-
-//require("./app.scss");
+import { siteComposition } from "./../helpers/nucleotideComposition";
+import BaseSiteBarPlot from "./BaseSiteBarPlot.jsx";
 
 class AlignmentWithSiteBarPlot extends Component {
   constructor(props) {
     super(props);
     this.label_width = 200;
-    this.initialize(this.props);
+    this.state = {
+      nucleotideInView: "A",
+      siteNucleotideData: null
+    };
   }
+
   componentDidMount() {
     this.setScrollingEvents(this.props);
+    this.setSiteNucleotideData(this.sequence_data);
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.fasta != null) {
+      console.log("inside componentDidMount");
+      console.log(this.props);
+      this.initialize(this.props);
+    }
+    this.setScrollingEvents(prevProps);
+  }
+
   setScrollingEvents(props) {
     if (props.fasta) {
       const { width, height, axis_height } = props;
@@ -48,14 +60,12 @@ class AlignmentWithSiteBarPlot extends Component {
       });
     }
   }
-  componentWillUpdate(nextProps) {
-    this.initialize(nextProps);
-    this.setScrollingEvents(nextProps);
-  }
+
   initialize(props) {
     if (props.fasta) {
+      console.log("initialize called");
       const { fasta, site_size, width, height, axis_height } = props;
-      this.sequence_data = fastaParser(fasta);
+      this.sequence_data = fastaParser(props.fasta);
       this.label_width =
         props.label_padding +
         this.sequence_data
@@ -78,6 +88,12 @@ class AlignmentWithSiteBarPlot extends Component {
         : 0;
     }
   }
+
+  setSiteNucleotideData = sequenceData => {
+    var siteNucleotideData = siteComposition(sequenceData);
+    this.setState({ siteNucleotideData: "test" });
+  };
+
   render() {
     const { full_pixel_width, full_pixel_height, label_width } = this,
       width = full_pixel_width
@@ -89,19 +105,22 @@ class AlignmentWithSiteBarPlot extends Component {
             this.props.height
           )
         : this.props.height;
+    const barPlotHeight = 50;
     const adenineRichness = [0.33, 0, 0, 0, 0, 0.66, 1, 0.33, 0, 0, 0, 0.33];
+    console.log("this.sequence_data");
+    console.log(this.sequence_data);
+    if (this.sequence_data == null) {
+      return <div>no sequenceData on state</div>;
+    }
     return (
       <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
-        {/*<SiteBarPlot
-          style={{gridColumn: "1/3"}}
-          height={this.props.siteBarPlot_height}
-          width={width}
-          sequenceAxisWidth={10}
-          site_size={this.props.site_size}
-          siteData={adenineRichness}
-          x_pixel={this.x_pixel}
+        <Placeholder width={this.label_width} height={barPlotHeight} />
+        <BaseSiteBarPlot
+          data={adenineRichness}
+          width={240}
+          height={barPlotHeight}
+          fillColor={"lightPink"}
         />
-        */}
         <Placeholder width={this.label_width} height={this.props.axis_height} />
         <SiteAxis
           height={this.props.axis_height}
@@ -126,7 +145,6 @@ class AlignmentWithSiteBarPlot extends Component {
           x_pixel={this.x_pixel}
           y_pixel={this.y_pixel}
         />
-        <TestBarPlot width={width} height={200} />
       </div>
     );
   }

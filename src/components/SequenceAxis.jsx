@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 const $ = require("jquery");
 
-class Labels extends Component {
+class SequenceAxis extends Component {
   constructor(props) {
     super(props);
     this.div_id = props.id + "-labels-div";
@@ -54,9 +54,9 @@ class Labels extends Component {
   }
 }
 
-Labels.defaultProps = {
+SequenceAxis.defaultProps = {
   label_padding: 10,
   id: "alignmentjs"
 };
 
-module.exports = Labels;
+module.exports = SequenceAxis;

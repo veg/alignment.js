@@ -14,7 +14,7 @@ import {
   amino_acid_text_color
 } from "./helpers/colors";
 import NavBar from "./components/navComponents/NavBar.jsx";
-import AlignmentWithSiteBarPlot from "./components/AlignmentWithSiteBarPlot.jsx";
+import AlignmentWithBarPlotsExample from "./components/AlignmentWithBarPlotsExample.jsx";
 require("./app.scss");
 
 const examples = {
@@ -58,17 +58,19 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fasta: "",
+      fasta: null,
       dataset: "loading",
-      viewing: "siteBarPlot"
+      viewing: "BarPlotExample"
       //viewing: "alignment"
     };
   }
+
   componentDidMount() {
     //this.loadData('CD2');
     //this.loadScaffoldData();
-    this.changeView("siteBarPlot");
+    this.changeView("BarPlotExample");
   }
+
   handleFileChange = e => {
     const files = e.target.files;
     if (files.length == 1) {
@@ -81,12 +83,14 @@ class App extends Component {
     }
     document.body.click();
   };
+
   handleTextUpdate = () => {
     $("#importModal").modal("hide");
     this.setState({
       fasta: document.getElementById("input_textarea").value
     });
   };
+
   loadData = dataset => {
     d3.text(`fasta/${dataset}.fasta`, (error, data) => {
       this.setState({
@@ -96,6 +100,7 @@ class App extends Component {
       });
     });
   };
+
   loadScaffoldData = () => {
     d3.text("fasta/scaffold.fasta", (error, data) => {
       this.setState({
@@ -104,10 +109,11 @@ class App extends Component {
       });
     });
   };
+
   changeView = view => {
     const views = {
       scaffold: { data: "fasta/scaffold.fasta" },
-      siteBarPlot: { data: "fasta/siteBarPlot.fasta" }
+      BarPlotExample: { data: "fasta/BarPlotExample.fasta" }
     };
     d3.text(views[view].data, (error, data) => {
       this.setState({
@@ -116,13 +122,16 @@ class App extends Component {
       });
     });
   };
+
   render() {
     const message =
       this.state.viewing == "alignment"
         ? examples[this.state.dataset].purpose
         : this.state.viewing == "scaffold"
           ? "NGS Scaffold viewer"
-          : "Example Site Bar Plot (adenine richness)";
+          : "Example Bar Plot (adenine richness)";
+    console.log("index.js state.fasta");
+    console.log(this.state.fasta);
     return (
       <div>
         <NavBar
@@ -156,11 +165,10 @@ class App extends Component {
                   height={800}
                 />
               ) : (
-                <AlignmentWithSiteBarPlot
+                <AlignmentWithBarPlotsExample
                   fasta={this.state.fasta}
                   width={1200}
                   height={800}
-                  siteBarPlot_height={60}
                 />
               )}
             </div>
