@@ -19,23 +19,25 @@ class AlignmentWithSiteBarPlot extends Component {
     super(props);
     this.label_width = 200;
     this.state = {
-      nucleotideInView: "A",
+      nucleotideInView: "T",
       siteNucleotideData: null
     };
   }
 
   componentDidMount() {
     this.setScrollingEvents(this.props);
-    this.setSiteNucleotideData(this.sequence_data);
+  }
+
+  componentWillUpdate(nextProps, prevState) {
+    //TODO: replace componentWillUpdate as this is deprecated in future versions of react.
+    this.initialize(nextProps);
+    this.setScrollingEvents(nextProps);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.fasta != null) {
-      console.log("inside componentDidMount");
-      console.log(this.props);
-      this.initialize(this.props);
+    if (this.state.siteNucleotideData == null) {
+      this.getSiteNucleotideData(this.sequence_data);
     }
-    this.setScrollingEvents(prevProps);
   }
 
   setScrollingEvents(props) {
@@ -46,6 +48,7 @@ class AlignmentWithSiteBarPlot extends Component {
         { width: width - this.label_width, height: height - axis_height },
         { x_pixel: this.x_pixel, y_pixel: this.y_pixel },
         [
+          "alignmentjs-siteBarPlot",
           "alignmentjs-alignment",
           "alignmentjs-axis-div",
           "alignmentjs-labels-div"
@@ -63,7 +66,6 @@ class AlignmentWithSiteBarPlot extends Component {
 
   initialize(props) {
     if (props.fasta) {
-      console.log("initialize called");
       const { fasta, site_size, width, height, axis_height } = props;
       this.sequence_data = fastaParser(props.fasta);
       this.label_width =
@@ -89,9 +91,12 @@ class AlignmentWithSiteBarPlot extends Component {
     }
   }
 
-  setSiteNucleotideData = sequenceData => {
-    var siteNucleotideData = siteComposition(sequenceData);
-    this.setState({ siteNucleotideData: "test" });
+  getSiteNucleotideData = sequence_data => {
+    siteComposition(sequence_data, this.setSiteNucleotideDataToState);
+  };
+
+  setSiteNucleotideDataToState = siteNucleotideData => {
+    this.setState({ siteNucleotideData: siteNucleotideData });
   };
 
   render() {
@@ -105,22 +110,25 @@ class AlignmentWithSiteBarPlot extends Component {
             this.props.height
           )
         : this.props.height;
-    const barPlotHeight = 50;
-    const adenineRichness = [0.33, 0, 0, 0, 0, 0.66, 1, 0.33, 0, 0, 0, 0.33];
-    console.log("this.sequence_data");
-    console.log(this.sequence_data);
-    if (this.sequence_data == null) {
-      return <div>no sequenceData on state</div>;
+
+    const barPlotHeight = 80;
+
+    if (this.state.siteNucleotideData == null) {
+      return <div>Loading Data</div>;
     }
     return (
       <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
         <Placeholder width={this.label_width} height={barPlotHeight} />
         <BaseSiteBarPlot
-          data={adenineRichness}
-          width={240}
+          data={this.state.siteNucleotideData[this.state.nucleotideInView]}
+          displayWidth={width - this.label_width}
+          siteSize={this.props.site_size}
           height={barPlotHeight}
-          fillColor={"lightPink"}
+          fillColor={this.props.site_color(this.state.nucleotideInView)}
+          outlineColor={this.props.text_color(this.state.nucleotideInView)}
+          x_pixel={this.x_pixel}
         />
+
         <Placeholder width={this.label_width} height={this.props.axis_height} />
         <SiteAxis
           height={this.props.axis_height}
@@ -128,6 +136,7 @@ class AlignmentWithSiteBarPlot extends Component {
           sequence_data={this.sequence_data}
           x_pixel={this.x_pixel}
         />
+
         <SequenceAxis
           width={this.label_width}
           height={height - this.props.axis_height}

@@ -129,9 +129,7 @@ class App extends Component {
         ? examples[this.state.dataset].purpose
         : this.state.viewing == "scaffold"
           ? "NGS Scaffold viewer"
-          : "Example Bar Plot (adenine richness)";
-    console.log("index.js state.fasta");
-    console.log(this.state.fasta);
+          : "Example Bar Plot (nucleotide composition)";
     return (
       <div>
         <NavBar
