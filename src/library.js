@@ -1,7 +1,7 @@
 import Alignment from "./components/Alignment.jsx";
 import BaseAlignment from "./components/BaseAlignment.jsx";
-import Axis from "./components/SiteAxis.jsx";
-import Labels from "./components/SequenceAxis.jsx";
+import SiteAxis from "./components/SiteAxis.jsx";
+import SequenceAxis from "./components/SequenceAxis.jsx";
 import fastaParser from "./helpers/fasta";
 import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
 

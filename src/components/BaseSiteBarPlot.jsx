@@ -66,12 +66,6 @@ class BaseSiteBarPlot extends React.Component {
       .domain([max_value, 0])
       .range([0, height]);
 
-    var changeColor = d3
-      .transition()
-      .delay(300)
-      .duration(300)
-      .ease(d3.easeLinear);
-
     var changeHeight = d3
       .transition()
       .duration(500)

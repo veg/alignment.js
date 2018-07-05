@@ -12,8 +12,6 @@ import SequenceAxis from "./SequenceAxis.jsx";
 import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 
-//require("./app.scss");
-
 class Alignment extends Component {
   constructor(props) {
     super(props);
