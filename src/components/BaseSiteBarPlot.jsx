@@ -5,6 +5,11 @@ const $ = require("jquery");
 class BaseSiteBarPlot extends React.Component {
   constructor(props) {
     super(props);
+
+    // d3 variables used by multiple methods
+    this.max_value = this.props.max_value && d3.max(this.props.data);
+    this.padding_bottom = 15;
+    this.chart_height = this.props.height - this.padding_bottom;
   }
 
   componentDidMount() {
@@ -19,21 +24,19 @@ class BaseSiteBarPlot extends React.Component {
   createBarPlot() {
     var data = this.props.data;
     var displayWidth = this.props.displayWidth;
-    var max_value = this.props.max_value && d3.max(data);
-    var padding_bottom = 15;
-    var height = this.props.height - padding_bottom;
+    var chart_height = this.chart_height;
 
     var barChartScale = d3
       .scaleLinear()
-      .domain([max_value, 0])
-      .range([0, height]);
+      .domain([this.max_value, 0])
+      .range([0, this.chart_height]);
 
     var barWidth = this.props.siteSize;
 
     var chart = d3
       .select(".baseSiteBarPlot")
       .attr("width", displayWidth)
-      .attr("height", height + padding_bottom);
+      .attr("height", this.chart_height + this.padding_bottom);
 
     var bar = chart
       .selectAll("g")
@@ -49,7 +52,7 @@ class BaseSiteBarPlot extends React.Component {
         return barChartScale(d);
       })
       .attr("height", function(d) {
-        return height - barChartScale(d);
+        return chart_height - barChartScale(d);
       })
       .attr("width", barWidth - 2)
       .attr("fill", this.props.fillColor)
@@ -58,15 +61,14 @@ class BaseSiteBarPlot extends React.Component {
 
   transitionBarPlot() {
     var data = this.props.data;
-    var height = this.props.height;
-    var max_value = this.props.max_value && d3.max(data);
+    var chart_height = this.chart_height;
 
     var barChartScale = d3
       .scaleLinear()
-      .domain([max_value, 0])
-      .range([0, height]);
+      .domain([this.max_value, 0])
+      .range([0, this.chart_height]);
 
-    var changeHeight = d3
+    var barChartTransition = d3
       .transition()
       .duration(500)
       .ease(d3.easeSin);
@@ -74,12 +76,12 @@ class BaseSiteBarPlot extends React.Component {
     d3
       .selectAll(".bars")
       .data(this.props.data)
-      .transition(changeHeight)
+      .transition(barChartTransition)
       .attr("y", function(d) {
         return barChartScale(d);
       })
       .attr("height", function(d) {
-        return height - barChartScale(d);
+        return chart_height - barChartScale(d);
       })
       .style("fill", this.props.fillColor)
       .style("stroke", this.props.outlineColor);
