@@ -51,7 +51,7 @@ class SiteBarPlotExample extends Component {
         { width: width - this.label_width, height: height - axis_height },
         { x_pixel: this.x_pixel, y_pixel: this.y_pixel },
         [
-          "alignmentjs-siteBarPlot",
+          "alignmentjs-siteBarPlot-div",
           "alignmentjs-alignment",
           "alignmentjs-axis-div",
           "alignmentjs-labels-div"

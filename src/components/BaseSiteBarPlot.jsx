@@ -10,14 +10,21 @@ class BaseSiteBarPlot extends React.Component {
     this.max_value = this.props.max_value && d3.max(this.props.data);
     this.padding_bottom = 15;
     this.chart_height = this.props.height - this.padding_bottom;
+
+    $("#alignmentjs-siteBarPlot-div").scrollLeft(this.props.x_pixel);
   }
 
   componentDidMount() {
     this.createBarPlot();
-    this.setListeners();
   }
 
   componentDidUpdate(prevProps, prevState) {
+    document
+      .getElementById("alignmentjs-siteBarPlot-div")
+      .addEventListener("alignmentjs_wheel_event", function(e) {
+        console.log(e.detail.x_pixel);
+        $("#alignmentjs-siteBarPlot").scrollLeft(e.detail.x_pixel);
+      });
     this.transitionBarPlot();
   }
 
@@ -34,7 +41,7 @@ class BaseSiteBarPlot extends React.Component {
     var barWidth = this.props.siteSize;
 
     var chart = d3
-      .select(".baseSiteBarPlot")
+      .select("#alignmentjs-siteBarPlot")
       .attr("width", displayWidth)
       .attr("height", this.chart_height + this.padding_bottom);
 
@@ -87,28 +94,17 @@ class BaseSiteBarPlot extends React.Component {
       .style("stroke", this.props.outlineColor);
   }
 
-  setListeners() {
-    $("#alignmentjs-siteBarPlot-div").scrollLeft(this.props.x_pixel);
-
-    document
-      .getElementById("alignmentjs-siteBarPlot-div")
-      .addEventListener("alignmentjs_wheel_event", function(e) {
-        $("#alignmentjs-siteBarPlot-div").scrollLeft(e.detail.x_pixel);
-      });
-  }
-
   render() {
     return (
       <div
-        id={this.props.id + "-siteBarPlot-div"}
+        id={"alignmentjs-siteBarPlot-div"}
         className="-container"
         style={{ overflowY: "scroll", overflowX: "hidden" }}
       >
         <svg
-          className="baseSiteBarPlot"
           width={this.props.displayWidth}
           height={this.props.height}
-          id={this.props.id + "siteBarPlot"}
+          id={"alignmentjs-siteBarPlot"}
         />
       </div>
     );
