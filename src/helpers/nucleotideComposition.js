@@ -25,8 +25,6 @@ function siteComposition(alignmentData, callback) {
     );
   }
 
-  //composition = 'test'
-
   if (callback) {
     callback(composition);
   } else {

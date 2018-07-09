@@ -1,6 +1,5 @@
 import React from "react";
 const d3 = require("d3");
-const $ = require("jquery");
 
 class BaseSiteBarPlotAxis extends React.Component {
   constructor(props) {
@@ -8,7 +7,20 @@ class BaseSiteBarPlotAxis extends React.Component {
   }
 
   componentDidMount() {
-    this.createBarPlotAxis();
+    if (this.props.data != null) {
+      this.createBarPlotAxis();
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data == null) {
+      this.createBarPlotAxis();
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data == null) {
+      this.createBarPlotAxis();
+    }
   }
 
   createBarPlotAxis() {

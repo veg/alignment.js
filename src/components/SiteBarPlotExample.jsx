@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-const d3 = require("d3");
 const $ = require("jquery");
-const _ = require("underscore");
 const text_width = require("text-width");
 
 import fastaParser from "./../helpers/fasta";
@@ -33,7 +31,6 @@ class SiteBarPlotExample extends Component {
 
   componentWillUpdate(nextProps, prevState) {
     //TODO: replace componentWillUpdate as this is deprecated in future versions of react.
-    this.initialize(nextProps);
     this.setScrollingEvents(nextProps);
   }
 
@@ -44,6 +41,7 @@ class SiteBarPlotExample extends Component {
   }
 
   setScrollingEvents(props) {
+    self = this;
     if (props.fasta) {
       const { width, height, axis_height } = props;
       this.scroll_broadcaster = new ScrollBroadcaster(
@@ -64,12 +62,18 @@ class SiteBarPlotExample extends Component {
         e.preventDefault();
         scroll_broadcaster.handleWheel(e);
       });
+      // Update this.x_pixel on scroll events so that the alignment and plots will render to the correct scroll location on re-renders.
+      document
+        .getElementById("alignmentjs-alignment")
+        .addEventListener("alignmentjs_wheel_event", function(e) {
+          self.x_pixel = e.detail.x_pixel;
+        });
     }
   }
 
   initialize(props) {
     if (props.fasta) {
-      const { fasta, site_size, width, height, axis_height } = props;
+      const { fasta, site_size, width, height } = props;
       this.sequence_data = fastaParser(props.fasta);
       this.label_width =
         props.label_padding +
@@ -107,10 +111,6 @@ class SiteBarPlotExample extends Component {
   };
 
   render() {
-    if (this.state.siteNucleotideData == null) {
-      return <div>Loading Data...</div>;
-    }
-
     const { full_pixel_width, full_pixel_height, label_width } = this,
       width = full_pixel_width
         ? Math.min(label_width + full_pixel_width, this.props.width)
@@ -121,8 +121,11 @@ class SiteBarPlotExample extends Component {
             this.props.height
           )
         : this.props.height;
-
     const barPlotHeight = 120;
+    var bar_plot_data =
+      this.state.siteNucleotideData == null
+        ? null
+        : this.state.siteNucleotideData[this.state.nucleotideInView];
 
     return (
       <div>
@@ -131,15 +134,15 @@ class SiteBarPlotExample extends Component {
         <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
           <BaseSiteBarPlotAxis
             label_width={this.label_width}
-            data={this.state.siteNucleotideData[this.state.nucleotideInView]}
+            data={bar_plot_data}
             height={barPlotHeight}
             max_value={1}
             axis_label={"Nucleotide %"}
           />
           <BaseSiteBarPlot
-            data={this.state.siteNucleotideData[this.state.nucleotideInView]}
-            displayWidth={width - this.label_width}
+            data={bar_plot_data}
             siteSize={this.props.site_size}
+            width={full_pixel_width}
             height={barPlotHeight}
             fillColor={this.props.site_color(this.state.nucleotideInView)}
             outlineColor={this.props.text_color(this.state.nucleotideInView)}

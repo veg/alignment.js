@@ -7,7 +7,6 @@ class BaseSiteBarPlot extends React.Component {
     super(props);
 
     // d3 variables used by multiple methods
-    this.max_value = this.props.max_value && d3.max(this.props.data);
     this.padding_bottom = 15;
     this.chart_height = this.props.height - this.padding_bottom;
 
@@ -15,37 +14,42 @@ class BaseSiteBarPlot extends React.Component {
   }
 
   componentDidMount() {
-    this.createBarPlot();
+    if (this.props.data != null) {
+      this.createBarPlot();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
     document
       .getElementById("alignmentjs-siteBarPlot-div")
       .addEventListener("alignmentjs_wheel_event", function(e) {
-        console.log(e.detail.x_pixel);
-        $("#alignmentjs-siteBarPlot").scrollLeft(e.detail.x_pixel);
+        $("#alignmentjs-siteBarPlot-div").scrollLeft(e.detail.x_pixel);
       });
-    this.transitionBarPlot();
+    if (prevProps.data == null) {
+      this.createBarPlot();
+    } else {
+      this.transitionBarPlot();
+    }
   }
 
   createBarPlot() {
     var data = this.props.data;
-    var displayWidth = this.props.displayWidth;
     var chart_height = this.chart_height;
+    var max_value = this.props.max_value && d3.max(data);
 
     var barChartScale = d3
       .scaleLinear()
-      .domain([this.max_value, 0])
-      .range([0, this.chart_height]);
+      .domain([max_value, 0])
+      .range([0, chart_height]);
 
     var barWidth = this.props.siteSize;
 
     var chart = d3
       .select("#alignmentjs-siteBarPlot")
-      .attr("width", displayWidth)
-      .attr("height", this.chart_height + this.padding_bottom);
+      .attr("width", this.props.width)
+      .attr("height", chart_height + this.padding_bottom);
 
-    var bar = chart
+    chart
       .selectAll("g")
       .data(data)
       .enter()
@@ -69,10 +73,11 @@ class BaseSiteBarPlot extends React.Component {
   transitionBarPlot() {
     var data = this.props.data;
     var chart_height = this.chart_height;
+    var max_value = this.props.max_value && d3.max(data);
 
     var barChartScale = d3
       .scaleLinear()
-      .domain([this.max_value, 0])
+      .domain([max_value, 0])
       .range([0, this.chart_height]);
 
     var barChartTransition = d3
@@ -102,7 +107,7 @@ class BaseSiteBarPlot extends React.Component {
         style={{ overflowY: "scroll", overflowX: "hidden" }}
       >
         <svg
-          width={this.props.displayWidth}
+          width={this.props.width}
           height={this.props.height}
           id={"alignmentjs-siteBarPlot"}
         />
