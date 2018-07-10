@@ -41,7 +41,7 @@ class SiteBarPlotExample extends Component {
   }
 
   setScrollingEvents(props) {
-    self = this;
+    var self = this;
     if (props.fasta) {
       const { width, height, axis_height } = props;
       this.scroll_broadcaster = new ScrollBroadcaster(
