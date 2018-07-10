@@ -18,8 +18,19 @@ function NavBar(props) {
               loadData={props.loadData}
             />
             <li>
-              <a className="nav-link" onClick={() => props.loadScaffoldData()}>
+              <a
+                className="nav-link"
+                onClick={() => props.changeView("scaffold")}
+              >
                 Scaffold viewer
+              </a>
+            </li>
+            <li>
+              <a
+                className="nav-link"
+                onClick={() => props.changeView("siteBarPlot")}
+              >
+                Site Bar Plot
               </a>
             </li>
           </ul>

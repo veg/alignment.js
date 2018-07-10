@@ -27,6 +27,7 @@
     "eslint-plugin-import": "2.9.0",
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "7.7.0",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
@@ -49,5 +50,6 @@
     "build-lib": "npx webpack --config webpack.lib.js",
     "precommit": "pretty-quick --staged",
     "format": "prettier 'src/**/*.{js,jsx}' --write"
-  }
+  },
+  "files": ["lib/alignment.js", "lib/alignment.css"]
 }

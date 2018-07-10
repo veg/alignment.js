@@ -4,15 +4,13 @@ const $ = require("jquery");
 const _ = require("underscore");
 const text_width = require("text-width");
 
-import fastaParser from "./fasta";
-import BaseAlignment from "./basealignment";
-import Axis from "./axis";
-import Placeholder from "./placeholder";
-import Labels from "./labels";
-import ScrollBroadcaster from "./scrollbroadcaster";
-import { nucleotide_color, nucleotide_text_color } from "./colors";
-
-require("./app.scss");
+import fastaParser from "./../helpers/fasta";
+import BaseAlignment from "./BaseAlignment.jsx";
+import SiteAxis from "./SiteAxis.jsx";
+import Placeholder from "./Placeholder.jsx";
+import SequenceAxis from "./SequenceAxis.jsx";
+import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
+import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 
 class Alignment extends Component {
   constructor(props) {
@@ -89,13 +87,13 @@ class Alignment extends Component {
     return (
       <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
         <Placeholder width={this.label_width} height={this.props.axis_height} />
-        <Axis
+        <SiteAxis
           height={this.props.axis_height}
           site_size={this.props.site_size}
           sequence_data={this.sequence_data}
           x_pixel={this.x_pixel}
         />
-        <Labels
+        <SequenceAxis
           width={this.label_width}
           height={height - this.props.axis_height}
           sequence_data={this.sequence_data}

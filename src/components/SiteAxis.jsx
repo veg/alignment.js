@@ -3,11 +3,12 @@ import React, { Component } from "react";
 const d3 = require("d3");
 const $ = require("jquery");
 
-class Axis extends Component {
+class SiteAxis extends Component {
   initialize() {
     if (this.props.sequence_data) {
       const { width, height, site_size } = this.props;
-      d3.select("#alignmentjs-axis-div")
+      d3
+        .select("#alignmentjs-axis-div")
         .style("width", width + "px")
         .style("height", height + "px");
       const { number_of_sites } = this.props.sequence_data,
@@ -64,8 +65,8 @@ class Axis extends Component {
   }
 }
 
-Axis.defaultProps = {
+SiteAxis.defaultProps = {
   x_pixel: 0,
   site_size: 20
 };
-module.exports = Axis;
+module.exports = SiteAxis;

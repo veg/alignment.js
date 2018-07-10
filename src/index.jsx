@@ -5,15 +5,16 @@ const d3 = require("d3");
 const _ = require("underscore");
 const $ = require("jquery");
 
-import Alignment from "./alignment";
-import ScaffoldViewer from "./scaffold_viewer";
+import Alignment from "./components/Alignment.jsx";
+import ScaffoldViewer from "./components/ScaffoldViewer.jsx";
 import {
   highlight_codon_color,
   highlight_codon_text_color,
   amino_acid_color,
   amino_acid_text_color
-} from "./colors";
-import NavBar from "./NavBar.jsx";
+} from "./helpers/colors";
+import NavBar from "./components/navComponents/NavBar.jsx";
+import SiteBarPlotExample from "./components/SiteBarPlotExample.jsx";
 require("./app.scss");
 
 const examples = {
@@ -57,15 +58,16 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fasta: "",
+      fasta: null,
       dataset: "loading",
       viewing: "alignment"
     };
   }
+
   componentDidMount() {
-    //this.loadData('CD2');
-    this.loadScaffoldData();
+    this.loadData("CD2");
   }
+
   handleFileChange = e => {
     const files = e.target.files;
     if (files.length == 1) {
@@ -78,12 +80,14 @@ class App extends Component {
     }
     document.body.click();
   };
+
   handleTextUpdate = () => {
     $("#importModal").modal("hide");
     this.setState({
       fasta: document.getElementById("input_textarea").value
     });
   };
+
   loadData = dataset => {
     d3.text(`fasta/${dataset}.fasta`, (error, data) => {
       this.setState({
@@ -93,19 +97,27 @@ class App extends Component {
       });
     });
   };
-  loadScaffoldData = () => {
-    d3.text("fasta/scaffold.fasta", (error, data) => {
+
+  changeView = view => {
+    const views = {
+      scaffold: { data: "fasta/scaffold.fasta" },
+      siteBarPlot: { data: "fasta/CD2.fasta" }
+    };
+    d3.text(views[view].data, (error, data) => {
       this.setState({
         fasta: data,
-        viewing: "scaffold"
+        viewing: view
       });
     });
   };
+
   render() {
     const message =
       this.state.viewing == "alignment"
         ? examples[this.state.dataset].purpose
-        : "NGS Scaffold viewer";
+        : this.state.viewing == "scaffold"
+          ? "NGS Scaffold viewer"
+          : "Example Bar Plot (nucleotide composition)";
     return (
       <div>
         <NavBar
@@ -115,6 +127,7 @@ class App extends Component {
           fasta={this.state.fasta}
           handleTextUpdate={this.handleTextUpdate}
           loadScaffoldData={this.loadScaffoldData}
+          changeView={this.changeView}
         />
 
         <div className="container">
@@ -131,8 +144,14 @@ class App extends Component {
                   height={800}
                   {...examples[this.state.dataset].props}
                 />
-              ) : (
+              ) : this.state.viewing == "scaffold" ? (
                 <ScaffoldViewer
+                  fasta={this.state.fasta}
+                  width={1200}
+                  height={800}
+                />
+              ) : (
+                <SiteBarPlotExample
                   fasta={this.state.fasta}
                   width={1200}
                   height={800}
