@@ -11,7 +11,7 @@ import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 import { siteComposition } from "./../helpers/nucleotideComposition";
 import BaseSiteBarPlot from "./BaseSiteBarPlot.jsx";
-import BaseSiteBarPlotAxis from "./BaseSiteBarPlotAxis.jsx";
+import SitePlotAxis from "./SitePlotAxis.jsx";
 
 class SiteBarPlotExample extends Component {
   constructor(props) {
@@ -132,7 +132,7 @@ class SiteBarPlotExample extends Component {
         <SwitchNucleotideButtons switchNucleotide={this.switchNucleotide} />
 
         <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
-          <BaseSiteBarPlotAxis
+          <SitePlotAxis
             label_width={this.label_width}
             data={bar_plot_data}
             height={barPlotHeight}

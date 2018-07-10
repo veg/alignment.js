@@ -1,7 +1,7 @@
 import React from "react";
 const d3 = require("d3");
 
-class BaseSiteBarPlotAxis extends React.Component {
+class SitePlotAxis extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -17,18 +17,14 @@ class BaseSiteBarPlotAxis extends React.Component {
       this.createBarPlotAxis();
     }
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.data == null) {
-      this.createBarPlotAxis();
-    }
-  }
 
   createBarPlotAxis() {
     var data = this.props.data;
     var label_width = this.props.label_width;
     var max_value = this.props.max_value && d3.max(data);
-    var padding_bottom = 15;
-    var height = this.props.height - padding_bottom;
+    var padding = this.props.padding;
+    var height = this.props.height - padding.bottom;
+    console.log(height);
 
     var bar_axis = d3.axisLeft().scale(
       d3
@@ -40,19 +36,20 @@ class BaseSiteBarPlotAxis extends React.Component {
     var axis = d3
       .select(".baseSiteBarPlotAxis")
       .attr("width", label_width)
-      .attr("height", height + padding_bottom);
+      .attr("height", height + padding.bottom);
 
     axis
       .append("g")
       .attr("class", "axis")
-      .attr("transform", `translate(${label_width - 1}, 10)`)
+      .attr("transform", `translate(${label_width - 1}, ${padding.top})`)
       .call(bar_axis);
 
     axis
       .append("text")
-      .attr("x", 11)
-      .attr("y", label_width - 20)
-      .attr("transform", `rotate(270 ${0.75 * label_width}, 70)`)
+      .attr("transform", "rotate(-90)")
+      .attr("y", label_width / 2)
+      .attr("x", 0 - height / 2)
+      .style("text-anchor", "middle")
       .text(this.props.axis_label);
   }
 
@@ -74,8 +71,9 @@ class BaseSiteBarPlotAxis extends React.Component {
   }
 }
 
-BaseSiteBarPlotAxis.defaultProps = {
-  id: "alignmentjs"
+SitePlotAxis.defaultProps = {
+  id: "alignmentjs",
+  padding: { top: 10, right: 0, bottom: 15, left: 5 }
 };
 
-module.exports = BaseSiteBarPlotAxis;
+module.exports = SitePlotAxis;

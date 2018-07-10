@@ -5,11 +5,7 @@ const $ = require("jquery");
 class BaseSiteBarPlot extends React.Component {
   constructor(props) {
     super(props);
-
-    // d3 variables used by multiple methods
-    this.padding_bottom = 15;
-    this.chart_height = this.props.height - this.padding_bottom;
-
+    this.chart_height = this.props.height - this.props.padding.bottom;
     $("#alignmentjs-siteBarPlot-div").scrollLeft(this.props.x_pixel);
   }
 
@@ -36,18 +32,19 @@ class BaseSiteBarPlot extends React.Component {
     var data = this.props.data;
     var chart_height = this.chart_height;
     var max_value = this.props.max_value && d3.max(data);
+    var bar_spacing = 2;
+    var padding = this.props.padding;
+    var barWidth = this.props.siteSize;
 
     var barChartScale = d3
       .scaleLinear()
-      .domain([max_value, 0])
-      .range([0, chart_height]);
-
-    var barWidth = this.props.siteSize;
+      .domain([0, max_value])
+      .range([chart_height, 0]);
 
     var chart = d3
       .select("#alignmentjs-siteBarPlot")
       .attr("width", this.props.width)
-      .attr("height", chart_height + this.padding_bottom);
+      .attr("height", chart_height + padding.bottom);
 
     chart
       .selectAll("g")
@@ -55,7 +52,13 @@ class BaseSiteBarPlot extends React.Component {
       .enter()
       .append("g")
       .attr("transform", function(d, i) {
-        return "translate(" + i * barWidth + ", 10)";
+        return (
+          "translate(" +
+          (i * barWidth + bar_spacing / 2) +
+          ", " +
+          padding.top +
+          ")"
+        );
       })
       .append("rect")
       .attr("class", "bars")
@@ -65,7 +68,7 @@ class BaseSiteBarPlot extends React.Component {
       .attr("height", function(d) {
         return chart_height - barChartScale(d);
       })
-      .attr("width", barWidth - 2)
+      .attr("width", barWidth - bar_spacing)
       .attr("fill", this.props.fillColor)
       .attr("stroke", this.props.outlineColor);
   }
@@ -117,7 +120,8 @@ class BaseSiteBarPlot extends React.Component {
 }
 
 BaseSiteBarPlot.defaultProps = {
-  id: "alignmentjs"
+  id: "alignmentjs",
+  padding: { top: 10, bottom: 15 }
 };
 
 module.exports = BaseSiteBarPlot;
