@@ -2,10 +2,6 @@ import React from "react";
 const d3 = require("d3");
 
 class SitePlotAxis extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     if (this.props.data != null) {
       this.createBarPlotAxis();
@@ -19,12 +15,11 @@ class SitePlotAxis extends React.Component {
   }
 
   createBarPlotAxis() {
-    var data = this.props.data;
+    var { data, label_width, padding } = this.props;
     var label_width = this.props.label_width;
     var max_value = this.props.max_value && d3.max(data);
     var padding = this.props.padding;
     var height = this.props.height - padding.bottom;
-    console.log(height);
 
     var bar_axis = d3.axisLeft().scale(
       d3
@@ -48,7 +43,7 @@ class SitePlotAxis extends React.Component {
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", label_width / 2)
-      .attr("x", 0 - height / 2)
+      .attr("x", -padding.top - height / 2)
       .style("text-anchor", "middle")
       .text(this.props.axis_label);
   }
