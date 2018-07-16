@@ -9,6 +9,8 @@ import SequenceAxis from "./SequenceAxis.jsx";
 import Scaffold from "./Scaffold.jsx";
 import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
+import StackedSiteBarPlot from "./StackedSiteBarPlot.jsx";
+import SitePlotAxis from "./SitePlotAxis.jsx";
 
 class ScaffoldViewer extends Component {
   constructor(props) {
@@ -16,9 +18,16 @@ class ScaffoldViewer extends Component {
     this.label_width = 200;
     this.initialize(this.props);
   }
+
   componentDidMount() {
+    this.initialize(this.props);
     this.setScrollingEvents(this.props);
   }
+
+  componentWillUpdate(nextProps) {
+    this.setScrollingEvents(nextProps);
+  }
+
   setScrollingEvents(props) {
     if (props.fasta) {
       const { scroll_broadcaster } = this;
@@ -30,10 +39,7 @@ class ScaffoldViewer extends Component {
       });
     }
   }
-  componentWillUpdate(nextProps) {
-    this.initialize(nextProps);
-    this.setScrollingEvents(nextProps);
-  }
+
   initialize(props) {
     if (props.fasta) {
       const { fasta, site_size, width, height } = props;
@@ -67,6 +73,7 @@ class ScaffoldViewer extends Component {
         },
         { x_pixel: this.x_pixel, y_pixel: this.y_pixel },
         [
+          "alignmentjs-siteBarPlot-div",
           "alignmentjs-reference-alignment",
           "alignmentjs-alignment",
           "alignmentjs-axis-div",
@@ -76,6 +83,7 @@ class ScaffoldViewer extends Component {
       );
     }
   }
+
   render() {
     if (!this.sequence_data) {
       return <div style={container_style} id="alignmentjs-main-div" />;
@@ -84,15 +92,35 @@ class ScaffoldViewer extends Component {
       gridTemplateColumns = `${
         this.label_width
       }px ${alignment_width}px ${scaffold_width}px`,
+      barPlotHeight = 140,
       container_style = {
         display: "grid",
         gridTemplateColumns: gridTemplateColumns,
-        gridTemplateRows: `20px 20px ${alignment_height}px`
+        gridTemplateRows: `${barPlotHeight} 20px 20px ${alignment_height}px`
       },
       reference_sequence_data = this.sequence_data.slice(0, 1),
       remaining_sequence_data = this.sequence_data.slice(1);
     return (
       <div style={container_style} id="alignmentjs-main-div">
+        <SitePlotAxis
+          label_width={this.label_width}
+          data={this.props.posteriors}
+          height={barPlotHeight}
+          max_value={1}
+          axis_label={"Posterior probability"}
+        />
+        <StackedSiteBarPlot
+          data={this.props.posteriors}
+          siteSize={this.props.site_size}
+          width={alignment_width}
+          height={barPlotHeight}
+          fillColor={"gray"}
+          outlineColor={"black"}
+          x_pixel={this.x_pixel}
+          max_value={1}
+        />
+        <div id="alignmentjs-placeholder" />
+
         <div id="alignmentjs-axis-placeholder1" />
         <SiteAxis
           width={alignment_width}

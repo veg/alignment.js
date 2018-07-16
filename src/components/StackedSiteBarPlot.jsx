@@ -2,7 +2,7 @@ import React from "react";
 const d3 = require("d3");
 const $ = require("jquery");
 
-class BaseSiteBarPlot extends React.Component {
+class StackedSiteBarPlot extends React.Component {
   constructor(props) {
     super(props);
     this.chart_height = this.props.height - this.props.padding.bottom;
@@ -21,11 +21,7 @@ class BaseSiteBarPlot extends React.Component {
       .addEventListener("alignmentjs_wheel_event", function(e) {
         $("#alignmentjs-siteBarPlot-div").scrollLeft(e.detail.x_pixel);
       });
-    if (prevProps.data == null) {
-      this.createBarPlot();
-    } else {
-      this.transitionBarPlot();
-    }
+    this.createBarPlot();
   }
 
   createBarPlot() {
@@ -39,14 +35,14 @@ class BaseSiteBarPlot extends React.Component {
     var barChartScale = d3
       .scaleLinear()
       .domain([0, max_value])
-      .range([chart_height, 0]);
+      .range([0, chart_height]);
 
     var chart = d3
       .select("#alignmentjs-siteBarPlot")
       .attr("width", this.props.width)
       .attr("height", chart_height + padding.bottom);
 
-    chart
+    var bars = chart
       .selectAll("g")
       .data(data)
       .enter()
@@ -59,47 +55,38 @@ class BaseSiteBarPlot extends React.Component {
           padding.top +
           ")"
         );
-      })
+      });
+
+    bars
       .append("rect")
-      .attr("class", "bars")
-      .attr("y", function(d) {
-        return barChartScale(d);
-      })
-      .attr("height", function(d) {
-        return chart_height - barChartScale(d);
-      })
+      .attr("x", 2)
       .attr("width", barWidth - bar_spacing)
-      .attr("fill", this.props.fillColor)
-      .attr("stroke", this.props.outlineColor);
-  }
+      .attr("height", d => barChartScale(d["A"][1]))
+      .attr("fill", "LightPink");
 
-  transitionBarPlot() {
-    var data = this.props.data;
-    var chart_height = this.chart_height;
-    var max_value = this.props.max_value && d3.max(data);
+    bars
+      .append("rect")
+      .attr("x", 2)
+      .attr("y", d => barChartScale(d["A"][1]))
+      .attr("width", barWidth - bar_spacing)
+      .attr("height", d => barChartScale(d["G"][1]))
+      .attr("fill", "LemonChiffon");
 
-    var barChartScale = d3
-      .scaleLinear()
-      .domain([max_value, 0])
-      .range([0, this.chart_height]);
+    bars
+      .append("rect")
+      .attr("x", 2)
+      .attr("y", d => barChartScale(d["A"][1] + d["G"][1]))
+      .attr("width", barWidth - bar_spacing)
+      .attr("height", d => barChartScale(d["C"][1]))
+      .attr("fill", "MediumPurple");
 
-    var barChartTransition = d3
-      .transition()
-      .duration(500)
-      .ease(d3.easeSin);
-
-    d3
-      .selectAll(".bars")
-      .data(this.props.data)
-      .transition(barChartTransition)
-      .attr("y", function(d) {
-        return barChartScale(d);
-      })
-      .attr("height", function(d) {
-        return chart_height - barChartScale(d);
-      })
-      .style("fill", this.props.fillColor)
-      .style("stroke", this.props.outlineColor);
+    bars
+      .append("rect")
+      .attr("x", 2)
+      .attr("y", d => barChartScale(d["A"][1] + d["G"][1] + d["C"][1]))
+      .attr("width", barWidth - bar_spacing)
+      .attr("height", d => barChartScale(d["T"][1]))
+      .attr("fill", "LightBlue");
   }
 
   render() {
@@ -119,9 +106,9 @@ class BaseSiteBarPlot extends React.Component {
   }
 }
 
-BaseSiteBarPlot.defaultProps = {
+StackedSiteBarPlot.defaultProps = {
   id: "alignmentjs",
   padding: { top: 10, bottom: 15 }
 };
 
-module.exports = BaseSiteBarPlot;
+module.exports = StackedSiteBarPlot;

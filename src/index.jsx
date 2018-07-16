@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "bootstrap";
 const d3 = require("d3");
 const $ = require("jquery");
+const _ = require("underscore");
 
 import Alignment from "./components/Alignment.jsx";
 import ScaffoldViewer from "./components/ScaffoldViewer.jsx";
@@ -95,11 +96,17 @@ class App extends Component {
         viewing: "alignment"
       });
     });
+    d3.json("json/NGS.json", (error, json) => {
+      const posteriors = _.toArray(json.posteriors);
+      this.setState({
+        posteriors: posteriors
+      });
+    });
   };
 
   changeView = view => {
     const views = {
-      scaffold: { data: "fasta/scaffold.fasta" },
+      scaffold: { data: "fasta/NGS.fasta" },
       siteBarPlot: { data: "fasta/CD2.fasta" }
     };
     d3.text(views[view].data, (error, data) => {
@@ -125,7 +132,6 @@ class App extends Component {
           loadData={this.loadData}
           fasta={this.state.fasta}
           handleTextUpdate={this.handleTextUpdate}
-          loadScaffoldData={this.loadScaffoldData}
           changeView={this.changeView}
         />
 
@@ -146,6 +152,7 @@ class App extends Component {
               ) : this.state.viewing == "scaffold" ? (
                 <ScaffoldViewer
                   fasta={this.state.fasta}
+                  posteriors={this.state.posteriors}
                   width={1200}
                   height={800}
                 />
