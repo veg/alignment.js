@@ -16,9 +16,7 @@ class SitePlotAxis extends React.Component {
 
   createBarPlotAxis() {
     var { data, label_width, padding } = this.props;
-    var label_width = this.props.label_width;
     var max_value = this.props.max_value && d3.max(data);
-    var padding = this.props.padding;
     var height = this.props.height - padding.bottom;
 
     var bar_axis = d3.axisLeft().scale(

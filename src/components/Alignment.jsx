@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-const d3 = require("d3");
 const $ = require("jquery");
-const _ = require("underscore");
 const text_width = require("text-width");
 
 import fastaParser from "./../helpers/fasta";
@@ -49,7 +47,7 @@ class Alignment extends Component {
   }
   initialize(props) {
     if (props.fasta) {
-      const { fasta, site_size, width, height, axis_height } = props;
+      const { fasta, site_size, width, height } = props;
       this.sequence_data = fastaParser(fasta);
       this.label_width =
         props.label_padding +

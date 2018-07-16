@@ -74,7 +74,7 @@ class SiteBarPlotExample extends Component {
   initialize(props) {
     if (props.fasta) {
       const { fasta, site_size, width, height } = props;
-      this.sequence_data = fastaParser(props.fasta);
+      this.sequence_data = fastaParser(fasta);
       this.label_width =
         props.label_padding +
         this.sequence_data

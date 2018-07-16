@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 const d3 = require("d3");
-const $ = require("jquery");
 
 class Scaffold extends Component {
   componentDidMount() {

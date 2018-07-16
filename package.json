@@ -4,6 +4,7 @@
   "main": "lib/alignment.js",
   "license": "MIT",
   "dependencies": {
+    "babel-eslint": "^8.2.6",
     "bootstrap": "^4.1.1",
     "d3": "^4.12.2",
     "jquery": "^3.3.1",
@@ -49,7 +50,8 @@
     "build-app": "npx webpack --config webpack.prod.js",
     "build-lib": "npx webpack --config webpack.lib.js",
     "precommit": "pretty-quick --staged",
-    "format": "prettier 'src/**/*.{js,jsx}' --write"
+    "format": "prettier 'src/**/*.{js,jsx}' --write",
+    "lint": "eslint --ext .js,.jsx --ignore-pattern public,static,dist ./src/"
   },
   "files": ["lib/alignment.js", "lib/alignment.css"]
 }

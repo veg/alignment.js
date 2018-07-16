@@ -33,7 +33,7 @@ const nucleotide_colors = {
     k: "DarkCyan",
     l: "DarkKhaki",
     m: "steelblue",
-    r: "DarkSeaGreen",
+    n: "DarkSeaGreen",
     p: "yellow",
     q: "lightgreen",
     r: "orange",

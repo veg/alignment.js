@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import Import from "./Import.jsx";
 import Export from "./Export.jsx";

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import "bootstrap";
 const d3 = require("d3");
-const _ = require("underscore");
 const $ = require("jquery");
 
 import Alignment from "./components/Alignment.jsx";

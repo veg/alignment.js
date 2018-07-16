@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 
-const d3 = require("d3");
 const _ = require("underscore");
 
 class BaseAlignment extends Component {
