@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 const $ = require("jquery");
-const text_width = require("text-width");
 
-import fastaParser from "./../helpers/fasta";
+import fastaParser from "../helpers/fasta";
+import computeLabelWidth from "../helpers/computeLabelWidth";
 import BaseAlignment from "./BaseAlignment.jsx";
 import SiteAxis from "./SiteAxis.jsx";
 import Placeholder from "./Placeholder.jsx";
@@ -75,16 +75,11 @@ class SiteBarPlotExample extends Component {
     if (props.fasta) {
       const { fasta, site_size, width, height } = props;
       this.sequence_data = fastaParser(props.fasta);
-      this.label_width =
-        props.label_padding +
-        this.sequence_data
-          .map(record =>
-            text_width(record.header, { family: "Courier", size: 14 })
-          )
-          .reduce((a, b) => Math.max(a, b), 0);
-      this.full_pixel_width = site_size * this.sequence_data.number_of_sites;
-      this.full_pixel_height =
-        site_size * this.sequence_data.number_of_sequences;
+      const { sequence_data } = this;
+      const { label_padding } = this.props;
+      this.label_width = computeLabelWidth(sequence_data, label_padding);
+      this.full_pixel_width = site_size * sequence_data.number_of_sites;
+      this.full_pixel_height = site_size * sequence_data.number_of_sequences;
 
       const { centerOnSite, centerOnHeader } = props;
       this.x_pixel = site_size * centerOnSite - width / 2 || 0;

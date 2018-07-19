@@ -69,4 +69,5 @@ SiteAxis.defaultProps = {
   x_pixel: 0,
   site_size: 20
 };
+
 module.exports = SiteAxis;

@@ -33,6 +33,14 @@ function NavBar(props) {
                 Site Bar Plot
               </a>
             </li>
+            <li>
+              <a
+                className="nav-link"
+                onClick={() => props.changeView("largeTreeAlignment")}
+              >
+                Large Tree
+              </a>
+            </li>
           </ul>
           <ul className="navbar-nav ml-auto">
             <Import
