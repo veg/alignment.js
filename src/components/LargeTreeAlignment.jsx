@@ -71,30 +71,53 @@ class LargeTreeAlignment extends Component {
         b_index = ordered_leaf_names.indexOf(b.header);
       return a_index - b_index;
     });
-
-    /*
-    const height = this.row_sizes[1],
-      width = this.column_sizes[2],
-      full_pixel_width = site_size*this.sequence_data.number_of_sites,
-      full_pixel_height = site_size*this.sequence_data.number_of_sequences;
-
-    this.scroll_broadcaster = new ScrollBroadcaster(
-      { width: full_pixel_width, height: full_pixel_height },
-      { width: width, height: height },
-      { x_pixel: 0, y_pixel: 0 },
-      ['alignmentjs-alignment', 'alignmentjs-axis-div']
-    );
-    const { scroll_broadcaster } = this;
-    $('#phyalign-container').off('wheel');
-    $('#phyalign-container').on('wheel', function (e) {
-      e.preventDefault();
-      scroll_broadcaster.handleWheel(e);
-    });
-*/
   }
   componentDidUpdate() {
     console.log("lta cdu");
     this.main_tree.svg(d3.select("#alignmentjs-largeTreeAlignment")).layout();
+
+    const { sequence_data } = this,
+      { site_size } = this.props,
+      height = this.row_sizes[1],
+      width = this.column_sizes[2],
+      full_pixel_width = site_size * sequence_data.number_of_sites,
+      full_pixel_height = site_size * sequence_data.number_of_sequences;
+    this.scroll_broadcaster = new ScrollBroadcaster(
+      { width: full_pixel_width, height: full_pixel_height },
+      { width: width, height: height },
+      { x_pixel: 0, y_pixel: 0 },
+      [
+        "alignmentjs-alignment",
+        "alignmentjs-labels-div",
+        "alignmentjs-largeTreeAlignment-div",
+        "alignmentjs-axis-div"
+      ]
+    );
+
+    const { scroll_broadcaster } = this;
+    scroll_broadcaster.setListeners();
+    $("#alignmentjs-largeTreeAlignment-div").off("wheel");
+    $("#alignmentjs-largeTreeAlignment-div").on("wheel", function(e) {
+      const e_mock = {
+        originalEvent: {
+          deltaX: 0,
+          deltaY: e.originalEvent.deltaY
+        }
+      };
+      scroll_broadcaster.handleWheel(e_mock, "tree");
+    });
+    $("#alignmentjs-alignment").on("wheel", function(e) {
+      e.preventDefault();
+      scroll_broadcaster.handleWheel(e, "alignment");
+    });
+
+    document
+      .getElementById("alignmentjs-largeTreeAlignment-div")
+      .addEventListener("alignmentjs_wheel_event", e => {
+        if (e.detail.sender == "alignment") {
+          $("#alignmentjs-largeTreeAlignment-div").scrollTop(e.detail.y_pixel);
+        }
+      });
   }
   render() {
     console.log("lta render");
@@ -115,7 +138,10 @@ class LargeTreeAlignment extends Component {
           height={this.row_sizes[0]}
           sequence_data={this.sequence_data}
         />
-        <div style={{ overfloxX: "scroll", overflowY: "scroll" }}>
+        <div
+          id="alignmentjs-largeTreeAlignment-div"
+          style={{ overflowX: "scroll", overflowY: "scroll" }}
+        >
           <svg id="alignmentjs-largeTreeAlignment" />
         </div>
         <SequenceAxis
