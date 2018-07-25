@@ -158,7 +158,7 @@ class App extends Component {
           changeView={this.changeView}
         />
 
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <div className="col-12">
               <h4>{message}</h4>
