@@ -20,7 +20,6 @@ class LargeTreeAlignment extends Component {
     this.row_sizes = [20, 700];
   }
   componentWillUpdate(nextProps) {
-    console.log("lta cwu");
     const { site_size } = this.props;
     this.sequence_data = fastaParser(nextProps.fasta);
     const number_of_sequences = this.sequence_data.length;
@@ -32,9 +31,11 @@ class LargeTreeAlignment extends Component {
         "top-bottom-spacing": "fit-to-size",
         "show-scale": false,
         "align-tips": true,
-        "show-labels": false
+        "show-labels": false,
+        selectable: false
       })
-      .size([this.tree_size, this.tree_size]);
+      .size([this.tree_size, this.tree_size])
+      .node_circle_size(0);
     this.parsed = d3.layout.newick_parser(nextProps.newick);
     this.main_tree(this.parsed);
 
@@ -76,7 +77,6 @@ class LargeTreeAlignment extends Component {
     });
   }
   componentDidUpdate() {
-    console.log("lta cdu");
     this.main_tree.svg(d3.select("#alignmentjs-largeTreeAlignment")).layout();
 
     const guide_height = this.row_sizes[1],
@@ -120,6 +120,9 @@ class LargeTreeAlignment extends Component {
       .attr("y", 0)
       .attr("id", "guide-rect")
       .style("opacity", 0.6)
+      .style("stroke-width", "1px")
+      .style("stroke", "red")
+      .style("fill", "pink")
       .attr("width", this.guide_x_scale(guide_width))
       .attr("height", this.guide_y_scale(guide_height));
 
@@ -151,7 +154,7 @@ class LargeTreeAlignment extends Component {
       const guide_x = +d3.select("#guide-rect").attr("x");
       const new_guide_x = Math.min(
         Math.max(guide_x + guide_x_scale(e.originalEvent.deltaX), 0),
-        guide_width
+        guide_width - guide_x_scale(guide_width)
       );
       rect.attr("x", new_guide_x);
 
@@ -181,7 +184,7 @@ class LargeTreeAlignment extends Component {
       const guide_x = +d3.select("#guide-rect").attr("x");
       const new_guide_x = Math.min(
         Math.max(guide_x + guide_x_scale(e.originalEvent.deltaX), 0),
-        guide_width
+        guide_width - guide_x_scale(guide_width)
       );
       rect.attr("x", new_guide_x);
 
@@ -235,7 +238,6 @@ class LargeTreeAlignment extends Component {
       });
   }
   render() {
-    console.log("lta render");
     if (!this.props.fasta) {
       return <div />;
     }
