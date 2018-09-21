@@ -2,7 +2,6 @@ import Alignment from "./components/Alignment.jsx";
 import BaseAlignment from "./components/BaseAlignment.jsx";
 import SiteAxis from "./components/SiteAxis.jsx";
 import SequenceAxis from "./components/SequenceAxis.jsx";
-import LargeTree from "./components/LargeTree.jsx";
 import LargeTreeAlignment from "./components/LargeTreeAlignment.jsx";
 import fastaParser from "./helpers/fasta";
 import ScrollBroadcaster from "./helpers/ScrollBroadcaster";

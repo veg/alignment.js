@@ -18,10 +18,13 @@ class LargeTreeAlignment extends Component {
     super(props);
     this.column_sizes = [700, 700, 200, 700];
     this.row_sizes = [20, 700];
+    if (props.fasta) {
+      this.preprocess(props);
+    }
   }
-  componentWillUpdate(nextProps) {
+  preprocess(props) {
     const { site_size } = this.props;
-    this.sequence_data = fastaParser(nextProps.fasta);
+    this.sequence_data = fastaParser(props.fasta);
     const number_of_sequences = this.sequence_data.length;
     this.tree_size = number_of_sequences * site_size;
     this.main_tree = d3.layout
@@ -36,7 +39,7 @@ class LargeTreeAlignment extends Component {
       })
       .size([this.tree_size, this.tree_size])
       .node_circle_size(0);
-    this.parsed = d3.layout.newick_parser(nextProps.newick);
+    this.parsed = d3.layout.newick_parser(props.newick);
     this.main_tree(this.parsed);
 
     const label_width = computeLabelWidth(
@@ -61,9 +64,14 @@ class LargeTreeAlignment extends Component {
       n["count_depth"] = d;
     });
 
-    this.main_tree.resort_children(function(a, b) {
-      return a["count_depth"] - b["count_depth"];
-    }, true);
+    this.main_tree.resort_children(
+      function(a, b) {
+        return a["count_depth"] - b["count_depth"];
+      },
+      null,
+      null,
+      true
+    );
 
     const ordered_leaf_names = this.main_tree
       .get_nodes(true)
@@ -76,7 +84,7 @@ class LargeTreeAlignment extends Component {
       return a_index - b_index;
     });
   }
-  componentDidUpdate() {
+  postprocess(props) {
     this.main_tree.svg(d3.select("#alignmentjs-largeTreeAlignment")).layout();
 
     const guide_height = this.row_sizes[1],
@@ -127,7 +135,7 @@ class LargeTreeAlignment extends Component {
       .attr("height", this.guide_y_scale(guide_height));
 
     const { sequence_data } = this,
-      { site_size } = this.props,
+      { site_size } = props,
       height = this.row_sizes[1],
       width = this.column_sizes[3],
       full_pixel_width = site_size * sequence_data.number_of_sites,
@@ -236,6 +244,17 @@ class LargeTreeAlignment extends Component {
           $("#alignmentjs-largeTreeAlignment-div").scrollTop(e.detail.y_pixel);
         }
       });
+  }
+  componentDidMount() {
+    if (this.props.fasta) {
+      this.postprocess(this.props);
+    }
+  }
+  componentWillUpdate(nextProps) {
+    this.preprocess(nextProps);
+  }
+  componentDidUpdate() {
+    this.postprocess(this.props);
   }
   render() {
     if (!this.props.fasta) {

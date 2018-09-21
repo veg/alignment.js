@@ -101,7 +101,8 @@ class App extends Component {
         d3.text("data/H3full.new", (newick_error, newick_data) => {
           this.setState({
             fasta: fasta_data,
-            newick: newick_data
+            newick: newick_data,
+            viewing: "largeTreeAlignment"
           });
         });
       });
@@ -156,6 +157,7 @@ class App extends Component {
           handleTextUpdate={this.handleTextUpdate}
           loadScaffoldData={this.loadScaffoldData}
           changeView={this.changeView}
+          viewing={this.state.viewing}
         />
 
         <div className="container-fluid">

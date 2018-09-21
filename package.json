@@ -7,7 +7,7 @@
     "bootstrap": "^4.1.1",
     "d3": "^4.12.2",
     "jquery": "^3.3.1",
-    "phylotree": "file:.yalc/phylotree",
+    "phylotree": "0.2.0-alpha.1",
     "popper.js": "^1.14.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -52,5 +52,9 @@
     "precommit": "pretty-quick --staged",
     "format": "prettier 'src/**/*.{js,jsx}' --write"
   },
-  "files": ["lib/alignment.js", "lib/alignment.css"]
+  "files": ["lib/alignment.js", "lib/alignment.css"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/veg/alignment.js"
+  }
 }

@@ -5,6 +5,7 @@ import Export from "./Export.jsx";
 import DropDownOfAlignmentsToView from "./DropDownOfAlignmentsToView.jsx";
 
 function NavBar(props) {
+  const show_import_export = props.viewing == "alignment";
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -42,13 +43,15 @@ function NavBar(props) {
               </a>
             </li>
           </ul>
-          <ul className="navbar-nav ml-auto">
-            <Import
-              handleFileChange={props.handleFileChange}
-              handleTextUpdate={props.handleTextUpdate}
-            />
-            <Export fasta={props.fasta} />
-          </ul>
+          {show_import_export ? (
+            <ul className="navbar-nav ml-auto">
+              <Import
+                handleFileChange={props.handleFileChange}
+                handleTextUpdate={props.handleTextUpdate}
+              />
+              <Export fasta={props.fasta} />
+            </ul>
+          ) : null}
         </div>
       </nav>
     </div>
