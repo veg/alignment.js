@@ -46,7 +46,7 @@ class ScrollBroadcaster {
     this.listeners = this.listener_ids.map(id => document.getElementById(id));
   }
 
-  broadcast(x_fraction_candidate, y_fraction_candidate) {
+  broadcast(x_fraction_candidate, y_fraction_candidate, sender) {
     // Make sure the viewport doens't go off the element.
     this.x_fraction = Math.min(
       Math.max(0, x_fraction_candidate),
@@ -61,7 +61,8 @@ class ScrollBroadcaster {
       x_fraction: this.x_fraction,
       y_fraction: this.y_fraction,
       x_pixel: this.x_fraction * this.full_pixel_width,
-      y_pixel: this.y_fraction * this.full_pixel_height
+      y_pixel: this.y_fraction * this.full_pixel_height,
+      sender: sender
     };
     // Broadcast the current "detail" on the "alignmentjs_wheel_event" channel.
     const wheel_event = new CustomEvent("alignmentjs_wheel_event", {
@@ -70,7 +71,7 @@ class ScrollBroadcaster {
     this.listeners.forEach(element => element.dispatchEvent(wheel_event));
   }
 
-  handleWheel(e) {
+  handleWheel(e, sender) {
     // Calculate the new location based on how far has been scrolled.
     const old_x_pixel = this.full_pixel_width * this.x_fraction;
     const old_y_pixel = this.full_pixel_height * this.y_fraction;
@@ -79,7 +80,7 @@ class ScrollBroadcaster {
     const x_fraction_candidate = new_x_pixel / this.full_pixel_width;
     const y_fraction_candidate = new_y_pixel / this.full_pixel_height;
     // Broadcast the new location with the broadcaster method.
-    this.broadcast(x_fraction_candidate, y_fraction_candidate);
+    this.broadcast(x_fraction_candidate, y_fraction_candidate, sender);
   }
 }
 

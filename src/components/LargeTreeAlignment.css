@@ -1,0 +1,7 @@
+#alignmentjs-guideTree-div path.branch {
+  opacity: 0.6;
+}
+
+#alignmentjs-guideTree-div path.branch:hover {
+  stroke-width: 2px;
+}

@@ -2,9 +2,9 @@ import React, { Component } from "react";
 const d3 = require("d3");
 const $ = require("jquery");
 const _ = require("underscore");
-const text_width = require("text-width");
 
 import fastaParser from "./../helpers/fasta";
+import computeLabelWidth from "../helpers/computeLabelWidth";
 import BaseAlignment from "./BaseAlignment.jsx";
 import SiteAxis from "./SiteAxis.jsx";
 import Placeholder from "./Placeholder.jsx";
@@ -41,26 +41,12 @@ class ScaffoldViewer extends Component {
     if (props.fasta) {
       const { fasta, site_size, width, height, axis_height } = props;
       this.sequence_data = fastaParser(fasta);
-      this.label_width =
-        props.label_padding +
-        this.sequence_data
-          .map(record =>
-            text_width(record.header, { family: "Courier", size: 14 })
-          )
-          .reduce((a, b) => Math.max(a, b), 0);
-      this.full_pixel_width = site_size * this.sequence_data.number_of_sites;
+      const { sequence_data } = this;
+      const { label_padding } = this.props;
+      this.label_width = computeLabelWidth(sequence_data, label_padding);
+      this.full_pixel_width = site_size * sequence_data.number_of_sites;
       this.full_pixel_height =
-        site_size * (this.sequence_data.number_of_sequences - 1);
-
-      const { centerOnSite, centerOnHeader } = props;
-      this.x_pixel = site_size * centerOnSite - width / 2 || 0;
-      this.y_pixel = centerOnHeader
-        ? site_size *
-            this.sequence_data
-              .map(record => record.header)
-              .indexOf(centerOnHeader) -
-          height / 2
-        : 0;
+        site_size * (sequence_data.number_of_sequences - 1);
 
       this.scroll_broadcaster = new ScrollBroadcaster(
         { width: this.full_pixel_width, height: this.full_pixel_height },
@@ -108,7 +94,6 @@ class ScaffoldViewer extends Component {
           height={this.props.site_size}
           sequence_data={reference_sequence_data}
           site_size={this.props.site_size}
-          y_pixel={this.y_pixel}
           id="alignmentjs-reference"
         />
         <BaseAlignment
@@ -116,8 +101,6 @@ class ScaffoldViewer extends Component {
           height={this.props.site_size}
           sequence_data={reference_sequence_data}
           site_size={this.props.site_size}
-          x_pixel={this.x_pixel}
-          y_pixel={this.y_pixel}
           id="alignmentjs-reference"
           disableVerticalScrolling
         />
@@ -134,8 +117,6 @@ class ScaffoldViewer extends Component {
           height={800}
           sequence_data={remaining_sequence_data}
           site_size={this.props.site_size}
-          x_pixel={this.x_pixel}
-          y_pixel={this.y_pixel}
         />
         <Scaffold
           width={scaffold_width}
