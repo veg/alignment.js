@@ -85,6 +85,7 @@ class BaseAlignment extends Component {
 BaseAlignment.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
+  site_size: 20,
   id: "alignmentjs"
 };
 

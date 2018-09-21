@@ -1,6 +1,8 @@
 node_modules
 .DS_Store
-
+.yalc
+yalc.lock
+yarn-error.log
 dist/index.html
 dist/bundle.js
 dist/alignment.js

@@ -2,9 +2,9 @@ import React, { Component } from "react";
 const d3 = require("d3");
 const $ = require("jquery");
 const _ = require("underscore");
-const text_width = require("text-width");
 
 import fastaParser from "./../helpers/fasta";
+import computeLabelWidth from "../helpers/computeLabelWidth";
 import BaseAlignment from "./BaseAlignment.jsx";
 import SiteAxis from "./SiteAxis.jsx";
 import Placeholder from "./Placeholder.jsx";
@@ -51,13 +51,9 @@ class Alignment extends Component {
     if (props.fasta) {
       const { fasta, site_size, width, height, axis_height } = props;
       this.sequence_data = fastaParser(fasta);
-      this.label_width =
-        props.label_padding +
-        this.sequence_data
-          .map(record =>
-            text_width(record.header, { family: "Courier", size: 14 })
-          )
-          .reduce((a, b) => Math.max(a, b), 0);
+      const { sequence_data } = this;
+      const { label_padding } = this.props;
+      this.label_width = computeLabelWidth(sequence_data, label_padding);
       this.full_pixel_width = site_size * this.sequence_data.number_of_sites;
       this.full_pixel_height =
         site_size * this.sequence_data.number_of_sequences;

@@ -56,6 +56,7 @@ class SequenceAxis extends Component {
 
 SequenceAxis.defaultProps = {
   label_padding: 10,
+  site_size: 20,
   id: "alignmentjs"
 };
 

@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -7,6 +8,11 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: "Javascript Alignment Viewer"
+    }),
+    new webpack.ProvidePlugin({
+      d3: "d3",
+      _: "underscore",
+      $: "jquery"
     }),
     new ExtractTextPlugin("alignment.css")
   ],
