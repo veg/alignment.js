@@ -67,12 +67,12 @@ class App extends Component {
     this.state = {
       fasta: null,
       dataset: "loading",
-      viewing: "largeTreeAlignment"
+      viewing: null
     };
   }
 
   componentDidMount() {
-    this.loadData("largeTreeAlignment");
+    this.loadData("CD2");
   }
 
   handleFileChange = e => {

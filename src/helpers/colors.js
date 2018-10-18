@@ -92,6 +92,7 @@ const nucleotide_colors = {
     t: "DeepSkyBlue",
     v: "Gold",
     w: "HotPink",
+    x: "black",
     y: "IndianRed",
     A: "lightblue",
     C: "pink",
@@ -112,6 +113,7 @@ const nucleotide_colors = {
     T: "DeepSkyBlue",
     V: "Gold",
     W: "HotPink",
+    X: "black",
     Y: "IndianRed"
   },
   nucleotide_color = (character, position, header) => {
@@ -135,7 +137,7 @@ const nucleotide_colors = {
     return amino_acid_colors[character];
   },
   amino_acid_text_color = (character, position, header) => {
-    return "black";
+    return character.toUpperCase() != "X" ? "black" : "white";
   };
 
 module.exports.nucleotide_color = nucleotide_color;

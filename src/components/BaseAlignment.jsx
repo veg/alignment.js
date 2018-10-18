@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
+import {
+  nucleotide_color,
+  nucleotide_text_color,
+  amino_acid_color,
+  amino_acid_text_color
+} from "./../helpers/colors";
 
 const d3 = require("d3");
 const _ = require("underscore");
@@ -24,12 +29,17 @@ class BaseAlignment extends Component {
   }
   draw(x_pixel, y_pixel) {
     if (this.props.disableVerticalScrolling) y_pixel = 0;
-    const { width, height, site_size, site_color, text_color } = this.props,
+    const { width, height, site_size } = this.props,
       start_site = Math.floor(x_pixel / site_size),
       end_site = Math.ceil((x_pixel + width) / site_size),
       start_seq = Math.floor(y_pixel / site_size),
-      end_seq = Math.ceil((y_pixel + height) / site_size);
-
+      end_seq = Math.ceil((y_pixel + height) / site_size),
+      site_color = this.props.amino_acid
+        ? amino_acid_color
+        : this.props.site_color,
+      text_color = this.props.amino_acid
+        ? amino_acid_text_color
+        : this.props.text_color;
     const individual_sites = _.flatten(
       this.props.sequence_data
         .filter((row, i) => {
