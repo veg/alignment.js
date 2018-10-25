@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 const $ = require("jquery");
 
 class SequenceAxis extends Component {
@@ -18,6 +17,10 @@ class SequenceAxis extends Component {
   componentDidUpdate(nextProps) {
     $(`#${this.div_id}`).scrollTop(this.props.y_pixel);
   }
+  handleWheel(e) {
+    e.preventDefault();
+    this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
+  }
   render() {
     if (!this.props.sequence_data) {
       return <div id={this.div_id} className="alignmentjs-container" />;
@@ -33,7 +36,12 @@ class SequenceAxis extends Component {
       alignment_height = site_size * number_of_sequences,
       labels = this.props.sequence_data.map(record => record.header);
     return (
-      <div id={this.div_id} className="alignmentjs-container" style={styles}>
+      <div
+        id={this.div_id}
+        className="alignmentjs-container"
+        style={styles}
+        onWheel={e => this.handleWheel(e)}
+      >
         <svg id="alignmentjs-labels" width={width} height={alignment_height}>
           {labels.map((label, i) => {
             return (
@@ -57,7 +65,8 @@ class SequenceAxis extends Component {
 SequenceAxis.defaultProps = {
   label_padding: 10,
   site_size: 20,
-  id: "alignmentjs"
+  id: "alignmentjs",
+  sender: "main"
 };
 
 module.exports = SequenceAxis;

@@ -48,12 +48,18 @@ class SitePlotAxis extends React.Component {
       .text(this.props.axis_label);
   }
 
+  handleWheel(e) {
+    e.preventDefault();
+    this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
+  }
+
   render() {
     return (
       <div
         id={this.props.id + "-siteBarPlotAxis-div"}
         className="alignmentjs-container"
         style={{ width: this.props.label_width, height: this.props.height }}
+        onWheel={e => this.handleWheel(e)}
       >
         <svg
           className="baseSiteBarPlotAxis"
@@ -68,7 +74,8 @@ class SitePlotAxis extends React.Component {
 
 SitePlotAxis.defaultProps = {
   id: "alignmentjs",
-  padding: { top: 10, right: 0, bottom: 15, left: 5 }
+  padding: { top: 10, right: 0, bottom: 15, left: 5 },
+  sender: "main"
 };
 
 module.exports = SitePlotAxis;

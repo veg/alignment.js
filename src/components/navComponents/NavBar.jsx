@@ -37,9 +37,9 @@ function NavBar(props) {
             <li>
               <a
                 className="nav-link"
-                onClick={() => props.changeView("largeTreeAlignment")}
+                onClick={() => props.changeView("treeAlignment")}
               >
-                Large Tree
+                Phylogenetic Tree
               </a>
             </li>
           </ul>

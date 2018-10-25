@@ -6,7 +6,7 @@ const _ = require("underscore");
 const $ = require("jquery");
 
 import Alignment from "./components/Alignment.jsx";
-import LargeTreeAlignment from "./components/LargeTreeAlignment.jsx";
+import TreeAlignment from "./components/TreeAlignment.jsx";
 import ScaffoldViewer from "./components/ScaffoldViewer.jsx";
 import {
   highlight_codon_color,
@@ -58,7 +58,7 @@ const examples = {
 const messages = {
   scaffold: "NGS Scaffold viewer",
   siteBarPlot: "Example Bar Plot (nucleotide composition)",
-  largeTreeAlignment: "Large phylogenetic tree and alignment."
+  treeAlignment: "Phylogenetic tree and alignment."
 };
 
 class App extends Component {
@@ -72,7 +72,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.loadData("CD2");
+    this.loadData("treeAlignment");
+    //this.loadData("CD2");
   }
 
   handleFileChange = e => {
@@ -96,13 +97,13 @@ class App extends Component {
   };
 
   loadData = dataset => {
-    if (dataset == "largeTreeAlignment") {
-      d3.text("data/H3full.fasta", (fasta_error, fasta_data) => {
-        d3.text("data/H3full.new", (newick_error, newick_data) => {
+    if (dataset == "treeAlignment") {
+      d3.text("data/H3trunk.fasta", (fasta_error, fasta_data) => {
+        d3.text("data/H3trunk.new", (newick_error, newick_data) => {
           this.setState({
             fasta: fasta_data,
             newick: newick_data,
-            viewing: "largeTreeAlignment"
+            viewing: "treeAlignment"
           });
         });
       });
@@ -122,9 +123,9 @@ class App extends Component {
       scaffold: { data: "data/scaffold.fasta" },
       siteBarPlot: { data: "data/CD2.fasta" }
     };
-    if (view == "largeTreeAlignment") {
-      d3.text("data/H3full.fasta", (fasta_error, fasta_data) => {
-        d3.text("data/H3full.new", (newick_error, newick_data) => {
+    if (view == "treeAlignment") {
+      d3.text("data/H3trunk.fasta", (fasta_error, fasta_data) => {
+        d3.text("data/H3trunk.new", (newick_error, newick_data) => {
           this.setState({
             viewing: view,
             fasta: fasta_data,
@@ -189,7 +190,7 @@ class App extends Component {
                   height={800}
                 />
               ) : (
-                <LargeTreeAlignment
+                <TreeAlignment
                   fasta={this.state.fasta}
                   newick={this.state.newick}
                 />

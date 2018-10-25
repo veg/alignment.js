@@ -10,6 +10,7 @@ import SequenceAxis from "./SequenceAxis.jsx";
 import fastaParser from "./../helpers/fasta";
 import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
 import computeLabelWidth from "../helpers/computeLabelWidth";
+import sortFASTAAndNewick from "../helpers/jointSort";
 
 import "./LargeTreeAlignment.css";
 
@@ -24,23 +25,15 @@ class LargeTreeAlignment extends Component {
   }
   preprocess(props) {
     const { site_size } = this.props;
-    this.sequence_data = fastaParser(props.fasta);
+    const { sequence_data, phylotree, tree_json } = sortFASTAAndNewick(
+      props.fasta,
+      props.newick
+    );
+    this.sequence_data = sequence_data;
+    this.phylotree = phylotree;
+    this.tree_json = tree_json;
     const number_of_sequences = this.sequence_data.length;
     this.tree_size = number_of_sequences * site_size;
-    this.main_tree = d3.layout
-      .phylotree()
-      .options({
-        "left-right-spacing": "fit-to-size",
-        "top-bottom-spacing": "fit-to-size",
-        "show-scale": false,
-        "align-tips": true,
-        "show-labels": false,
-        selectable: false
-      })
-      .size([this.tree_size, this.tree_size])
-      .node_circle_size(0);
-    this.parsed = d3.layout.newick_parser(props.newick);
-    this.main_tree(this.parsed);
 
     const label_width = computeLabelWidth(
       this.sequence_data,
@@ -49,44 +42,10 @@ class LargeTreeAlignment extends Component {
 
     this.column_sizes[3] += this.column_sizes[2] - label_width;
     this.column_sizes[2] = label_width;
-
-    var i = 0;
-    this.main_tree.traverse_and_compute(function(n) {
-      var d = 1;
-      if (!n.name) {
-        n.name = "Node" + i++;
-      }
-      if (n.children && n.children.length) {
-        d += d3.max(n.children, function(d) {
-          return d["count_depth"];
-        });
-      }
-      n["count_depth"] = d;
-    });
-
-    this.main_tree.resort_children(
-      function(a, b) {
-        return a["count_depth"] - b["count_depth"];
-      },
-      null,
-      null,
-      true
-    );
-
-    const ordered_leaf_names = this.main_tree
-      .get_nodes(true)
-      .filter(d3.layout.phylotree.is_leafnode)
-      .map(d => d.name);
-
-    this.sequence_data.sort((a, b) => {
-      const a_index = ordered_leaf_names.indexOf(a.header),
-        b_index = ordered_leaf_names.indexOf(b.header);
-      return a_index - b_index;
-    });
   }
   postprocess(props) {
     this.main_tree.svg(d3.select("#alignmentjs-largeTreeAlignment")).layout();
-
+    /*
     const guide_height = this.row_sizes[1],
       guide_width = this.column_sizes[0];
 
@@ -244,6 +203,7 @@ class LargeTreeAlignment extends Component {
           $("#alignmentjs-largeTreeAlignment-div").scrollTop(e.detail.y_pixel);
         }
       });
+*/
   }
   componentDidMount() {
     if (this.props.fasta) {

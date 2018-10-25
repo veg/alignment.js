@@ -78,10 +78,18 @@ class BaseAlignment extends Component {
       context.closePath();
     });
   }
+  handleWheel(e) {
+    e.preventDefault();
+    this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
+  }
   render() {
     const div_id = this.props.id + "-alignment-div";
     return (
-      <div id={div_id} className="alignmentjs-container">
+      <div
+        id={div_id}
+        className="alignmentjs-container"
+        onWheel={e => this.handleWheel(e)}
+      >
         <canvas
           width={this.props.width}
           height={this.props.height}
@@ -96,7 +104,8 @@ BaseAlignment.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
   site_size: 20,
-  id: "alignmentjs"
+  id: "alignmentjs",
+  sender: "main"
 };
 
 module.exports = BaseAlignment;

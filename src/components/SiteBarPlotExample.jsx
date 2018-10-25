@@ -21,12 +21,11 @@ class SiteBarPlotExample extends Component {
       nucleotideInView: "A",
       siteNucleotideData: null
     };
+    this.initialize(this.props);
   }
 
   componentDidMount() {
-    this.initialize(this.props);
     this.getSiteNucleotideData(this.sequence_data);
-    this.setScrollingEvents(this.props);
   }
 
   componentWillUpdate(nextProps, prevState) {
@@ -41,32 +40,28 @@ class SiteBarPlotExample extends Component {
   }
 
   setScrollingEvents(props) {
-    var self = this;
     if (props.fasta) {
       const { width, height, axis_height } = props;
-      this.scroll_broadcaster = new ScrollBroadcaster(
-        { width: this.full_pixel_width, height: this.full_pixel_height },
-        { width: width - this.label_width, height: height - axis_height },
-        { x_pixel: this.x_pixel, y_pixel: this.y_pixel },
-        [
+      this.scroll_broadcaster = new ScrollBroadcaster({
+        width: this.full_pixel_width,
+        height: this.full_pixel_height,
+        x_pad: width - this.label_width,
+        y_pad: height - axis_height,
+        x_pixel: this.x_pixel,
+        y_pixel: this.y_pixel,
+        bidirectional: [
           "alignmentjs-siteBarPlot-div",
           "alignmentjs-alignment",
           "alignmentjs-axis-div",
           "alignmentjs-labels-div"
         ]
-      );
-      const { scroll_broadcaster } = this;
-      scroll_broadcaster.setListeners();
-      $("#alignmentjs-main-div").off("wheel");
-      $("#alignmentjs-main-div").on("wheel", function(e) {
-        e.preventDefault();
-        scroll_broadcaster.handleWheel(e);
       });
+
       // Update this.x_pixel on scroll events so that the alignment and plots will render to the correct scroll location on re-renders.
       document
         .getElementById("alignmentjs-alignment")
-        .addEventListener("alignmentjs_wheel_event", function(e) {
-          self.x_pixel = e.detail.x_pixel;
+        .addEventListener("alignmentjs_wheel_event", e => {
+          this.x_pixel = e.detail.x_pixel;
         });
     }
   }
@@ -91,6 +86,7 @@ class SiteBarPlotExample extends Component {
           height / 2
         : 0;
     }
+    this.setScrollingEvents(props);
   }
 
   getSiteNucleotideData = sequence_data => {
@@ -133,6 +129,7 @@ class SiteBarPlotExample extends Component {
             height={barPlotHeight}
             max_value={1}
             axis_label={"Nucleotide %"}
+            scroll_broadcaster={this.scroll_broadcaster}
           />
           <BaseSiteBarPlot
             data={bar_plot_data}
@@ -143,6 +140,7 @@ class SiteBarPlotExample extends Component {
             outlineColor={this.props.text_color(this.state.nucleotideInView)}
             x_pixel={this.x_pixel}
             max_value={1}
+            scroll_broadcaster={this.scroll_broadcaster}
           />
 
           <Placeholder
@@ -154,6 +152,7 @@ class SiteBarPlotExample extends Component {
             site_size={this.props.site_size}
             sequence_data={this.sequence_data}
             x_pixel={this.x_pixel}
+            scroll_broadcaster={this.scroll_broadcaster}
           />
 
           <SequenceAxis
@@ -162,6 +161,7 @@ class SiteBarPlotExample extends Component {
             sequence_data={this.sequence_data}
             site_size={this.props.site_size}
             y_pixel={this.y_pixel}
+            scroll_broadcaster={this.scroll_broadcaster}
           />
           <BaseAlignment
             width={width - this.label_width}
@@ -172,6 +172,7 @@ class SiteBarPlotExample extends Component {
             site_size={this.props.site_size}
             x_pixel={this.x_pixel}
             y_pixel={this.y_pixel}
+            scroll_broadcaster={this.scroll_broadcaster}
           />
         </div>
       </div>
@@ -184,7 +185,8 @@ SiteBarPlotExample.defaultProps = {
   text_color: nucleotide_text_color,
   label_padding: 10,
   site_size: 20,
-  axis_height: 20
+  axis_height: 20,
+  sender: "main"
 };
 
 class SwitchNucleotideButtons extends React.Component {
