@@ -1,7 +1,7 @@
-const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin'),
-  merge = require('webpack-merge'),
-  path = require('path'),
-  common = require('./webpack.common.js');
+const UglifyJsWebpackPlugin = require("uglifyjs-webpack-plugin"),
+  merge = require("webpack-merge"),
+  path = require("path"),
+  common = require("./webpack.common.js");
 
 module.exports = merge(common, {
   output: {
@@ -10,11 +10,5 @@ module.exports = merge(common, {
     libraryTarget: "commonjs2",
     filename: "alignment.js"
   },
-  entry: path.resolve(__dirname, 'src', 'library.js'),
-  externals: [
-    'react',
-    'react-bootstrap',
-    'd3',
-    'underscore'
-  ]
+  entry: path.resolve(__dirname, "src", "library.js")
 });
