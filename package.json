@@ -33,6 +33,7 @@
     "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
+    "jest": "^23.6.0",
     "lint-staged": "^7.2.0",
     "node-sass": "^4.9.0",
     "npx": "^9.7.1",
@@ -51,7 +52,8 @@
     "build-app": "npx webpack --config webpack.prod.js",
     "build-lib": "npx webpack --config webpack.lib.js",
     "precommit": "pretty-quick --staged",
-    "format": "prettier 'src/**/*.{js,jsx}' --write"
+    "format": "prettier 'src/**/*.{js,jsx}' --write",
+    "test": "jest"
   },
   "files": ["lib/alignment.js", "lib/alignment.css"],
   "repository": {
