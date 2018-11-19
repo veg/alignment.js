@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import "bootstrap";
+import "bootstrap/scss/bootstrap.scss";
 const d3 = require("d3");
 const $ = require("jquery");
 
