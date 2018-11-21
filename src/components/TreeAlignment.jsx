@@ -21,7 +21,6 @@ class TreeAlignment extends Component {
     this.initialize(props);
   }
   componentWillUpdate(nextProps) {
-    console.log("cwu");
     this.initialize(nextProps);
   }
   setScrollingEvents(props) {
