@@ -29,7 +29,7 @@ class BaseAlignment extends Component {
   }
   draw(x_pixel, y_pixel) {
     if (this.props.disableVerticalScrolling) y_pixel = 0;
-    const { width, height, site_size } = this.props,
+    const { width, height, site_size, molecule } = this.props,
       start_site = Math.floor(x_pixel / site_size),
       end_site = Math.ceil((x_pixel + width) / site_size),
       start_seq = Math.floor(y_pixel / site_size),
@@ -68,13 +68,14 @@ class BaseAlignment extends Component {
     context.setTransform(1, 0, 0, 1, -x_pixel, -y_pixel);
     individual_sites.forEach(function(d) {
       const x = site_size * (d.j - 1),
-        y = site_size * (d.i - 1);
+        y = site_size * (d.i - 1),
+        mol = molecule(d.mol, d.j, d.header);
       context.beginPath();
       context.fillStyle = site_color(d.mol, d.j, d.header);
       context.rect(x, y, site_size, site_size);
       context.fill();
       context.fillStyle = text_color(d.mol, d.j, d.header);
-      context.fillText(d.mol, x + site_size / 2, y + site_size / 2);
+      context.fillText(mol, x + site_size / 2, y + site_size / 2);
       context.closePath();
     });
   }
@@ -103,6 +104,7 @@ class BaseAlignment extends Component {
 BaseAlignment.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
+  molecule: mol => mol,
   site_size: 20,
   id: "alignmentjs",
   sender: "main"

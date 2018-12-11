@@ -31,7 +31,7 @@ class SiteAxis extends Component {
       axis_svg
         .append("g")
         .attr("class", "axis")
-        .attr("transform", `translate(0, ${height - 1})`)
+        .attr("transform", `translate(0, ${height - 2})`)
         .call(axis);
 
       $("#alignmentjs-axis-div").scrollLeft(this.props.x_pixel);

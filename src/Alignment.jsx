@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 
-import fastaParser from "./../helpers/fasta";
-import computeLabelWidth from "../helpers/computeLabelWidth";
-import BaseAlignment from "./BaseAlignment.jsx";
-import SiteAxis from "./SiteAxis.jsx";
-import Placeholder from "./Placeholder.jsx";
-import SequenceAxis from "./SequenceAxis.jsx";
-import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
-import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
+import fastaParser from "./helpers/fasta";
+import computeLabelWidth from "./helpers/computeLabelWidth";
+import BaseAlignment from "./components/BaseAlignment.jsx";
+import SiteAxis from "./components/SiteAxis.jsx";
+import Placeholder from "./components/Placeholder.jsx";
+import SequenceAxis from "./components/SequenceAxis.jsx";
+import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
+import { nucleotide_color, nucleotide_text_color } from "./helpers/colors";
 
 class Alignment extends Component {
   constructor(props) {
@@ -99,6 +99,7 @@ class Alignment extends Component {
           x_pixel={this.x_pixel}
           y_pixel={this.y_pixel}
           scroll_broadcaster={this.scroll_broadcaster}
+          molecule={this.props.molecule}
         />
       </div>
     );
@@ -110,8 +111,11 @@ Alignment.defaultProps = {
   text_color: nucleotide_text_color,
   label_padding: 10,
   site_size: 20,
-  axis_height: 20,
-  sender: "main"
+  axis_height: 25,
+  width: 960,
+  height: 500,
+  sender: "main",
+  molecule: mol => mol
 };
 
 module.exports = Alignment;

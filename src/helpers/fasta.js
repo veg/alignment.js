@@ -1,4 +1,5 @@
 function fastaParser(fasta) {
+  if (typeof fasta == "object") return fasta;
   var seqs = [],
     header,
     in_header,
@@ -27,4 +28,11 @@ function fastaParser(fasta) {
   return seqs;
 }
 
+function fastaToText(fasta) {
+  return (
+    fasta.map(entry => ">" + entry.header + "\n" + entry.seq).join("\n") + "\n"
+  );
+}
+
 module.exports = fastaParser;
+module.exports.fastaToText = fastaToText;

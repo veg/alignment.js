@@ -5,74 +5,11 @@ import "bootstrap";
 import "bootstrap/scss/bootstrap.scss";
 const $ = require("jquery");
 
+import Home from "./app/home.jsx";
 import FASTA from "./app/FASTA.jsx";
 import FNA from "./app/FNA.jsx";
 import SAM from "./app/SAM.jsx";
 import "./app/styles.scss";
-
-function Modal(props) {
-  return (
-    <div
-      className="modal fade"
-      id={props.id}
-      tabIndex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-    >
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h4 className="modal-title" id="myModalLabel">
-              {props.title}
-            </h4>
-            <button
-              type="button"
-              className="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">{props.body}</div>
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn.btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            {props.bottomButton}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-Modal.defaultProps = {
-  bottomButton: null
-};
-
-function Export(props) {
-  const showExportModal = () => $("#exportModal").modal("show");
-
-  return (
-    <div>
-      <li>
-        <a className="nav-link" onClick={showExportModal}>
-          Export
-        </a>
-      </li>
-      <Modal
-        id="exportModal"
-        title="Export sequence data"
-        body={<div style={{ overflow: "auto" }}>{props.fasta}</div>}
-      />
-    </div>
-  );
-}
 
 function Divider(props) {
   return [
@@ -116,20 +53,6 @@ function Dropdown(props) {
   );
 }
 
-function FASTARoutes(props) {
-  return [
-    <Route key="0" path="/fasta-viewer" component={FASTA.FASTAViewer} />,
-    <Route key="1" path="/fasta-aminoacid" component={FASTA.AminoAcid} />,
-    <Route key="2" path="/fasta-highlight" component={FASTA.Highlight} />,
-    <Route
-      key="3"
-      path="/fasta-start"
-      component={FASTA.StartAtSiteAndSequence}
-    />,
-    <Route key="4" path="/fasta-lowercase" component={FASTA.Lowercase} />
-  ];
-}
-
 function FASTALinks(props) {
   return (
     <Dropdown title={"FASTA"}>
@@ -143,14 +66,6 @@ function FASTALinks(props) {
   );
 }
 
-function FNARoutes(props) {
-  return [
-    <Route key="0" path="/fna-viewer" component={FNA.FNAViewer} />,
-    <Route key="1" path="/fna-immunology" component={FNA.Immunology} />,
-    <Route key="2" path="/fna-hiv" component={FNA.HIV} />
-  ];
-}
-
 function FNALinks(props) {
   return (
     <Dropdown title={"FNA"}>
@@ -160,13 +75,6 @@ function FNALinks(props) {
       <Link to="/fna-hiv" header="HIV - site annotations" />
     </Dropdown>
   );
-}
-
-function SAMRoutes(props) {
-  return [
-    <Route key="0" path="/sam-viewer" component={SAM.SAMViewer} />,
-    <Route key="1" path="/sam-variantcaller" component={SAM.VariantCaller} />
-  ];
 }
 
 function SAMLinks(props) {
@@ -197,10 +105,6 @@ function NavBar(props) {
   );
 }
 
-function Home(props) {
-  return <h1>Home will go here.</h1>;
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -209,35 +113,25 @@ class App extends Component {
     };
   }
 
-  handleFileChange = e => {
-    const files = e.target.files;
-    if (files.length == 1) {
-      const file = files[0],
-        reader = new FileReader();
-      reader.onload = e => {
-        this.setState({ data: e.target.result });
-      };
-      reader.readAsText(file);
-    }
-    document.body.click();
-  };
-
-  handleTextUpdate = () => {
-    $("#importModal").modal("hide");
-    this.setState({
-      data: document.getElementById("input_textarea").value
-    });
-  };
-
   render() {
     return (
       <div>
         <NavBar />
-        <div className="container-fluid">
-          <Route exact path="/" component={Home} />
-          <FASTARoutes />
-          <FNARoutes />
-          <SAMRoutes />
+        <div style={{ maxWidth: 1140 }} className="container-fluid">
+          <Route exact path="/" render={props => <Home />} />
+
+          <Route path="/fasta-viewer" render={props => <FASTA.FASTAViewer />} />
+          <Route path="/fasta-aminoacid" component={FASTA.AminoAcid} />
+          <Route path="/fasta-highlight" component={FASTA.Highlight} />
+          <Route path="/fasta-start" component={FASTA.StartAtSiteAndSequence} />
+          <Route path="/fasta-lowercase" component={FASTA.Lowercase} />
+
+          <Route path="/fna-viewer" component={FNA.FNAViewer} />
+          <Route path="/fna-immunology" component={FNA.Immunology} />
+          <Route path="/fna-hiv" component={FNA.HIV} />
+
+          <Route path="/sam-viewer" component={SAM.SAMViewer} />
+          <Route path="/sam-variantcaller" component={SAM.VariantCaller} />
         </div>
       </div>
     );

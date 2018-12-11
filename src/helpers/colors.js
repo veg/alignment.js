@@ -138,10 +138,21 @@ const nucleotide_colors = {
   },
   amino_acid_text_color = (character, position, header) => {
     return character.toUpperCase() != "X" ? "black" : "white";
+  },
+  nucleotide_difference = desired_record => {
+    const desired_header = desired_record.header,
+      desired_sequence = desired_record.seq;
+    return (mol, site, header) => {
+      const desired_color = nucleotide_colors[mol];
+      if (mol == "-") return nucleotide_colors["-"];
+      if (header == desired_header) return desired_color;
+      return mol == desired_sequence[site - 1] ? "white" : desired_color;
+    };
   };
 
 module.exports.nucleotide_color = nucleotide_color;
 module.exports.nucleotide_text_color = nucleotide_text_color;
+module.exports.nucleotide_difference = nucleotide_difference;
 module.exports.highlight_codon_color = highlight_codon_color;
 module.exports.highlight_codon_text_color = highlight_codon_text_color;
 module.exports.amino_acid_color = amino_acid_color;
