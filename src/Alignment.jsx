@@ -34,8 +34,9 @@ class Alignment extends Component {
       });
     }
   }
-  componentWillUpdate(nextProps) {
+  shouldComponentUpdate(nextProps) {
     this.initialize(nextProps);
+    return true;
   }
   initialize(props) {
     if (props.fasta) {

@@ -3,5 +3,10 @@ const path = require("path"),
   common = require("./webpack.common.js");
 
 module.exports = merge(common, {
-  devtool: "inline-source-map"
+  mode: "development",
+  devtool: "inline-source-map",
+  devServer: {
+    contentBase: path.resolve(__dirname, "dist"),
+    historyApiFallback: true
+  }
 });

@@ -4,24 +4,25 @@ const d3 = require("phylotree/node_modules/d3");
 import "phylotree/phylotree.css";
 require("phylotree");
 
-import BaseAlignment from "./BaseAlignment.jsx";
-import SiteAxis from "./SiteAxis.jsx";
-import SequenceAxis from "./SequenceAxis.jsx";
-import BaseTree from "./BaseTree.jsx";
-import fastaParser from "./../helpers/fasta";
-import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
-import computeLabelWidth from "../helpers/computeLabelWidth";
-import sortFASTAAndNewick from "../helpers/jointSort";
+import BaseAlignment from "./components/BaseAlignment.jsx";
+import SiteAxis from "./components/SiteAxis.jsx";
+import SequenceAxis from "./components/SequenceAxis.jsx";
+import BaseTree from "./components/BaseTree.jsx";
+import fastaParser from "./helpers/fasta";
+import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
+import computeLabelWidth from "./helpers/computeLabelWidth";
+import sortFASTAAndNewick from "./helpers/jointSort";
 
 class TreeAlignment extends Component {
   constructor(props) {
     super(props);
-    this.column_sizes = [500, 200, 700];
-    this.row_sizes = [20, 700];
+    this.column_sizes = [200, 200, 560];
+    this.row_sizes = [props.axis_height, 700];
     this.initialize(props);
   }
-  componentWillUpdate(nextProps) {
+  shouldComponentUpdate(nextProps) {
     this.initialize(nextProps);
+    return true;
   }
   setScrollingEvents(props) {
     if (props.fasta && props.newick) {
@@ -47,9 +48,9 @@ class TreeAlignment extends Component {
   initialize(props) {
     if (props.fasta && props.newick) {
       this.sequence_data = fastaParser(props.fasta);
-      this.full_pixel_height = this.props.site_size * this.sequence_data.length;
+      this.full_pixel_height = props.site_size * this.sequence_data.length;
       this.full_pixel_width =
-        this.props.site_size * this.sequence_data[0].seq.length;
+        props.site_size * this.sequence_data[0].seq.length;
       const phylotree_size = [this.full_pixel_height, this.column_sizes[0]];
       const { phylotree, tree_json } = sortFASTAAndNewick(
         this.sequence_data,
@@ -73,18 +74,25 @@ class TreeAlignment extends Component {
     if (!this.props.fasta) {
       return <div />;
     }
-    const template_css = {
-      display: "grid",
-      gridTemplateColumns: this.column_sizes.join("px ") + "px",
-      gridTemplateRows: this.row_sizes.join("px ") + "px"
-    };
+    const { axis_height } = this.props,
+      { full_pixel_height } = this,
+      max_height = this.row_sizes[0] + this.row_sizes[1],
+      height = full_pixel_height
+        ? Math.min(full_pixel_height + axis_height, max_height)
+        : max_height,
+      gridTemplateRows = [axis_height, height - axis_height],
+      template_css = {
+        display: "grid",
+        gridTemplateColumns: this.column_sizes.join("px ") + "px",
+        gridTemplateRows: gridTemplateRows.join("px ") + "px"
+      };
     return (
       <div style={template_css}>
         <div />
         <div />
         <SiteAxis
           width={this.column_sizes[2]}
-          height={this.row_sizes[0]}
+          height={axis_height}
           sequence_data={this.sequence_data}
           scroll_broadcaster={this.scroll_broadcaster}
         />
@@ -96,11 +104,15 @@ class TreeAlignment extends Component {
           width={this.column_sizes[1]}
           height={this.row_sizes[1]}
           sequence_data={this.sequence_data}
+          site_size={this.props.site_size}
           scroll_broadcaster={this.scroll_broadcaster}
         />
         <BaseAlignment
           width={this.column_sizes[2]}
-          height={this.row_sizes[1]}
+          site_size={this.props.site_size}
+          site_color={this.props.site_color}
+          molecule={this.props.molecule}
+          height={gridTemplateRows[1]}
           sequence_data={this.sequence_data}
           scroll_broadcaster={this.scroll_broadcaster}
         />
@@ -112,7 +124,7 @@ class TreeAlignment extends Component {
 TreeAlignment.defaultProps = {
   label_padding: 10,
   site_size: 20,
-  axis_height: 20
+  axis_height: 25
 };
 
 module.exports = TreeAlignment;

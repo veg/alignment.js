@@ -38,7 +38,10 @@ class FASTAViewer extends Component {
     text("data/CD2.fasta").then(data => this.loadFASTA(data));
   }
   loadFASTA(fasta) {
-    this.setState({ data: fastaParser(fasta) });
+    this.setState({
+      data: fastaParser(fasta),
+      show_differences: ""
+    });
   }
   saveFASTA() {
     const blob = new Blob([fastaToText(this.state.data)], {

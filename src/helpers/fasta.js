@@ -1,3 +1,5 @@
+import sortFASTAAndNewick from "./jointSort.js";
+
 function fastaParser(fasta) {
   if (typeof fasta == "object") return fasta;
   var seqs = [],
@@ -34,5 +36,37 @@ function fastaToText(fasta) {
   );
 }
 
+function fnaParser(fna, sortFASTA) {
+  var i = fna.length - 2,
+    current_char = fna[i];
+  while (current_char != "\n") {
+    i--;
+    current_char = fna[i];
+  }
+  const parsed_fasta = fastaParser(fna.slice(0, i + 1)),
+    newick = fna.slice(i + 1, fna.length - 1);
+  if (sortFASTA) {
+    sortFASTAAndNewick(parsed_fasta, newick, 20);
+  }
+  return {
+    fasta: parsed_fasta,
+    newick: newick
+  };
+}
+
+function fnaToText(fna) {
+  return (
+    fna.fasta
+      .map(record => {
+        return ">" + record.header + "\n" + record.seq;
+      })
+      .join("\n") +
+    "\n" +
+    fna.newick
+  );
+}
+
 module.exports = fastaParser;
 module.exports.fastaToText = fastaToText;
+module.exports.fnaParser = fnaParser;
+module.exports.fnaToText = fnaToText;

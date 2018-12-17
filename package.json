@@ -49,11 +49,11 @@
     "uglifyjs-webpack-plugin": "^1.1.4",
     "webpack": "4",
     "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
     "webpack-merge": "^4.1.1"
   },
   "scripts": {
-    "start": "npx concurrently 'yarn develop' 'yarn serve'",
-    "develop": "webpack --config webpack.dev.js --mode=development --watch",
+    "develop": "npx webpack-dev-server --config webpack.dev.js --open",
     "serve": "node src/server.js",
     "build-app": "npx webpack --config webpack.prod.js",
     "build-lib": "npx webpack --config webpack.lib.js",
@@ -65,5 +65,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/veg/alignment.js"
-  }
+  },
+  "sideEffects": false
 }
