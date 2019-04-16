@@ -6,6 +6,7 @@ const $ = require("jquery");
 const _ = require("underscore");
 
 import Alignment from "./components/Alignment.jsx";
+import LargeTreeAlignment from "./components/LargeTreeAlignment.jsx";
 import ScaffoldViewer from "./components/ScaffoldViewer.jsx";
 import {
   highlight_codon_color,
@@ -54,18 +55,24 @@ const examples = {
   }
 };
 
+const messages = {
+  scaffold: "NGS Scaffold viewer",
+  siteBarPlot: "Example Bar Plot (nucleotide composition)",
+  largeTreeAlignment: "Large phylogenetic tree and alignment."
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fasta: null,
       dataset: "loading",
-      viewing: "alignment"
+      viewing: "largeTreeAlignment"
     };
   }
 
   componentDidMount() {
-    this.loadData("CD2");
+    this.loadData("largeTreeAlignment");
   }
 
   handleFileChange = e => {
@@ -89,13 +96,18 @@ class App extends Component {
   };
 
   loadData = dataset => {
-    d3.text(`fasta/${dataset}.fasta`, (error, data) => {
-      this.setState({
-        dataset: dataset,
-        fasta: data,
-        viewing: "alignment"
+    if (dataset == "largeTreeAlignment") {
+      d3.text("data/H3full.fasta", (fasta_error, fasta_data) => {
+        d3.text("data/H3full.new", (newick_error, newick_data) => {
+          this.setState({
+            fasta: fasta_data,
+            newick: newick_data,
+            viewing: "largeTreeAlignment"
+          });
+        });
       });
-    });
+    }
+
     d3.json("json/NGS.json", (error, json) => {
       const posteriors = _.toArray(json.posteriors);
       this.setState({
@@ -106,24 +118,34 @@ class App extends Component {
 
   changeView = view => {
     const views = {
-      scaffold: { data: "fasta/NGS.fasta" },
-      siteBarPlot: { data: "fasta/CD2.fasta" }
+      scaffold: { data: "data/scaffold.fasta" },
+      siteBarPlot: { data: "data/CD2.fasta" }
     };
-    d3.text(views[view].data, (error, data) => {
-      this.setState({
-        fasta: data,
-        viewing: view
+    if (view == "largeTreeAlignment") {
+      d3.text("data/H3full.fasta", (fasta_error, fasta_data) => {
+        d3.text("data/H3full.new", (newick_error, newick_data) => {
+          this.setState({
+            viewing: view,
+            fasta: fasta_data,
+            newick: newick_data
+          });
+        });
       });
-    });
+    } else {
+      d3.text(views[view].data, (error, data) => {
+        this.setState({
+          fasta: data,
+          viewing: view
+        });
+      });
+    }
   };
 
   render() {
     const message =
       this.state.viewing == "alignment"
         ? examples[this.state.dataset].purpose
-        : this.state.viewing == "scaffold"
-          ? "NGS Scaffold viewer"
-          : "Example Bar Plot (nucleotide composition)";
+        : messages[this.state.viewing];
     return (
       <div>
         <NavBar
@@ -133,9 +155,10 @@ class App extends Component {
           fasta={this.state.fasta}
           handleTextUpdate={this.handleTextUpdate}
           changeView={this.changeView}
+          viewing={this.state.viewing}
         />
 
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <div className="col-12">
               <h4>{message}</h4>
@@ -155,12 +178,19 @@ class App extends Component {
                   posteriors={this.state.posteriors}
                   width={1200}
                   height={800}
+                  centerOnSite={260}
+                  centerOnHeader={"GBAV82T04B82BA"}
                 />
-              ) : (
+              ) : this.state.viewing == "siteBarPlot" ? (
                 <SiteBarPlotExample
                   fasta={this.state.fasta}
                   width={1200}
                   height={800}
+                />
+              ) : (
+                <LargeTreeAlignment
+                  fasta={this.state.fasta}
+                  newick={this.state.newick}
                 />
               )}
             </div>
