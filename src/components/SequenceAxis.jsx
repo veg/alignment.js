@@ -1,6 +1,33 @@
 import React, { Component } from "react";
 const $ = require("jquery");
 
+function BaseSequenceAxis(props) {
+  const { sequence_data, label_padding, site_size, width } = props,
+    labels = sequence_data.map(record => record.header);
+  return (
+    <g
+      style={{
+        fontFamily: "Courier",
+        fontSize: 14
+      }}
+    >
+      {labels.map((label, i) => {
+        return (
+          <text
+            x={width - label_padding}
+            y={(i + 1) * site_size}
+            textAnchor="end"
+            dy={-site_size / 3}
+            key={i}
+          >
+            {label}
+          </text>
+        );
+      })}
+    </g>
+  );
+}
+
 class SequenceAxis extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +45,6 @@ class SequenceAxis extends Component {
     $(`#${this.div_id}`).scrollTop(this.props.y_pixel);
   }
   handleWheel(e) {
-    e.preventDefault();
     this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
   }
   render() {
@@ -33,8 +59,7 @@ class SequenceAxis extends Component {
         width: width,
         height: height
       },
-      alignment_height = site_size * number_of_sequences,
-      labels = this.props.sequence_data.map(record => record.header);
+      alignment_height = site_size * number_of_sequences;
     return (
       <div
         id={this.div_id}
@@ -43,19 +68,7 @@ class SequenceAxis extends Component {
         onWheel={e => this.handleWheel(e)}
       >
         <svg id="alignmentjs-labels" width={width} height={alignment_height}>
-          {labels.map((label, i) => {
-            return (
-              <text
-                x={width - this.props.label_padding}
-                y={(i + 1) * site_size}
-                textAnchor="end"
-                dy={-site_size / 3}
-                key={i}
-              >
-                {label}
-              </text>
-            );
-          })}
+          <BaseSequenceAxis {...this.props} />
         </svg>
       </div>
     );
@@ -70,3 +83,4 @@ SequenceAxis.defaultProps = {
 };
 
 module.exports = SequenceAxis;
+module.exports.BaseSequenceAxis = BaseSequenceAxis;

@@ -7,11 +7,10 @@ import Alignment from "../Alignment.jsx";
 import Button from "./Button.jsx";
 import FileUploadButton from "./FileUploadButton.jsx";
 import Modal from "./Modal.jsx";
+import SVGAlignment from "../SVGAlignment.jsx";
 import { nucleotide_color, nucleotide_difference } from "../helpers/colors";
-
-function AminoAcid(props) {
-  return <h1>Amino acid example will go here.</h1>;
-}
+import AminoAcid from "./FASTA/amino_acid.jsx";
+import SVGAlignmentExample from "./FASTA/svg_example.jsx";
 
 function Highlight(props) {
   return <h1>Highlight example will go here.</h1>;
@@ -146,3 +145,4 @@ module.exports.AminoAcid = AminoAcid;
 module.exports.Highlight = Highlight;
 module.exports.StartAtSiteAndSequence = StartAtSiteAndSequence;
 module.exports.Lowercase = Lowercase;
+module.exports.SVGAlignmentExample = SVGAlignmentExample;

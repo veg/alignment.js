@@ -6,7 +6,6 @@ import {
   amino_acid_text_color
 } from "./../helpers/colors";
 
-const d3 = require("d3");
 const _ = require("underscore");
 
 class BaseAlignment extends Component {
@@ -80,7 +79,6 @@ class BaseAlignment extends Component {
     });
   }
   handleWheel(e) {
-    e.preventDefault();
     this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
   }
   render() {
