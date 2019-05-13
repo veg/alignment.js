@@ -47,7 +47,7 @@ function BaseSVGAlignment(props) {
         height: site_size * sequence_data.length,
         fontFamily: "Courier"
       }}
-      transform={`translate(${props.translateX},0)`}
+      transform={`translate(${props.translateX},${props.translateY})`}
     >
       {characters}
     </g>
@@ -55,7 +55,9 @@ function BaseSVGAlignment(props) {
 }
 
 BaseSVGAlignment.defaultProps = {
-  site_size: 20
+  site_size: 20,
+  translateX: 0,
+  translateY: 0
 };
 
 module.exports = BaseSVGAlignment;

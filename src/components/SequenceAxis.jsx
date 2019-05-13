@@ -10,6 +10,7 @@ function BaseSequenceAxis(props) {
         fontFamily: "Courier",
         fontSize: 14
       }}
+      transform={`translate(${props.translateX}, ${props.translateY})`}
     >
       {labels.map((label, i) => {
         return (
@@ -27,6 +28,11 @@ function BaseSequenceAxis(props) {
     </g>
   );
 }
+
+BaseSequenceAxis.defaultProps = {
+  translateX: 0,
+  translateY: 0
+};
 
 class SequenceAxis extends Component {
   constructor(props) {

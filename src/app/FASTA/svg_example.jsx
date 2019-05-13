@@ -18,7 +18,12 @@ class SVGAlignmentExample extends Component {
     });
   }
   render() {
-    return <SVGAlignment sequence_data={this.state.sequence_data} />;
+    return (
+      <div>
+        <h1>SVG Alignment</h1>
+        <SVGAlignment sequence_data={this.state.sequence_data} />
+      </div>
+    );
   }
 }
 
