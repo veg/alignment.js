@@ -2854,6 +2854,11 @@ d3-random@1:
   resolved "https://registry.yarnpkg.com/d3-random/-/d3-random-1.1.2.tgz#2833be7c124360bf9e2d3fd4f33847cfe6cab291"
   integrity sha512-6AK5BNpIFqP+cx/sreKzNjWbwZQCSUatxq+pPRmFIQaWuoD+NrbVWw7YWpHiXpCQ/NanKdtGDuB+VQcZDaEmYQ==
 
+d3-save-svg@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/d3-save-svg/-/d3-save-svg-0.0.2.tgz#74b35e82b943ea6c680f43498ac2eb3027823945"
+  integrity sha1-dLNegrlD6mxoD0NJisLrMCeCOUU=
+
 d3-scale-chromatic@1:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/d3-scale-chromatic/-/d3-scale-chromatic-1.3.3.tgz#dad4366f0edcb288f490128979c3c793583ed3c0"
@@ -8920,6 +8925,11 @@ sass-loader@^7.0.1:
     neo-async "^2.5.0"
     pify "^3.0.0"
     semver "^5.5.0"
+
+save-svg-as-png@^1.4.14:
+  version "1.4.14"
+  resolved "https://registry.yarnpkg.com/save-svg-as-png/-/save-svg-as-png-1.4.14.tgz#d5017bb9746adf00c146a17e63ed4badd1e10b40"
+  integrity sha512-hJqOFSdRvhBVD2pQSM+mJStvQGfnvQCCF6ULtAxdjF4lDwXYfWZ9Eug0fcRl05YyPL2yknCDBEOpbO4Fkw5qmg==
 
 sax@>=0.6.0, sax@^1.2.4, sax@~1.2.1:
   version "1.2.4"

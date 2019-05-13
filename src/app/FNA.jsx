@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 
 import { fnaParser, fnaToText } from "../helpers/fasta";
 import TreeAlignment from "../TreeAlignment.jsx";
-import Button from "./Button.jsx";
+import Button from "../components/Button.jsx";
 import FileUploadButton from "./FileUploadButton.jsx";
 import Modal from "./Modal.jsx";
 import { nucleotide_color, nucleotide_difference } from "../helpers/colors";

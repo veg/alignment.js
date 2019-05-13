@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 
 import fastaParser, { fastaToText } from "../helpers/fasta";
 import Alignment from "../Alignment.jsx";
-import Button from "./Button.jsx";
+import Button from "../components/Button.jsx";
 import FileUploadButton from "./FileUploadButton.jsx";
 import Modal from "./Modal.jsx";
 import SVGAlignment from "../SVGAlignment.jsx";

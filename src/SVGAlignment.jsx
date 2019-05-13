@@ -16,7 +16,8 @@ function SVGAlignment(props) {
     height = props.axis_height + site_size * number_of_sequences;
 
   return (
-    <svg style={{ width, height }}>
+    <svg id="alignment-js-svg" style={{ width, height }}>
+      <rect x={0} y={0} width={width} height={height} fill="white" />
       <SVGSiteAxis
         {...props}
         number_of_sites={number_of_sites}

@@ -6,6 +6,7 @@
   "dependencies": {
     "bootstrap": "^4.1.1",
     "d3": "5",
+    "d3-save-svg": "^0.0.2",
     "express": "^4.16.4",
     "file-saver": "^2.0.0",
     "jquery": "^3.3.1",
@@ -14,6 +15,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.3.1",
+    "save-svg-as-png": "^1.4.14",
     "text-width": "^1.2.0",
     "underscore": "^1.8.3"
   },
