@@ -32,6 +32,9 @@ class Alignment extends Component {
           "alignmentjs-labels-div"
         ]
       });
+      if (props.excavator) {
+        props.excavator.broadcaster = this.scroll_broadcaster;
+      }
     }
   }
   shouldComponentUpdate(nextProps) {

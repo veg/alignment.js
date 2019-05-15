@@ -36,7 +36,7 @@ class FASTAViewer extends Component {
     };
   }
   componentDidMount() {
-    text("data/CD2-slim.fasta").then(data => this.loadFASTA(data));
+    text("data/CD2.fasta").then(data => this.loadFASTA(data));
   }
   loadFASTA(fasta) {
     this.setState({
@@ -59,9 +59,12 @@ class FASTAViewer extends Component {
   }
   molecule() {
     if (!this.state.show_differences) return molecule => molecule;
-    const desired_record = this.state.data.filter(
-      datum => datum.header == this.state.show_differences
-    )[0];
+    const data = this.state.saving
+        ? this.state.trimmed_sequence_data
+        : this.state.data,
+      desired_record = data.filter(
+        datum => datum.header == this.state.show_differences
+      )[0];
     return (mol, site, header) => {
       if (mol == "-") return "-";
       if (header == desired_record.header) return mol;
@@ -80,10 +83,36 @@ class FASTAViewer extends Component {
     }
     document.body.click();
   };
+  scrollExcavator = () => {
+    return this.scrollExcavator.broadcaster.location();
+  };
+  trimData = (start_site, end_site) => {
+    return this.state.data.map(record => {
+      const new_record = {
+        header: record.header,
+        seq: record.seq.slice(start_site, end_site)
+      };
+      return new_record;
+    });
+  };
   saveAsPNG = () => {
-    this.setState({ saving: true }, () => {
+    const saving = true;
+    const { x_pixel, x_pad, x_fraction, y_fraction } = this.scrollExcavator(),
+      start_site = Math.floor(x_pixel / this.state.site_size),
+      end_site = Math.ceil((x_pixel + x_pad) / this.state.site_size),
+      axis_bounds = [start_site, end_site],
+      trimmed_sequence_data = this.trimData(start_site, end_site);
+    trimmed_sequence_data.number_of_sequences = trimmed_sequence_data.length;
+    trimmed_sequence_data.number_of_sites = trimmed_sequence_data[0].seq.length;
+    this.setState({ saving, trimmed_sequence_data, axis_bounds }, () => {
       savePNG(document.getElementById("alignment-js-svg"), "alignment.png");
-      this.setState({ saving: false });
+      this.setState({ saving: false }, () => {
+        this.scrollExcavator.broadcaster.broadcast(
+          x_fraction,
+          y_fraction,
+          "main"
+        );
+      });
     });
   };
   render() {
@@ -134,10 +163,11 @@ class FASTAViewer extends Component {
         </div>
         {this.state.saving ? (
           <SVGAlignment
-            sequence_data={this.state.data}
+            sequence_data={this.state.trimmed_sequence_data}
             molecule={this.molecule()}
             site_color={this.siteColor()}
             site_size={this.state.site_size}
+            axis_bounds={this.state.axis_bounds}
           />
         ) : (
           <Alignment
@@ -145,6 +175,7 @@ class FASTAViewer extends Component {
             site_size={this.state.site_size}
             molecule={this.molecule()}
             site_color={this.siteColor()}
+            excavator={this.scrollExcavator}
           />
         )}
         <Modal title="Export fasta">

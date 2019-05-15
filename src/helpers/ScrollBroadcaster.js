@@ -60,6 +60,16 @@ class ScrollBroadcaster {
       element.dispatchEvent(wheel_event);
     });
   }
+  location() {
+    return {
+      x_pixel: this["main"].width * this["main"].x_fraction,
+      y_pixel: this["main"].height * this["main"].y_fraction,
+      x_fraction: this["main"].x_fraction,
+      y_fraction: this["main"].y_fraction,
+      x_pad: this["main"].x_pad,
+      y_pad: this["main"].y_pad
+    };
+  }
 }
 
 module.exports = ScrollBroadcaster;
