@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { text } from "d3-fetch";
 import { saveAs } from "file-saver";
+import { saveSvgAsPng as savePNG } from "save-svg-as-png";
 
 import fastaParser, { fastaToText } from "../helpers/fasta";
 import Alignment from "../Alignment.jsx";
@@ -30,11 +31,12 @@ class FASTAViewer extends Component {
     this.state = {
       data: null,
       site_size: 20,
-      show_differences: ""
+      show_differences: "",
+      saving: false
     };
   }
   componentDidMount() {
-    text("data/CD2.fasta").then(data => this.loadFASTA(data));
+    text("data/CD2-slim.fasta").then(data => this.loadFASTA(data));
   }
   loadFASTA(fasta) {
     this.setState({
@@ -78,6 +80,12 @@ class FASTAViewer extends Component {
     }
     document.body.click();
   };
+  saveAsPNG = () => {
+    this.setState({ saving: true }, () => {
+      savePNG(document.getElementById("alignment-js-svg"), "alignment.png");
+      this.setState({ saving: false });
+    });
+  };
   render() {
     const toolbar_style = {
       display: "flex",
@@ -99,6 +107,7 @@ class FASTAViewer extends Component {
         <div style={toolbar_style}>
           <FileUploadButton label="Import" onChange={this.handleFileChange} />
           <Button label="Export" onClick={() => $("#modal").modal("show")} />
+          <Button label="Save as PNG" onClick={this.saveAsPNG} />
           <span>
             <label>Site size:</label>
             <input
@@ -123,12 +132,21 @@ class FASTAViewer extends Component {
             </select>
           </span>
         </div>
-        <Alignment
-          fasta={this.state.data}
-          site_size={this.state.site_size}
-          molecule={this.molecule()}
-          site_color={this.siteColor()}
-        />
+        {this.state.saving ? (
+          <SVGAlignment
+            sequence_data={this.state.data}
+            molecule={this.molecule()}
+            site_color={this.siteColor()}
+            site_size={this.state.site_size}
+          />
+        ) : (
+          <Alignment
+            fasta={this.state.data}
+            site_size={this.state.site_size}
+            molecule={this.molecule()}
+            site_color={this.siteColor()}
+          />
+        )}
         <Modal title="Export fasta">
           <Button label="Download" onClick={() => this.saveFASTA()} />
           <div style={{ overflowY: "scroll", width: 400, height: 400 }}>

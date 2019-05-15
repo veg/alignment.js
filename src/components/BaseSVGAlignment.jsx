@@ -25,15 +25,15 @@ function BaseSVGAlignment(props) {
               y={0}
               width={site_size + 1}
               height={site_size + 1}
-              fill={nucleotide_color(character)}
+              fill={props.site_color(character, j, sequence.header)}
             />
             <text
               transform={text_translate}
-              fill={nucleotide_text_color(character)}
+              fill={props.text_color(character)}
               textAnchor="middle"
               dy=".25em"
             >
-              {character}
+              {props.molecule(character, j, sequence.header)}
             </text>
           </g>
         );
@@ -55,6 +55,9 @@ function BaseSVGAlignment(props) {
 }
 
 BaseSVGAlignment.defaultProps = {
+  site_color: nucleotide_color,
+  text_color: nucleotide_text_color,
+  molecule: mol => mol,
   site_size: 20,
   translateX: 0,
   translateY: 0
