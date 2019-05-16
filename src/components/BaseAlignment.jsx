@@ -79,6 +79,7 @@ class BaseAlignment extends Component {
     });
   }
   handleWheel(e) {
+    e.preventDefault();
     this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
   }
   render() {

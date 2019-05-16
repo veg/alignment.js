@@ -51,6 +51,7 @@ class SequenceAxis extends Component {
     $(`#${this.div_id}`).scrollTop(this.props.y_pixel);
   }
   handleWheel(e) {
+    e.preventDefault();
     this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
   }
   render() {
