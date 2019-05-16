@@ -4,6 +4,7 @@
   "main": "lib/alignment.js",
   "license": "MIT",
   "dependencies": {
+    "@gmod/bam": "^1.0.18",
     "bootstrap": "^4.1.1",
     "d3": "5",
     "d3-save-svg": "^0.0.2",
