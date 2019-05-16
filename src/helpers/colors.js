@@ -122,17 +122,6 @@ const nucleotide_colors = {
   nucleotide_text_color = (character, position, header) => {
     return nucleotide_text_colors[character];
   },
-  highlight_codon_color = (character, position, header) => {
-    if (
-      header == "DUCK_VIETNAM_272_2005" &&
-      Math.floor((position - 1) / 3) == 3
-    )
-      return "red";
-    return character == "-" ? "white" : "GhostWhite";
-  },
-  highlight_codon_text_color = (character, position, header) => {
-    return character == "G" ? "Gold" : nucleotide_colors[character];
-  },
   amino_acid_color = (character, position, header) => {
     return amino_acid_colors[character];
   },
@@ -153,7 +142,5 @@ const nucleotide_colors = {
 module.exports.nucleotide_color = nucleotide_color;
 module.exports.nucleotide_text_color = nucleotide_text_color;
 module.exports.nucleotide_difference = nucleotide_difference;
-module.exports.highlight_codon_color = highlight_codon_color;
-module.exports.highlight_codon_text_color = highlight_codon_text_color;
 module.exports.amino_acid_color = amino_acid_color;
 module.exports.amino_acid_text_color = amino_acid_text_color;

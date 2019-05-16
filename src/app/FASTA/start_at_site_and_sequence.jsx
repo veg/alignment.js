@@ -3,12 +3,8 @@ import { text } from "d3";
 
 import Alignment from "../../Alignment.jsx";
 import fastaParser from "../../helpers/fasta.js";
-import {
-  amino_acid_color,
-  amino_acid_text_color
-} from "../../helpers/colors.js";
 
-class AminoAcid extends Component {
+class StartAtSiteAndSequence extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +12,7 @@ class AminoAcid extends Component {
     };
   }
   componentDidMount() {
-    text("data/CD2_AA.fasta").then(data => {
+    text("data/H3trunk.fasta").then(data => {
       const sequence_data = fastaParser(data);
       this.setState({ sequence_data });
     });
@@ -25,16 +21,16 @@ class AminoAcid extends Component {
     return (
       <div>
         <div>
-          <h1>Amino Acid Alignment</h1>
+          <h1>Begin centered on a given sequence (CY010004) and site (100).</h1>
         </div>
         <Alignment
           fasta={this.state.sequence_data}
-          site_color={amino_acid_color}
-          text_color={amino_acid_text_color}
+          centerOnSite={100}
+          centerOnHeader={"CY010004"}
         />
       </div>
     );
   }
 }
 
-module.exports = AminoAcid;
+module.exports = StartAtSiteAndSequence;
