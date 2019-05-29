@@ -1,3 +1,4 @@
+/*
 const d3 = require("phylotree/node_modules/d3");
 require("phylotree");
 
@@ -61,3 +62,4 @@ function sortFASTAAndNewick(sequence_data, newick, size) {
 }
 
 module.exports = sortFASTAAndNewick;
+*/

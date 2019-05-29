@@ -3,7 +3,6 @@ import { text } from "d3-fetch";
 import { saveAs } from "file-saver";
 
 import { fnaParser, fnaToText } from "../helpers/fasta";
-import TreeAlignment from "../TreeAlignment.jsx";
 import Button from "../components/Button.jsx";
 import FileUploadButton from "./FileUploadButton.jsx";
 import Modal from "./Modal.jsx";

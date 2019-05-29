@@ -1,24 +1,22 @@
-import Alignment from "./components/Alignment.jsx";
+import Alignment from "./Alignment.jsx";
 import BaseAlignment from "./components/BaseAlignment.jsx";
-import BaseTree from "./components/BaseTree.jsx";
+import BaseSVGAlignment from "./components/BaseSVGAlignment.jsx";
 import SiteAxis from "./components/SiteAxis.jsx";
+import SitePlotAxis from "./components/SitePlotAxis.jsx";
 import SequenceAxis from "./components/SequenceAxis.jsx";
 import fastaParser from "./helpers/fasta";
 import computeLabelWidth from "./helpers/computeLabelWidth";
-import sortFASTAAndNewick from "./helpers/jointSort";
 import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
 import colors from "./helpers/colors";
-
-require("./app.scss");
 
 module.exports = Alignment;
 module.exports.Alignment = Alignment;
 module.exports.BaseAlignment = BaseAlignment;
-module.exports.BaseTree = BaseTree;
+module.exports.BaseSVGAlignment = BaseSVGAlignment;
 module.exports.SiteAxis = SiteAxis;
+module.exports.SitePlotAxis = SitePlotAxis;
 module.exports.SequenceAxis = SequenceAxis;
 module.exports.fastaParser = fastaParser;
 module.exports.computeLabelWidth = computeLabelWidth;
-module.exports.sortFASTAAndNewick = sortFASTAAndNewick;
 module.exports.ScrollBroadcaster = ScrollBroadcaster;
 module.exports.colors = colors;

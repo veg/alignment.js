@@ -8,7 +8,8 @@ const $ = require("jquery");
 import Home from "./app/home.jsx";
 import FASTA from "./app/FASTA.jsx";
 import FNA from "./app/FNA.jsx";
-import SAM from "./app/SAM.jsx";
+import BAM from "./app/BAM.jsx";
+import Components from "./app/Components.jsx";
 import "./app/styles.scss";
 
 function Divider(props) {
@@ -78,9 +79,9 @@ function FNALinks(props) {
   );
 }
 
-function SAMLinks(props) {
+function BAMLinks(props) {
   return (
-    <Dropdown title={"SAM"}>
+    <Dropdown title={"BAM"}>
       <Link to="/sam-viewer" header="Viewer" />
       <Divider header="Examples" />
       <Link to="/sam-variantcaller" header="Variant caller" />
@@ -99,7 +100,7 @@ function NavBar(props) {
         <div className="collapse navbar-collapse">
           <FASTALinks />
           <FNALinks />
-          <SAMLinks />
+          <BAMLinks />
         </div>
       </nav>
     </div>
@@ -132,8 +133,10 @@ class App extends Component {
           <Route path="/fna-immunology" component={FNA.Immunology} />
           <Route path="/fna-hiv" component={FNA.HIV} />
 
-          <Route path="/sam-viewer" component={SAM.SAMViewer} />
-          <Route path="/sam-variantcaller" component={SAM.VariantCaller} />
+          <Route path="/sam-viewer" component={BAM.BAMViewer} />
+          <Route path="/sam-variantcaller" component={BAM.VariantCaller} />
+
+          <Route path="/base-svg-tree" component={Components.BaseSVGTree} />
         </div>
       </div>
     );
@@ -197,6 +200,7 @@ document.removeEventListener = (type, listener, options) => {
   }
   return originalRemoveEventListener(type, listener, modOptions);
 };
+// End of temporary fix
 
 ReactDOM.render(
   <Main />,

@@ -72,7 +72,6 @@ class FASTAViewer extends Component {
       };
       reader.readAsText(file);
     }
-    document.body.click();
   };
   scrollExcavator = () => {
     return this.scrollExcavator.broadcaster.location();
@@ -152,23 +151,25 @@ class FASTAViewer extends Component {
             </select>
           </span>
         </div>
-        {this.state.saving ? (
-          <SVGAlignment
-            sequence_data={this.state.trimmed_sequence_data}
-            molecule={this.molecule()}
-            site_color={this.siteColor()}
-            site_size={this.state.site_size}
-            axis_bounds={this.state.axis_bounds}
-          />
-        ) : (
-          <Alignment
-            fasta={this.state.data}
-            site_size={this.state.site_size}
-            molecule={this.molecule()}
-            site_color={this.siteColor()}
-            excavator={this.scrollExcavator}
-          />
-        )}
+        <div>
+          {this.state.saving ? (
+            <SVGAlignment
+              sequence_data={this.state.trimmed_sequence_data}
+              molecule={this.molecule()}
+              site_color={this.siteColor()}
+              site_size={this.state.site_size}
+              axis_bounds={this.state.axis_bounds}
+            />
+          ) : (
+            <Alignment
+              fasta={this.state.data}
+              site_size={this.state.site_size}
+              molecule={this.molecule()}
+              site_color={this.siteColor()}
+              excavator={this.scrollExcavator}
+            />
+          )}
+        </div>
         <Modal title="Export fasta">
           <Button label="Download" onClick={() => this.saveFASTA()} />
           <div style={{ overflowY: "scroll", width: 400, height: 400 }}>
