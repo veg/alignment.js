@@ -9,7 +9,8 @@ class SitePlotAxis extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.data == null) {
+    if (prevProps.data != null) {
+      d3.select(".baseSitePlotAxis").html("");
       this.createPlotAxis();
     }
   }
