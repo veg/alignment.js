@@ -44,4 +44,4 @@ SVGAlignment.defaultProps = {
   axis_height: 25
 };
 
-module.exports = SVGAlignment;
+export default SVGAlignment;

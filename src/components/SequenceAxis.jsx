@@ -89,5 +89,5 @@ SequenceAxis.defaultProps = {
   sender: "main"
 };
 
-module.exports = SequenceAxis;
-module.exports.BaseSequenceAxis = BaseSequenceAxis;
+export default SequenceAxis;
+export { BaseSequenceAxis };

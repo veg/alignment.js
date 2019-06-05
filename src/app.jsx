@@ -6,9 +6,9 @@ import "bootstrap/scss/bootstrap.scss";
 const $ = require("jquery");
 
 import Home from "./app/home.jsx";
-import FASTA from "./app/FASTA.jsx";
-import FNA from "./app/FNA.jsx";
-import BAM from "./app/BAM.jsx";
+import * as FASTA from "./app/FASTA.jsx";
+import * as FNA from "./app/FNA.jsx";
+import * as BAM from "./app/BAM.jsx";
 import Components from "./app/Components.jsx";
 import "./app/styles.scss";
 
@@ -75,6 +75,7 @@ function FNALinks(props) {
       <Divider header="Examples" />
       <Link to="/fna-immunology" header="Immunology - heavy chain regions" />
       <Link to="/fna-hiv" header="HIV - site annotations" />
+      <Link to="/fna-basesvgtree" header="BaseSVGTreeInstance" />
     </Dropdown>
   );
 }
@@ -132,11 +133,10 @@ class App extends Component {
           <Route path="/fna-viewer" component={FNA.FNAViewer} />
           <Route path="/fna-immunology" component={FNA.Immunology} />
           <Route path="/fna-hiv" component={FNA.HIV} />
+          <Route path="/fna-basesvgtree" component={FNA.BaseSVGTreeInstance} />
 
           <Route path="/sam-viewer" component={BAM.BAMViewer} />
           <Route path="/sam-variantcaller" component={BAM.VariantCaller} />
-
-          <Route path="/base-svg-tree" component={Components.BaseSVGTree} />
         </div>
       </div>
     );

@@ -181,9 +181,11 @@ class FASTAViewer extends Component {
   }
 }
 
-module.exports.FASTAViewer = FASTAViewer;
-module.exports.AminoAcid = AminoAcid;
-module.exports.Highlight = Highlight;
-module.exports.StartAtSiteAndSequence = StartAtSiteAndSequence;
-module.exports.Lowercase = Lowercase;
-module.exports.SVGAlignmentExample = SVGAlignmentExample;
+export {
+  FASTAViewer,
+  AminoAcid,
+  Highlight,
+  StartAtSiteAndSequence,
+  Lowercase,
+  SVGAlignmentExample
+};

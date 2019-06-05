@@ -65,4 +65,4 @@ BaseSVGAlignment.defaultProps = {
   translateY: 0
 };
 
-module.exports = BaseSVGAlignment;
+export default BaseSVGAlignment;

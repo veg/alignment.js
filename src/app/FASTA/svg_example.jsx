@@ -43,4 +43,4 @@ class SVGAlignmentExample extends Component {
   }
 }
 
-module.exports = SVGAlignmentExample;
+export default SVGAlignmentExample;

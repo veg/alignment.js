@@ -37,4 +37,4 @@ class AminoAcid extends Component {
   }
 }
 
-module.exports = AminoAcid;
+export default AminoAcid;

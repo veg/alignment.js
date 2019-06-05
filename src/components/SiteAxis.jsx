@@ -76,4 +76,4 @@ SiteAxis.defaultProps = {
   sender: "main"
 };
 
-module.exports = SiteAxis;
+export default SiteAxis;

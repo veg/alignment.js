@@ -122,4 +122,4 @@ Alignment.defaultProps = {
   molecule: mol => mol
 };
 
-module.exports = Alignment;
+export default Alignment;

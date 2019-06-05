@@ -29,4 +29,4 @@ class Lowercase extends Component {
   }
 }
 
-module.exports = Lowercase;
+export default Lowercase;

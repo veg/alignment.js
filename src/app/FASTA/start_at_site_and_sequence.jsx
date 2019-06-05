@@ -33,4 +33,4 @@ class StartAtSiteAndSequence extends Component {
   }
 }
 
-module.exports = StartAtSiteAndSequence;
+export default StartAtSiteAndSequence;

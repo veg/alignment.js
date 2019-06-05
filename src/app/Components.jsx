@@ -51,4 +51,4 @@ function BaseSVGTreeInstance(props) {
   );
 }
 
-module.exports.BaseSVGTree = BaseSVGTreeInstance;
+export { BaseSVGTreeInstance };

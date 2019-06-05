@@ -109,4 +109,4 @@ BaseAlignment.defaultProps = {
   sender: "main"
 };
 
-module.exports = BaseAlignment;
+export default BaseAlignment;

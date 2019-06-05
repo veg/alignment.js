@@ -8,4 +8,4 @@ function Button(props) {
   );
 }
 
-module.exports = Button;
+export default Button;

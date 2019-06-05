@@ -4,6 +4,7 @@
   "main": "lib/alignment.js",
   "license": "MIT",
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@gmod/bam": "^1.0.18",
     "bootstrap": "^4.1.1",
     "d3": "5",
@@ -15,20 +16,20 @@
     "popper.js": "^1.14.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-phylotree": "file:.yalc/react-phylotree",
     "react-router-dom": "^4.3.1",
     "save-svg-as-png": "^1.4.14",
     "text-width": "^1.2.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
     "autoprefixer": "^8.4.1",
-    "babel-core": "^6.26.0",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-1": "^6.24.1",
+    "babel-loader": "8",
     "concurrently": "^4.1.0",
     "css-loader": "^0.28.11",
     "eslint": "4.18.2",
@@ -63,6 +64,15 @@
     "precommit": "pretty-quick --staged",
     "format": "prettier 'src/**/*.{js,jsx}' --write",
     "test": "jest"
+  },
+  "babel": {
+    "presets": ["@babel/preset-env", "@babel/preset-react"],
+    "plugins": ["@babel/plugin-proposal-class-properties"],
+    "env": {
+      "test": {
+        "presets": ["@babel/preset-env", "@babel/preset-react"]
+      }
+    }
   },
   "files": ["lib/alignment.js", "lib/alignment.css"],
   "repository": {

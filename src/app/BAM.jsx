@@ -86,5 +86,4 @@ class BAMViewer extends Component {
   }
 }
 
-module.exports.BAMViewer = BAMViewer;
-module.exports.VariantCaller = VariantCaller;
+export { BAMViewer, VariantCaller };

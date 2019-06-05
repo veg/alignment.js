@@ -3,6 +3,7 @@ import { text } from "d3-fetch";
 import { saveAs } from "file-saver";
 
 import { fnaParser, fnaToText } from "../helpers/fasta";
+import { BaseSVGTreeInstance } from "./Components.jsx";
 import Button from "../components/Button.jsx";
 import FileUploadButton from "./FileUploadButton.jsx";
 import Modal from "./Modal.jsx";
@@ -132,6 +133,4 @@ class FNAViewer extends Component {
   }
 }
 
-module.exports.FNAViewer = FNAViewer;
-module.exports.Immunology = Immunology;
-module.exports.HIV = HIV;
+export { FNAViewer, Immunology, HIV, BaseSVGTreeInstance };

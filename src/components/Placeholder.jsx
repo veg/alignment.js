@@ -9,4 +9,4 @@ function Placeholder(props) {
   );
 }
 
-module.exports = Placeholder;
+export default Placeholder;

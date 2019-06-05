@@ -46,4 +46,4 @@ Modal.defaultProps = {
   bottomButton: null
 };
 
-module.exports = Modal;
+export default Modal;

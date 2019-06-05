@@ -28,4 +28,4 @@ function FileUploadButton(props) {
   );
 }
 
-module.exports = FileUploadButton;
+export default FileUploadButton;

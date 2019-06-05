@@ -56,4 +56,4 @@ SVGSiteAxis.defaultProps = {
   axis_bounds: [null, null]
 };
 
-module.exports = SVGSiteAxis;
+export default SVGSiteAxis;

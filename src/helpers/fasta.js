@@ -66,7 +66,5 @@ function fnaToText(fna) {
   );
 }
 
-module.exports = fastaParser;
-module.exports.fastaToText = fastaToText;
-module.exports.fnaParser = fnaParser;
-module.exports.fnaToText = fnaToText;
+export default fastaParser;
+export { fastaToText, fnaParser, fnaToText };
