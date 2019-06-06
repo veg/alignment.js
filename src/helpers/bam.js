@@ -72,4 +72,4 @@ class BAMReader {
   }
 }
 
-module.exports = BAMReader;
+export default BAMReader;

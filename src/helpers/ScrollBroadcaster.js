@@ -72,4 +72,4 @@ class ScrollBroadcaster {
   }
 }
 
-module.exports = ScrollBroadcaster;
+export default ScrollBroadcaster;

@@ -131,4 +131,4 @@ BaseSiteBarPlot.defaultProps = {
   sender: "main"
 };
 
-module.exports = BaseSiteBarPlot;
+export default BaseSiteBarPlot;

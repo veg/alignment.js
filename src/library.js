@@ -9,14 +9,15 @@ import computeLabelWidth from "./helpers/computeLabelWidth";
 import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
 import colors from "./helpers/colors";
 
-module.exports = Alignment;
-module.exports.Alignment = Alignment;
-module.exports.BaseAlignment = BaseAlignment;
-module.exports.BaseSVGAlignment = BaseSVGAlignment;
-module.exports.SiteAxis = SiteAxis;
-module.exports.SitePlotAxis = SitePlotAxis;
-module.exports.SequenceAxis = SequenceAxis;
-module.exports.fastaParser = fastaParser;
-module.exports.computeLabelWidth = computeLabelWidth;
-module.exports.ScrollBroadcaster = ScrollBroadcaster;
-module.exports.colors = colors;
+export default Alignment;
+export {
+  BaseAlignment,
+  BaseSVGAlignment,
+  SiteAxis,
+  SitePlotAxis,
+  SequenceAxis,
+  fastaParser,
+  computeLabelWidth,
+  ScrollBroadcaster,
+  colors
+};

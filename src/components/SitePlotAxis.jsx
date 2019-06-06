@@ -73,4 +73,4 @@ SitePlotAxis.defaultProps = {
   translateY: 0
 };
 
-module.exports = SitePlotAxis;
+export default SitePlotAxis;

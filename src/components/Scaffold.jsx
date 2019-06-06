@@ -94,4 +94,4 @@ Scaffold.defaultProps = {
   sender: "main"
 };
 
-module.exports = Scaffold;
+export default Scaffold;

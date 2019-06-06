@@ -139,8 +139,10 @@ const nucleotide_colors = {
     };
   };
 
-module.exports.nucleotide_color = nucleotide_color;
-module.exports.nucleotide_text_color = nucleotide_text_color;
-module.exports.nucleotide_difference = nucleotide_difference;
-module.exports.amino_acid_color = amino_acid_color;
-module.exports.amino_acid_text_color = amino_acid_text_color;
+export {
+  nucleotide_color,
+  nucleotide_text_color,
+  nucleotide_difference,
+  amino_acid_color,
+  amino_acid_text_color
+};

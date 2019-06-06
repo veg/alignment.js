@@ -58,4 +58,4 @@ function NavBar(props) {
   );
 }
 
-module.exports = NavBar;
+export default NavBar;

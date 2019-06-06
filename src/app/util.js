@@ -18,5 +18,4 @@ function handleTextUpdate(component) {
   });
 }
 
-module.exports.handleFileChange = handleFileChange;
-module.exports.handleTextUpdate = handleTextUpdate;
+export { handleFileChange, handleTextUpdate };

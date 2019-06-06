@@ -139,4 +139,4 @@ ScaffoldViewer.defaultProps = {
   scaffold_width: 400
 };
 
-module.exports = ScaffoldViewer;
+export default ScaffoldViewer;

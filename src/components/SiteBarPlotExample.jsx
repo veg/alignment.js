@@ -230,4 +230,4 @@ class SwitchNucleotideButtons extends React.Component {
   }
 }
 
-module.exports = SiteBarPlotExample;
+export default SiteBarPlotExample;
