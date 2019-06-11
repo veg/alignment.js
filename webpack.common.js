@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-  entry: path.resolve("src", "index.jsx"),
+  entry: path.resolve("src", "app.jsx"),
   plugins: [
     new HtmlWebpackPlugin({
       title: "Javascript Alignment Viewer"
@@ -21,10 +21,7 @@ module.exports = {
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        loader: "babel-loader",
-        query: {
-          presets: ["es2015", "react", "stage-1"]
-        }
+        loader: "babel-loader"
       },
       {
         test: /\.css$/,
@@ -50,5 +47,8 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist")
+  },
+  stats: {
+    colors: true
   }
 };

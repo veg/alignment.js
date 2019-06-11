@@ -10,3 +10,4 @@ dist/alignment.js
 *.svg
 *.ttf
 *.eot
+tags*

@@ -1,16 +1,13 @@
 import React, { Component } from "react";
-const d3 = require("d3");
-const $ = require("jquery");
-const _ = require("underscore");
 
-import fastaParser from "./../helpers/fasta";
-import computeLabelWidth from "../helpers/computeLabelWidth";
-import BaseAlignment from "./BaseAlignment.jsx";
-import SiteAxis from "./SiteAxis.jsx";
-import Placeholder from "./Placeholder.jsx";
-import SequenceAxis from "./SequenceAxis.jsx";
-import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
-import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
+import fastaParser from "./helpers/fasta";
+import computeLabelWidth from "./helpers/computeLabelWidth";
+import BaseAlignment from "./components/BaseAlignment.jsx";
+import SiteAxis from "./components/SiteAxis.jsx";
+import Placeholder from "./components/Placeholder.jsx";
+import SequenceAxis from "./components/SequenceAxis.jsx";
+import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
+import { nucleotide_color, nucleotide_text_color } from "./helpers/colors";
 
 class Alignment extends Component {
   constructor(props) {
@@ -18,34 +15,31 @@ class Alignment extends Component {
     this.label_width = 200;
     this.initialize(this.props);
   }
-  componentDidMount() {
-    this.setScrollingEvents(this.props);
-  }
   setScrollingEvents(props) {
     if (props.fasta) {
       const { width, height, axis_height } = props;
-      this.scroll_broadcaster = new ScrollBroadcaster(
-        { width: this.full_pixel_width, height: this.full_pixel_height },
-        { width: width - this.label_width, height: height - axis_height },
-        { x_pixel: this.x_pixel, y_pixel: this.y_pixel },
-        [
+      const { full_pixel_width, full_pixel_height, label_width } = this;
+      this.scroll_broadcaster = new ScrollBroadcaster({
+        width: full_pixel_width,
+        height: full_pixel_height,
+        x_pad: width - label_width,
+        y_pad: height - axis_height,
+        x_pixel: this.x_pixel || 0,
+        y_pixel: this.y_pixel || 0,
+        bidirectional: [
           "alignmentjs-alignment",
           "alignmentjs-axis-div",
           "alignmentjs-labels-div"
         ]
-      );
-      const { scroll_broadcaster } = this;
-      scroll_broadcaster.setListeners();
-      $("#alignmentjs-main-div").off("wheel");
-      $("#alignmentjs-main-div").on("wheel", function(e) {
-        e.preventDefault();
-        scroll_broadcaster.handleWheel(e);
       });
+      if (props.excavator) {
+        props.excavator.broadcaster = this.scroll_broadcaster;
+      }
     }
   }
-  componentWillUpdate(nextProps) {
+  shouldComponentUpdate(nextProps) {
     this.initialize(nextProps);
-    this.setScrollingEvents(nextProps);
+    return true;
   }
   initialize(props) {
     if (props.fasta) {
@@ -68,6 +62,7 @@ class Alignment extends Component {
           height / 2
         : 0;
     }
+    this.setScrollingEvents(props);
   }
   render() {
     const { full_pixel_width, full_pixel_height, label_width } = this,
@@ -88,6 +83,7 @@ class Alignment extends Component {
           site_size={this.props.site_size}
           sequence_data={this.sequence_data}
           x_pixel={this.x_pixel}
+          scroll_broadcaster={this.scroll_broadcaster}
         />
         <SequenceAxis
           width={this.label_width}
@@ -95,6 +91,7 @@ class Alignment extends Component {
           sequence_data={this.sequence_data}
           site_size={this.props.site_size}
           y_pixel={this.y_pixel}
+          scroll_broadcaster={this.scroll_broadcaster}
         />
         <BaseAlignment
           width={width - this.label_width}
@@ -105,6 +102,8 @@ class Alignment extends Component {
           site_size={this.props.site_size}
           x_pixel={this.x_pixel}
           y_pixel={this.y_pixel}
+          scroll_broadcaster={this.scroll_broadcaster}
+          molecule={this.props.molecule}
         />
       </div>
     );
@@ -116,7 +115,11 @@ Alignment.defaultProps = {
   text_color: nucleotide_text_color,
   label_padding: 10,
   site_size: 20,
-  axis_height: 20
+  axis_height: 25,
+  width: 960,
+  height: 500,
+  sender: "main",
+  molecule: mol => mol
 };
 
-module.exports = Alignment;
+export default Alignment;

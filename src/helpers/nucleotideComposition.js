@@ -32,4 +32,4 @@ function siteComposition(alignmentData, callback) {
   }
 }
 
-module.exports.siteComposition = siteComposition;
+export { siteComposition };

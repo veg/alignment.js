@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 const d3 = require("d3");
-const $ = require("jquery");
 
 class Scaffold extends Component {
   componentDidMount() {
@@ -12,33 +11,43 @@ class Scaffold extends Component {
           .attr("x", e.detail.x_fraction * this.props.width)
           .attr("y", e.detail.y_fraction * this.props.height);
       });
-    const { width, height, scroll_broadcaster } = this.props,
+    const { width, height, scroll_broadcaster, sender } = this.props,
       guide_svg = d3.select("#alignmentjs-scaffold");
     guide_svg.on("click", function() {
       const coords = d3.mouse(this),
         x_fraction = coords[0] / width,
         y_fraction = coords[1] / height;
-      scroll_broadcaster.broadcast(x_fraction, y_fraction);
+      scroll_broadcaster.broadcast(x_fraction, y_fraction, sender);
     });
+  }
+  handleWheel(e) {
+    e.preventDefault();
+    this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
   }
   render() {
     if (!this.props.sequence_data) {
       return <div id="alignmentjs-scaffold-div" />;
     }
-    const { sequence_data, scroll_broadcaster, width, height } = this.props,
+    const {
+        sequence_data,
+        scroll_broadcaster,
+        width,
+        height,
+        sender
+      } = this.props,
+      {
+        x_pad,
+        y_pad,
+        width: alignment_width,
+        height: alignment_height
+      } = scroll_broadcaster[sender],
       number_of_sites = sequence_data[0].seq.length,
       number_of_sequences = sequence_data.length,
-      guide_width =
-        this.props.width *
-        scroll_broadcaster.viewport_pixel_width /
-        scroll_broadcaster.full_pixel_width,
-      guide_height =
-        this.props.height *
-        scroll_broadcaster.viewport_pixel_height /
-        scroll_broadcaster.full_pixel_height,
+      guide_width = this.props.width * x_pad / alignment_width,
+      guide_height = this.props.height * y_pad / alignment_height,
       line_style = { stroke: "red", strokeWidth: "1px" };
     return (
-      <div id="alignmentjs-scaffold-div">
+      <div id="alignmentjs-scaffold-div" onWheel={e => this.handleWheel(e)}>
         <svg width={width} height={height} id="alignmentjs-scaffold">
           <rect x={0} y={0} width={width} height={height} fill="WhiteSmoke" />
           {sequence_data.map((row, index) => {
@@ -81,4 +90,8 @@ class Scaffold extends Component {
   }
 }
 
-module.exports = Scaffold;
+Scaffold.defaultProps = {
+  sender: "main"
+};
+
+export default Scaffold;

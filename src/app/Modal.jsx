@@ -5,7 +5,7 @@ function Modal(props) {
   return (
     <div
       className="modal fade"
-      id={props.id}
+      id="modal"
       tabIndex="-1"
       role="dialog"
       aria-labelledby="myModalLabel"
@@ -25,7 +25,7 @@ function Modal(props) {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div className="modal-body">{props.body}</div>
+          <div className="modal-body">{props.children}</div>
           <div className="modal-footer">
             <button
               type="button"
@@ -46,4 +46,4 @@ Modal.defaultProps = {
   bottomButton: null
 };
 
-module.exports = Modal;
+export default Modal;

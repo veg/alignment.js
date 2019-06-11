@@ -102,12 +102,18 @@ class BaseSiteBarPlot extends React.Component {
       .style("stroke", this.props.outlineColor);
   }
 
+  handleWheel(e) {
+    e.preventDefault();
+    this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
+  }
+
   render() {
     return (
       <div
         id={"alignmentjs-siteBarPlot-div"}
         className="-container"
         style={{ overflowY: "scroll", overflowX: "hidden" }}
+        onWheel={e => this.handleWheel(e)}
       >
         <svg
           width={this.props.width}
@@ -121,7 +127,8 @@ class BaseSiteBarPlot extends React.Component {
 
 BaseSiteBarPlot.defaultProps = {
   id: "alignmentjs",
-  padding: { top: 10, bottom: 15 }
+  padding: { top: 10, bottom: 15 },
+  sender: "main"
 };
 
-module.exports = BaseSiteBarPlot;
+export default BaseSiteBarPlot;

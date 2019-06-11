@@ -31,7 +31,7 @@ class SiteAxis extends Component {
       axis_svg
         .append("g")
         .attr("class", "axis")
-        .attr("transform", `translate(0, ${height - 1})`)
+        .attr("transform", `translate(0, ${height - 2})`)
         .call(axis);
 
       $("#alignmentjs-axis-div").scrollLeft(this.props.x_pixel);
@@ -48,12 +48,17 @@ class SiteAxis extends Component {
   componentDidUpdate() {
     this.initialize();
   }
+  handleWheel(e) {
+    e.preventDefault();
+    this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
+  }
   render() {
     return (
       <div
         id="alignmentjs-axis-div"
         className="-container"
         style={{ overflowY: "scroll", overflowX: "hidden" }}
+        onWheel={e => this.handleWheel(e)}
       >
         <svg
           id="alignmentjs-axis"
@@ -67,7 +72,8 @@ class SiteAxis extends Component {
 
 SiteAxis.defaultProps = {
   x_pixel: 0,
-  site_size: 20
+  site_size: 20,
+  sender: "main"
 };
 
-module.exports = SiteAxis;
+export default SiteAxis;

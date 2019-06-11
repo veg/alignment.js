@@ -92,6 +92,7 @@ const nucleotide_colors = {
     t: "DeepSkyBlue",
     v: "Gold",
     w: "HotPink",
+    x: "black",
     y: "IndianRed",
     A: "lightblue",
     C: "pink",
@@ -112,6 +113,7 @@ const nucleotide_colors = {
     T: "DeepSkyBlue",
     V: "Gold",
     W: "HotPink",
+    X: "black",
     Y: "IndianRed"
   },
   nucleotide_color = (character, position, header) => {
@@ -120,27 +122,27 @@ const nucleotide_colors = {
   nucleotide_text_color = (character, position, header) => {
     return nucleotide_text_colors[character];
   },
-  highlight_codon_color = (character, position, header) => {
-    if (
-      header == "DUCK_VIETNAM_272_2005" &&
-      Math.floor((position - 1) / 3) == 3
-    )
-      return "red";
-    return character == "-" ? "white" : "GhostWhite";
-  },
-  highlight_codon_text_color = (character, position, header) => {
-    return character == "G" ? "Gold" : nucleotide_colors[character];
-  },
   amino_acid_color = (character, position, header) => {
     return amino_acid_colors[character];
   },
   amino_acid_text_color = (character, position, header) => {
-    return "black";
+    return character.toUpperCase() != "X" ? "black" : "white";
+  },
+  nucleotide_difference = desired_record => {
+    const desired_header = desired_record.header,
+      desired_sequence = desired_record.seq;
+    return (mol, site, header) => {
+      const desired_color = nucleotide_colors[mol];
+      if (mol == "-") return nucleotide_colors["-"];
+      if (header == desired_header) return desired_color;
+      return mol == desired_sequence[site - 1] ? "white" : desired_color;
+    };
   };
 
-module.exports.nucleotide_color = nucleotide_color;
-module.exports.nucleotide_text_color = nucleotide_text_color;
-module.exports.highlight_codon_color = highlight_codon_color;
-module.exports.highlight_codon_text_color = highlight_codon_text_color;
-module.exports.amino_acid_color = amino_acid_color;
-module.exports.amino_acid_text_color = amino_acid_text_color;
+export {
+  nucleotide_color,
+  nucleotide_text_color,
+  nucleotide_difference,
+  amino_acid_color,
+  amino_acid_text_color
+};

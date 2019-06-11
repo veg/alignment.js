@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-const d3 = require("d3");
-const $ = require("jquery");
-const _ = require("underscore");
 
 import fastaParser from "./../helpers/fasta";
 import computeLabelWidth from "../helpers/computeLabelWidth";
@@ -19,23 +16,35 @@ class ScaffoldViewer extends Component {
     this.label_width = 200;
     this.initialize(this.props);
   }
-  componentDidMount() {
-    this.setScrollingEvents(this.props);
-  }
   setScrollingEvents(props) {
     if (props.fasta) {
-      const { scroll_broadcaster } = this;
-      scroll_broadcaster.setListeners();
-      $("#alignmentjs-main-div").off("wheel");
-      $("#alignmentjs-main-div").on("wheel", function(e) {
-        e.preventDefault();
-        scroll_broadcaster.handleWheel(e);
+      const {
+        width,
+        height,
+        axis_height,
+        alignment_width,
+        alignment_height
+      } = props;
+      const { full_pixel_width, full_pixel_height, label_width } = this;
+      this.scroll_broadcaster = new ScrollBroadcaster({
+        width: full_pixel_width,
+        height: full_pixel_height,
+        x_pad: alignment_width,
+        y_pad: alignment_height,
+        x_pixel: this.x_pixel,
+        y_pixel: this.y_pixel,
+        bidirectional: [
+          "alignmentjs-reference-alignment",
+          "alignmentjs-alignment",
+          "alignmentjs-axis-div",
+          "alignmentjs-labels-div",
+          "alignmentjs-scaffold-div"
+        ]
       });
     }
   }
   componentWillUpdate(nextProps) {
     this.initialize(nextProps);
-    this.setScrollingEvents(nextProps);
   }
   initialize(props) {
     if (props.fasta) {
@@ -47,23 +56,8 @@ class ScaffoldViewer extends Component {
       this.full_pixel_width = site_size * sequence_data.number_of_sites;
       this.full_pixel_height =
         site_size * (sequence_data.number_of_sequences - 1);
-
-      this.scroll_broadcaster = new ScrollBroadcaster(
-        { width: this.full_pixel_width, height: this.full_pixel_height },
-        {
-          width: this.props.alignment_width,
-          height: this.props.alignment_height
-        },
-        { x_pixel: this.x_pixel, y_pixel: this.y_pixel },
-        [
-          "alignmentjs-reference-alignment",
-          "alignmentjs-alignment",
-          "alignmentjs-axis-div",
-          "alignmentjs-labels-div",
-          "alignmentjs-scaffold-div"
-        ]
-      );
     }
+    this.setScrollingEvents(props);
   }
   render() {
     if (!this.sequence_data) {
@@ -87,6 +81,7 @@ class ScaffoldViewer extends Component {
           width={alignment_width}
           height={20}
           sequence_data={this.sequence_data}
+          scroll_broadcaster={this.scroll_broadcaster}
         />
         <div id="alignmentjs-axis-placeholder2" />
         <SequenceAxis
@@ -95,6 +90,7 @@ class ScaffoldViewer extends Component {
           sequence_data={reference_sequence_data}
           site_size={this.props.site_size}
           id="alignmentjs-reference"
+          scroll_broadcaster={this.scroll_broadcaster}
         />
         <BaseAlignment
           width={alignment_width}
@@ -103,6 +99,7 @@ class ScaffoldViewer extends Component {
           site_size={this.props.site_size}
           id="alignmentjs-reference"
           disableVerticalScrolling
+          scroll_broadcaster={this.scroll_broadcaster}
         />
         <div id="alignmentjs-reference-placeholder" />
         <SequenceAxis
@@ -111,12 +108,14 @@ class ScaffoldViewer extends Component {
           sequence_data={remaining_sequence_data}
           site_size={this.props.site_size}
           y_pixel={this.y_pixel}
+          scroll_broadcaster={this.scroll_broadcaster}
         />
         <BaseAlignment
           width={alignment_width}
           height={800}
           sequence_data={remaining_sequence_data}
           site_size={this.props.site_size}
+          scroll_broadcaster={this.scroll_broadcaster}
         />
         <Scaffold
           width={scaffold_width}
@@ -140,4 +139,4 @@ ScaffoldViewer.defaultProps = {
   scaffold_width: 400
 };
 
-module.exports = ScaffoldViewer;
+export default ScaffoldViewer;

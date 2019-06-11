@@ -7,4 +7,4 @@ function computeLabelWidth(sequence_data, padding) {
   return padding + label_width;
 }
 
-module.exports = computeLabelWidth;
+export default computeLabelWidth;

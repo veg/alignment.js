@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
+import {
+  nucleotide_color,
+  nucleotide_text_color,
+  amino_acid_color,
+  amino_acid_text_color
+} from "./../helpers/colors";
 
-const d3 = require("d3");
 const _ = require("underscore");
 
 class BaseAlignment extends Component {
@@ -24,12 +28,17 @@ class BaseAlignment extends Component {
   }
   draw(x_pixel, y_pixel) {
     if (this.props.disableVerticalScrolling) y_pixel = 0;
-    const { width, height, site_size, site_color, text_color } = this.props,
+    const { width, height, site_size, molecule } = this.props,
       start_site = Math.floor(x_pixel / site_size),
       end_site = Math.ceil((x_pixel + width) / site_size),
       start_seq = Math.floor(y_pixel / site_size),
-      end_seq = Math.ceil((y_pixel + height) / site_size);
-
+      end_seq = Math.ceil((y_pixel + height) / site_size),
+      site_color = this.props.amino_acid
+        ? amino_acid_color
+        : this.props.site_color,
+      text_color = this.props.amino_acid
+        ? amino_acid_text_color
+        : this.props.text_color;
     const individual_sites = _.flatten(
       this.props.sequence_data
         .filter((row, i) => {
@@ -58,20 +67,29 @@ class BaseAlignment extends Component {
     context.setTransform(1, 0, 0, 1, -x_pixel, -y_pixel);
     individual_sites.forEach(function(d) {
       const x = site_size * (d.j - 1),
-        y = site_size * (d.i - 1);
+        y = site_size * (d.i - 1),
+        mol = molecule(d.mol, d.j, d.header);
       context.beginPath();
       context.fillStyle = site_color(d.mol, d.j, d.header);
       context.rect(x, y, site_size, site_size);
       context.fill();
       context.fillStyle = text_color(d.mol, d.j, d.header);
-      context.fillText(d.mol, x + site_size / 2, y + site_size / 2);
+      context.fillText(mol, x + site_size / 2, y + site_size / 2);
       context.closePath();
     });
+  }
+  handleWheel(e) {
+    e.preventDefault();
+    this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
   }
   render() {
     const div_id = this.props.id + "-alignment-div";
     return (
-      <div id={div_id} className="alignmentjs-container">
+      <div
+        id={div_id}
+        className="alignmentjs-container"
+        onWheel={e => this.handleWheel(e)}
+      >
         <canvas
           width={this.props.width}
           height={this.props.height}
@@ -85,8 +103,10 @@ class BaseAlignment extends Component {
 BaseAlignment.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
+  molecule: mol => mol,
   site_size: 20,
-  id: "alignmentjs"
+  id: "alignmentjs",
+  sender: "main"
 };
 
-module.exports = BaseAlignment;
+export default BaseAlignment;
