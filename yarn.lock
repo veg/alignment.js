@@ -8821,8 +8821,10 @@ react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
-"react-phylotree@file:.yalc/react-phylotree":
-  version "0.0.1-6d45bf72"
+react-phylotree@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/react-phylotree/-/react-phylotree-0.0.1.tgz#ed901740a4e6ed71bc799bad89f88d46fa021b49"
+  integrity sha512-OEt4HI/4IuLMIAyskTwpNl7R1E7drAOlaSLIHYAHSnRfw3U5owgnuk6a1zVrTp4/38HG5xW04U0Dw+W2kwJMeg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.10"
     "@fortawesome/free-solid-svg-icons" "^5.6.1"
