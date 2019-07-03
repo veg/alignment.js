@@ -4,7 +4,6 @@
   "main": "lib/alignment.js",
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@gmod/bam": "^1.0.18",
     "bootstrap": "^4.1.1",
     "d3": "5",
@@ -25,6 +24,7 @@
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "autoprefixer": "^8.4.1",

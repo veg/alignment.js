@@ -84,6 +84,7 @@ class Alignment extends Component {
           sequence_data={this.sequence_data}
           x_pixel={this.x_pixel}
           scroll_broadcaster={this.scroll_broadcaster}
+          start_site={this.props.start_site}
         />
         <SequenceAxis
           width={this.label_width}
@@ -119,7 +120,8 @@ Alignment.defaultProps = {
   width: 960,
   height: 500,
   sender: "main",
-  molecule: mol => mol
+  molecule: mol => mol,
+  start_site: 0
 };
 
 export default Alignment;

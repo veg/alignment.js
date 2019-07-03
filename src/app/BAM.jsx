@@ -15,7 +15,7 @@ class BAMViewer extends Component {
       window_start: 0,
       window_width: 200,
       site_size: 15,
-      fasta: null
+      fasta: []
     };
   }
   componentDidMount() {
@@ -24,17 +24,30 @@ class BAMViewer extends Component {
       baiUrl: "data/sorted.bam.bai"
     });
     this.bam = new BAMReader(bam_file);
-    const { window_start, window_width } = this.state,
-      window_end = window_start + window_width;
+    const { window_start, window_width } = this.state;
+    this.loadBamWindow(window_start, window_width);
+  }
+  loadBamWindow(window_start, window_width) {
+    const window_end = window_start + window_width;
     this.bam
       .fasta_window(window_start, window_end)
-      .then(fasta => this.setState({ fasta }));
+      .then(fasta => this.setState({ fasta, window_start, window_width }));
+  }
+  handleStartChange(e) {
+    const window_start = +e.target.value,
+      { window_width } = this.state;
+    this.loadBamWindow(window_start, window_width);
+  }
+  handleWidthChange(e) {
+    const { window_start } = this.state,
+      window_width = +e.target.value;
+    this.loadBamWindow(window_start, window_width);
   }
   render() {
-    const width = 1400,
+    const width = 1140,
       toolbar_style = {
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "space-around",
         width: width
       };
     return (
@@ -48,8 +61,8 @@ class BAMViewer extends Component {
               value={this.state.window_start}
               min={0}
               max={100}
-              step={5}
-              onChange={e => this.setState({ window_start: e.target.value })}
+              step={25}
+              onChange={e => this.handleStartChange(e)}
             />
           </span>
           <span>
@@ -59,8 +72,8 @@ class BAMViewer extends Component {
               value={this.state.window_width}
               min={100}
               max={1000}
-              step={5}
-              onChange={e => this.setState({ window_width: e.target.value })}
+              step={10}
+              onChange={e => this.handleWidthChange(e)}
             />
           </span>
           <span>
@@ -74,12 +87,14 @@ class BAMViewer extends Component {
               onChange={e => this.setState({ site_size: e.target.value })}
             />
           </span>
+          <span>Number of reads in window: {this.state.fasta.length}</span>
         </div>
         <Alignment
           width={width}
           height={1000}
           site_size={this.state.site_size}
           fasta={this.state.fasta}
+          start_site={this.state.window_start}
         />
       </div>
     );

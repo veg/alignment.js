@@ -6,7 +6,7 @@ const $ = require("jquery");
 class SiteAxis extends Component {
   initialize() {
     if (this.props.sequence_data) {
-      const { width, height, site_size } = this.props;
+      const { width, height, site_size, start_site } = this.props;
       d3
         .select("#alignmentjs-axis-div")
         .style("width", width + "px")
@@ -16,7 +16,7 @@ class SiteAxis extends Component {
 
       var axis_scale = d3
         .scaleLinear()
-        .domain([1, number_of_sites])
+        .domain([start_site + 1, start_site + number_of_sites])
         .range([site_size / 2, alignment_width - site_size / 2]);
 
       var axis_svg = d3.select("#alignmentjs-axis");
@@ -26,7 +26,7 @@ class SiteAxis extends Component {
       var axis = d3
         .axisTop()
         .scale(axis_scale)
-        .tickValues(d3.range(1, number_of_sites, 2));
+        .tickValues(d3.range(start_site + 1, start_site + number_of_sites, 2));
 
       axis_svg
         .append("g")
@@ -72,7 +72,8 @@ class SiteAxis extends Component {
 SiteAxis.defaultProps = {
   x_pixel: 0,
   site_size: 20,
-  sender: "main"
+  sender: "main",
+  start_site: 0
 };
 
 export default SiteAxis;
