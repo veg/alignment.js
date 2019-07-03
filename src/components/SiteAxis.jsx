@@ -56,7 +56,6 @@ class SiteAxis extends Component {
     return (
       <div
         id="alignmentjs-axis-div"
-        className="-container"
         style={{ overflowY: "scroll", overflowX: "hidden" }}
         onWheel={e => this.handleWheel(e)}
       >

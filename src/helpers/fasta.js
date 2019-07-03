@@ -1,3 +1,5 @@
+import { phylotree } from "phylotree";
+
 import sortFASTAAndNewick from "./jointSort.js";
 
 function fastaParser(fasta) {
@@ -43,26 +45,24 @@ function fnaParser(fna, sortFASTA) {
     i--;
     current_char = fna[i];
   }
-  const parsed_fasta = fastaParser(fna.slice(0, i + 1)),
-    newick = fna.slice(i + 1, fna.length - 1);
+  const sequence_data = fastaParser(fna.slice(0, i + 1)),
+    newick = fna.slice(i + 1, fna.length - 1),
+    tree = new phylotree(newick);
   if (sortFASTA) {
-    sortFASTAAndNewick(parsed_fasta, newick, 20);
+    sortFASTAAndNewick(sequence_data, tree);
   }
-  return {
-    fasta: parsed_fasta,
-    newick: newick
-  };
+  return { sequence_data, tree };
 }
 
 function fnaToText(fna) {
   return (
-    fna.fasta
+    fna.sequence_data
       .map(record => {
         return ">" + record.header + "\n" + record.seq;
       })
       .join("\n") +
     "\n" +
-    fna.newick
+    fna.tree.newick_string
   );
 }
 
