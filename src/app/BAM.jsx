@@ -3,6 +3,7 @@ import { BamFile } from "@gmod/bam";
 
 import Alignment from "../Alignment.jsx";
 import BAMReader from "../helpers/bam.js";
+import { nucleotide_color, nucleotide_difference } from "../helpers/colors";
 
 function VariantCaller(props) {
   return <h1>Variant calling example will go here.</h1>;
@@ -15,7 +16,10 @@ class BAMViewer extends Component {
       window_start: 0,
       window_width: 200,
       site_size: 15,
-      fasta: []
+      fasta: [],
+      label: null,
+      molecule: mol => mol,
+      site_color: nucleotide_color
     };
   }
   componentDidMount() {
@@ -43,6 +47,32 @@ class BAMViewer extends Component {
       window_width = +e.target.value;
     this.loadBamWindow(window_start, window_width);
   }
+  onSequenceClick = (label, i) => {
+    return () => {
+      if (label == this.state.label) {
+        this.setState({
+          label: null,
+          molecule: mol => mol,
+          site_color: nucleotide_color
+        });
+      } else {
+        const desired_record = this.state.fasta.filter(
+            datum => datum.header == label
+          )[0],
+          molecule = (mol, site, header) => {
+            if (mol == "-") return "-";
+            if (header == desired_record.header) return mol;
+            return mol == desired_record.seq[site - 1] ? "." : mol;
+          };
+
+        this.setState({
+          label: label,
+          molecule: molecule,
+          site_color: nucleotide_difference(desired_record)
+        });
+      }
+    };
+  };
   render() {
     const width = 1140,
       toolbar_style = {
@@ -95,6 +125,9 @@ class BAMViewer extends Component {
           site_size={this.state.site_size}
           fasta={this.state.fasta}
           start_site={this.state.window_start}
+          molecule={this.state.molecule}
+          site_color={this.state.site_color}
+          onSequenceClick={this.onSequenceClick}
         />
       </div>
     );
