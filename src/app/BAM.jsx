@@ -24,8 +24,8 @@ class BAMViewer extends Component {
   }
   componentDidMount() {
     const bam_file = new BamFile({
-      bamUrl: "data/sorted.bam",
-      baiUrl: "data/sorted.bam.bai"
+      bamUrl: this.props.data_url,
+      baiUrl: this.props.data_url + ".bai"
     });
     this.bam = new BAMReader(bam_file);
     const { window_start, window_width } = this.state;
@@ -47,8 +47,12 @@ class BAMViewer extends Component {
       window_width = +e.target.value;
     this.loadBamWindow(window_start, window_width);
   }
+  scrollExcavator = () => {
+    return this.scrollExcavator.broadcaster.location();
+  };
   onSequenceClick = (label, i) => {
     return () => {
+      const { x_fraction, y_fraction } = this.scrollExcavator();
       if (label == this.state.label) {
         this.setState({
           label: null,
@@ -65,11 +69,20 @@ class BAMViewer extends Component {
             return mol == desired_record.seq[site - 1] ? "." : mol;
           };
 
-        this.setState({
-          label: label,
-          molecule: molecule,
-          site_color: nucleotide_difference(desired_record)
-        });
+        this.setState(
+          {
+            label: label,
+            molecule: molecule,
+            site_color: nucleotide_difference(desired_record)
+          },
+          () => {
+            this.scrollExcavator.broadcaster.broadcast(
+              x_fraction,
+              y_fraction,
+              "main"
+            );
+          }
+        );
       }
     };
   };
@@ -128,10 +141,16 @@ class BAMViewer extends Component {
           molecule={this.state.molecule}
           site_color={this.state.site_color}
           onSequenceClick={this.onSequenceClick}
+          excavator={this.scrollExcavator}
         />
       </div>
     );
   }
 }
 
+BAMViewer.defaultProps = {
+  data_url: "data/sorted.bam"
+};
+
+export default BAMViewer;
 export { BAMViewer, VariantCaller };
