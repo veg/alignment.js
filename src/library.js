@@ -10,6 +10,8 @@ import computeLabelWidth from "./helpers/computeLabelWidth";
 import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
 import * as colors from "./helpers/colors";
 
+require("./app/styles.scss");
+
 export default Alignment;
 export {
   BAMViewer,
