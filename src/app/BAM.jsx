@@ -52,13 +52,23 @@ class BAMViewer extends Component {
   };
   onSequenceClick = (label, i) => {
     return () => {
-      const { x_fraction, y_fraction } = this.scrollExcavator();
+      const { x_fraction, y_fraction } = this.scrollExcavator(),
+        scroll_corrector = () => {
+          this.scrollExcavator.broadcaster.broadcast(
+            x_fraction,
+            y_fraction,
+            "main"
+          );
+        };
       if (label == this.state.label) {
-        this.setState({
-          label: null,
-          molecule: mol => mol,
-          site_color: nucleotide_color
-        });
+        this.setState(
+          {
+            label: null,
+            molecule: mol => mol,
+            site_color: nucleotide_color
+          },
+          scroll_corrector
+        );
       } else {
         const desired_record = this.state.fasta.filter(
             datum => datum.header == label
@@ -75,13 +85,7 @@ class BAMViewer extends Component {
             molecule: molecule,
             site_color: nucleotide_difference(desired_record)
           },
-          () => {
-            this.scrollExcavator.broadcaster.broadcast(
-              x_fraction,
-              y_fraction,
-              "main"
-            );
-          }
+          scroll_corrector
         );
       }
     };
