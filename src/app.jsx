@@ -86,6 +86,7 @@ function BAMLinks(props) {
       <Link to="/sam-viewer" header="Viewer" />
       <Divider header="Examples" />
       <Link to="/sam-variantcaller" header="Variant caller" />
+      <Link to="/sam-scaffold" header="Scaffold viewer" />
     </Dropdown>
   );
 }
@@ -136,6 +137,7 @@ class App extends Component {
           <Route path="/fna-basesvgtree" component={FNA.BaseSVGTreeInstance} />
 
           <Route path="/sam-viewer" component={BAM.BAMViewer} />
+          <Route path="/sam-scaffold" component={BAM.ScaffoldExample} />
           <Route path="/sam-variantcaller" component={BAM.VariantCaller} />
         </div>
       </div>

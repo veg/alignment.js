@@ -2,11 +2,30 @@ import React, { Component } from "react";
 import { BamFile } from "@gmod/bam";
 
 import Alignment from "../Alignment.jsx";
+import ScaffoldViewer from "../components/ScaffoldViewer.jsx";
+import { DataFetcher } from "./Components.jsx";
 import BAMReader from "../helpers/bam.js";
 import { nucleotide_color, nucleotide_difference } from "../helpers/colors";
 
 function VariantCaller(props) {
   return <h1>Variant calling example will go here.</h1>;
+}
+
+function ScaffoldExample() {
+  return (
+    <div>
+      <h1>Scaffold viewer</h1>
+      <ul>
+        <li>The reference sequence stays fixed to the top.</li>
+        <li>
+          Click the scaffold to navigate to that portion of the alignment.
+        </li>
+      </ul>
+      <DataFetcher child_prop="fasta" source="data/scaffold.fasta">
+        <ScaffoldViewer />
+      </DataFetcher>
+    </div>
+  );
 }
 
 class BAMViewer extends Component {
@@ -157,4 +176,4 @@ BAMViewer.defaultProps = {
 };
 
 export default BAMViewer;
-export { BAMViewer, VariantCaller };
+export { BAMViewer, VariantCaller, ScaffoldExample };
