@@ -141,8 +141,10 @@ const nucleotide_colors = {
 
 export {
   nucleotide_color,
+  nucleotide_colors,
   nucleotide_text_color,
   nucleotide_difference,
   amino_acid_color,
+  amino_acid_colors,
   amino_acid_text_color
 };
