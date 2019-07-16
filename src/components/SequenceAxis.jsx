@@ -20,6 +20,7 @@ function BaseSequenceAxis(props) {
             textAnchor="end"
             dy={-site_size / 3}
             key={i}
+            onClick={props.onClick(label, i)}
           >
             {label}
           </text>
@@ -31,7 +32,8 @@ function BaseSequenceAxis(props) {
 
 BaseSequenceAxis.defaultProps = {
   translateX: 0,
-  translateY: 0
+  translateY: 0,
+  onClick: (label, i) => () => null
 };
 
 class SequenceAxis extends Component {
@@ -86,7 +88,8 @@ SequenceAxis.defaultProps = {
   label_padding: 10,
   site_size: 20,
   id: "alignmentjs",
-  sender: "main"
+  sender: "main",
+  onClick: (label, i) => () => null
 };
 
 export default SequenceAxis;

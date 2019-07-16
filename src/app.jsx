@@ -10,6 +10,7 @@ import * as FASTA from "./app/FASTA.jsx";
 import * as FNA from "./app/FNA.jsx";
 import * as BAM from "./app/BAM.jsx";
 import Components from "./app/Components.jsx";
+import PreventDefaultPatch from "./prevent_default_patch";
 import "./app/styles.scss";
 
 function Divider(props) {
@@ -86,6 +87,7 @@ function BAMLinks(props) {
       <Link to="/sam-viewer" header="Viewer" />
       <Divider header="Examples" />
       <Link to="/sam-variantcaller" header="Variant caller" />
+      <Link to="/sam-scaffold" header="Scaffold viewer" />
     </Dropdown>
   );
 }
@@ -136,6 +138,7 @@ class App extends Component {
           <Route path="/fna-basesvgtree" component={FNA.BaseSVGTreeInstance} />
 
           <Route path="/sam-viewer" component={BAM.BAMViewer} />
+          <Route path="/sam-scaffold" component={BAM.ScaffoldExample} />
           <Route path="/sam-variantcaller" component={BAM.VariantCaller} />
         </div>
       </div>
@@ -151,57 +154,7 @@ function Main(props) {
   );
 }
 
-/* Temporary fix for a breaking change in Chrome to React
- * See https://github.com/facebook/react/issues/14856
- */
-const EVENTS_TO_MODIFY = [
-  "touchstart",
-  "touchmove",
-  "touchend",
-  "touchcancel",
-  "wheel"
-];
-
-const originalAddEventListener = document.addEventListener.bind();
-document.addEventListener = (type, listener, options, wantsUntrusted) => {
-  let modOptions = options;
-  if (EVENTS_TO_MODIFY.includes(type)) {
-    if (typeof options === "boolean") {
-      modOptions = {
-        capture: options,
-        passive: false
-      };
-    } else if (typeof options === "object") {
-      modOptions = {
-        ...options,
-        passive: false
-      };
-    }
-  }
-
-  return originalAddEventListener(type, listener, modOptions, wantsUntrusted);
-};
-
-const originalRemoveEventListener = document.removeEventListener.bind();
-document.removeEventListener = (type, listener, options) => {
-  let modOptions = options;
-  if (EVENTS_TO_MODIFY.includes(type)) {
-    if (typeof options === "boolean") {
-      modOptions = {
-        capture: options,
-        passive: false
-      };
-    } else if (typeof options === "object") {
-      modOptions = {
-        ...options,
-        passive: false
-      };
-    }
-  }
-  return originalRemoveEventListener(type, listener, modOptions);
-};
-// End of temporary fix
-
+PreventDefaultPatch(document);
 ReactDOM.render(
   <Main />,
   document.body.appendChild(document.createElement("div"))

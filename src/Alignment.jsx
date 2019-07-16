@@ -43,7 +43,7 @@ class Alignment extends Component {
   }
   initialize(props) {
     if (props.fasta) {
-      const { fasta, site_size, width, height, axis_height } = props;
+      const { fasta, site_size, width, height } = props;
       this.sequence_data = fastaParser(fasta);
       const { sequence_data } = this;
       const { label_padding } = this.props;
@@ -84,6 +84,7 @@ class Alignment extends Component {
           sequence_data={this.sequence_data}
           x_pixel={this.x_pixel}
           scroll_broadcaster={this.scroll_broadcaster}
+          start_site={this.props.start_site}
         />
         <SequenceAxis
           width={this.label_width}
@@ -92,6 +93,7 @@ class Alignment extends Component {
           site_size={this.props.site_size}
           y_pixel={this.y_pixel}
           scroll_broadcaster={this.scroll_broadcaster}
+          onClick={this.props.onSequenceClick}
         />
         <BaseAlignment
           width={width - this.label_width}
@@ -119,7 +121,9 @@ Alignment.defaultProps = {
   width: 960,
   height: 500,
   sender: "main",
-  molecule: mol => mol
+  molecule: mol => mol,
+  start_site: 0,
+  onSequenceClick: (label, i) => () => null
 };
 
 export default Alignment;

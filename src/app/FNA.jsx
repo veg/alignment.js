@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { text } from "d3-fetch";
 import { saveAs } from "file-saver";
 
+import TreeAlignment from "../TreeAlignment.jsx";
 import { fnaParser, fnaToText } from "../helpers/fasta";
 import { BaseSVGTreeInstance } from "./Components.jsx";
 import Button from "../components/Button.jsx";
@@ -29,9 +30,9 @@ class FNAViewer extends Component {
   componentDidMount() {
     text("data/CD2.fna").then(data => this.loadFNA(data));
   }
-  loadFNA(fasta) {
+  loadFNA(text) {
     this.setState({
-      data: fnaParser(fasta, true),
+      data: fnaParser(text, true),
       show_differences: ""
     });
   }
@@ -43,14 +44,14 @@ class FNAViewer extends Component {
   }
   siteColor() {
     if (!this.state.show_differences) return nucleotide_color;
-    const desired_record = this.state.data.fasta.filter(
+    const desired_record = this.state.data.sequence_data.filter(
       datum => datum.header == this.state.show_differences
     )[0];
     return nucleotide_difference(desired_record);
   }
   molecule() {
     if (!this.state.show_differences) return molecule => molecule;
-    const desired_record = this.state.data.fasta.filter(
+    const desired_record = this.state.data.sequence_data.filter(
       datum => datum.header == this.state.show_differences
     )[0];
     return (mol, site, header) => {
@@ -78,7 +79,7 @@ class FNAViewer extends Component {
       width: 960
     };
     const options = this.state.data
-      ? this.state.data.fasta.map(datum => {
+      ? this.state.data.sequence_data.map(datum => {
           return (
             <option key={datum.header} value={datum.header}>
               {datum.header}

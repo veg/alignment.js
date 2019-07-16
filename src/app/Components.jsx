@@ -51,4 +51,4 @@ function BaseSVGTreeInstance(props) {
   );
 }
 
-export { BaseSVGTreeInstance };
+export { DataFetcher, BaseSVGTreeInstance };
