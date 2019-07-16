@@ -1,6 +1,6 @@
 {
   "name": "alignment.js",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "lib/alignment.js",
   "license": "MIT",
   "dependencies": {
@@ -11,11 +11,11 @@
     "express": "^4.16.4",
     "file-saver": "^2.0.0",
     "jquery": "^3.3.1",
-    "phylotree": "1.0.0-alpha.14",
+    "phylotree": "1.0.0-alpha.17",
     "popper.js": "^1.14.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-phylotree": "^0.0.1",
+    "react-phylotree": "0.1.0",
     "react-router-dom": "^4.3.1",
     "save-svg-as-png": "^1.4.14",
     "text-width": "^1.2.0",
