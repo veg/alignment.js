@@ -9,11 +9,12 @@ import fastaParser from "./helpers/fasta";
 import computeLabelWidth from "./helpers/computeLabelWidth";
 import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
 import * as colors from "./helpers/colors";
-import PreventDefaultPatch from "./prevent_default_patch";
+//import PreventDefaultPatch from "./prevent_default_patch";
 
 require("./app/styles.scss");
 
-PreventDefaultPatch(document);
+// Conflicts with phylotree branch selection
+//PreventDefaultPatch(document);
 
 export default Alignment;
 export {
