@@ -1,3 +1,5 @@
+import { max } from "d3";
+
 function sortFASTAAndNewick(sequence_data, tree) {
   var i = 0;
   tree.traverse_and_compute(function(n) {
@@ -6,7 +8,7 @@ function sortFASTAAndNewick(sequence_data, tree) {
       n.name = "Node" + i++;
     }
     if (n.children && n.children.length) {
-      d += d3.max(n.children, function(d) {
+      d += max(n.children, function(d) {
         return d["count_depth"];
       });
     }

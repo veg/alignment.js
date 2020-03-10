@@ -9,11 +9,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Javascript Alignment Viewer"
     }),
-    new webpack.ProvidePlugin({
-      d3: "d3",
-      _: "underscore",
-      $: "jquery"
-    }),
     new ExtractTextPlugin("alignment.css")
   ],
   module: {
