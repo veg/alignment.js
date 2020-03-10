@@ -12,3 +12,4 @@ dist/alignment.js
 *.eot
 tags*
 .tern-port
+lib

@@ -11,7 +11,7 @@ import * as FNA from "./app/FNA.jsx";
 import * as BAM from "./app/BAM.jsx";
 import Components from "./app/Components.jsx";
 import PreventDefaultPatch from "./prevent_default_patch";
-import "./app/styles.scss";
+import "./styles.scss";
 
 function Divider(props) {
   return [

@@ -1,7 +1,7 @@
 {
   "name": "alignment.js",
-  "version": "0.1.1",
-  "main": "lib/alignment.js",
+  "version": "0.2.0",
+  "main": "library.js",
   "license": "MIT",
   "dependencies": {
     "@gmod/bam": "^1.0.18",
@@ -17,6 +17,7 @@
     "react-dom": "^16.2.0",
     "react-phylotree": "0.1.0",
     "react-router-dom": "^4.3.1",
+    "sass": "^1.26.2",
     "save-svg-as-png": "^1.4.14",
     "text-width": "^1.2.0",
     "underscore": "^1.8.3"
@@ -24,12 +25,13 @@
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "autoprefixer": "^8.4.1",
     "babel-eslint": "^10.0.1",
     "babel-loader": "8",
+    "babel-plugin-convert-jsx-extension-to-js": "^0.0.1",
     "concurrently": "^4.1.0",
     "css-loader": "^0.28.11",
     "eslint": "4.18.2",
@@ -43,13 +45,12 @@
     "husky": "^0.14.3",
     "jest": "^23.6.0",
     "lint-staged": "^7.2.0",
-    "node-sass": "^4.9.0",
     "npx": "^9.7.1",
     "postcss-loader": "^2.1.5",
     "prettier": "1.12.1",
     "pretty-quick": "^1.6.0",
-    "sass-loader": "^7.0.1",
-    "style-loader": "^0.21.0",
+    "sass-loader": "8",
+    "style-loader": "1",
     "uglifyjs-webpack-plugin": "^1.1.4",
     "webpack": "4",
     "webpack-cli": "^3.1.2",
@@ -59,22 +60,14 @@
   "scripts": {
     "develop": "npx webpack-dev-server --config webpack.dev.js --open",
     "serve": "node src/server.js",
-    "build-app": "npx webpack --config webpack.prod.js",
-    "build-lib": "npx webpack --config webpack.lib.js",
+    "app": "npx webpack --config webpack.prod.js",
+    "library":
+      "BABEL_ENV=library npx babel src --out-dir lib --copy-files && cp package.json lib",
+    "yalc": "yarn library && cd lib && yalc push",
     "precommit": "pretty-quick --staged",
     "format": "prettier 'src/**/*.{js,jsx}' --write",
     "test": "jest"
   },
-  "babel": {
-    "presets": ["@babel/preset-env", "@babel/preset-react"],
-    "plugins": ["@babel/plugin-proposal-class-properties"],
-    "env": {
-      "test": {
-        "presets": ["@babel/preset-env", "@babel/preset-react"]
-      }
-    }
-  },
-  "files": ["lib/alignment.js", "lib/alignment.css"],
   "repository": {
     "type": "git",
     "url": "https://github.com/veg/alignment.js"

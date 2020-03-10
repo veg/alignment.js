@@ -11,8 +11,6 @@ import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
 import * as colors from "./helpers/colors";
 //import PreventDefaultPatch from "./prevent_default_patch";
 
-require("./app/styles.scss");
-
 // Conflicts with phylotree branch selection
 //PreventDefaultPatch(document);
 
