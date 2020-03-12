@@ -79,6 +79,7 @@ class Alignment extends Component {
       <div id="alignmentjs-main-div" style={{ width: width, height: height }}>
         <Placeholder width={this.label_width} height={this.props.axis_height} />
         <SiteAxis
+          width={width - this.label_width}
           height={this.props.axis_height}
           site_size={this.props.site_size}
           sequence_data={this.sequence_data}
