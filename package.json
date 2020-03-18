@@ -63,8 +63,9 @@
     "serve": "node src/server.js",
     "app": "npx webpack --config webpack.prod.js",
     "library":
-      "BABEL_ENV=library npx babel src --out-dir lib --copy-files && cp package.json lib",
+      "BABEL_ENV=library npx babel src --out-dir lib --copy-files && cp {package.json,yarn.lock,README.md} lib",
     "yalc": "yarn library && cd lib && yalc push",
+    "publish": "yarn library && cd lib && npm publish",
     "precommit": "pretty-quick --staged",
     "format": "prettier 'src/**/*.{js,jsx}' --write",
     "test": "jest"
