@@ -30,6 +30,9 @@ class SiteAxis extends Component {
         $("#alignmentjs-axis-div").scrollLeft(e.detail.x_pixel);
       });
   }
+  componentDidUpdate(nextProps) {
+    $("#alignmentjs-axis-div").scrollLeft(this.props.x_pixel);
+  }
   handleWheel(e) {
     e.preventDefault();
     this.props.scroll_broadcaster.handleWheel(e, this.props.sender);

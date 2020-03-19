@@ -24,7 +24,10 @@ class BaseAlignment extends Component {
     }
   }
   componentDidUpdate() {
-    this.draw(this.props.x_pixel || 0, this.props.y_pixel || 0);
+    const { x_pixel, y_pixel } = this.props;
+    if (x_pixel != undefined || y_pixel != undefined) {
+      this.draw(x_pixel || 0, y_pixel || 0);
+    }
   }
   draw(x_pixel, y_pixel) {
     if (this.props.disableVerticalScrolling) y_pixel = 0;
