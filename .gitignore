@@ -5,6 +5,7 @@ yalc.lock
 yarn-error.log
 dist/index.html
 dist/bundle.js
+dist/main.js
 dist/alignment.js
 *.woff*
 *.svg

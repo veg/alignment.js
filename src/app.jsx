@@ -1,9 +1,8 @@
+import "./styles.scss";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, NavLink } from "react-router-dom";
-import "bootstrap";
-import "bootstrap/scss/bootstrap.scss";
-const $ = require("jquery");
+//import "bootstrap";
 
 import Home from "./app/home.jsx";
 import * as FASTA from "./app/FASTA.jsx";
@@ -11,7 +10,6 @@ import * as FNA from "./app/FNA.jsx";
 import * as BAM from "./app/BAM.jsx";
 import Components from "./app/Components.jsx";
 import PreventDefaultPatch from "./prevent_default_patch";
-import "./styles.scss";
 
 function Divider(props) {
   return [
