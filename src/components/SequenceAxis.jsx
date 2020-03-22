@@ -20,7 +20,9 @@ function BaseSequenceAxis(props) {
             textAnchor="end"
             dy={-site_size / 3}
             key={i}
+            fill={props.fill ? props.fill[i] : "black"}
             onClick={props.onClick(label, i)}
+            fontWeight={props.bold ? "bold" : "normal"}
           >
             {label}
           </text>
@@ -33,6 +35,8 @@ function BaseSequenceAxis(props) {
 BaseSequenceAxis.defaultProps = {
   translateX: 0,
   translateY: 0,
+  label_padding: 5,
+  site_size: 20,
   onClick: (label, i) => () => null
 };
 
