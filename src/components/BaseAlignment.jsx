@@ -81,6 +81,16 @@ class BaseAlignment extends Component {
       context.closePath();
     });
   }
+  handleClick(e) {
+    const { scroll_broadcaster, sender, site_size } = this.props,
+      { x_pixel, y_pixel } = scroll_broadcaster.location(sender),
+      x_click = e.clientX - e.target.offsetLeft + x_pixel,
+      y_click = e.clientY - e.target.offsetTop + y_pixel,
+      x_site = Math.floor(x_click / site_size),
+      y_sequence_index = Math.floor(y_click / site_size),
+      y_sequence = this.props.sequence_data[y_sequence_index];
+    this.props.onSiteClick(x_site, y_sequence);
+  }
   handleWheel(e) {
     e.preventDefault();
     this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
@@ -91,6 +101,7 @@ class BaseAlignment extends Component {
       <div
         id={div_id}
         className="alignmentjs-container"
+        onClick={e => this.handleClick(e)}
         onWheel={e => this.handleWheel(e)}
       >
         <canvas
@@ -109,7 +120,8 @@ BaseAlignment.defaultProps = {
   molecule: mol => mol,
   site_size: 20,
   id: "alignmentjs",
-  sender: "main"
+  sender: "main",
+  onSiteClick: () => null
 };
 
 export default BaseAlignment;

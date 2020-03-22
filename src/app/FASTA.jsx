@@ -17,6 +17,7 @@ import StartAtSiteAndSequence from "./FASTA/start_at_site_and_sequence.jsx";
 import Lowercase from "./FASTA/lowercase.jsx";
 import Quasispecies from "./FASTA/quasispecies.jsx";
 import ArtificialRecombination from "./FASTA/artificial_recombination.jsx";
+import Click from "./FASTA/click.jsx";
 
 class FASTAViewer extends Component {
   constructor(props) {
@@ -191,5 +192,6 @@ export {
   Lowercase,
   SVGAlignmentExample,
   Quasispecies,
-  ArtificialRecombination
+  ArtificialRecombination,
+  Click
 };

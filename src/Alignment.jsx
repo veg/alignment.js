@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import _ from "underscore";
 
 import fastaParser from "./helpers/fasta";
 import computeLabelWidth from "./helpers/computeLabelWidth";
@@ -38,8 +39,18 @@ class Alignment extends Component {
     }
   }
   shouldComponentUpdate(nextProps) {
-    this.initialize(nextProps);
-    return true;
+    const same_fasta = _.isEqual(this.props.fasta, nextProps.fasta),
+      different_coloring =
+        !_.isEqual(this.props.molecule, nextProps.molecule) ||
+        !_.isEqual(this.props.site_color, nextProps.site_color) ||
+        !_.isEqual(this.props.text_color, nextProps.text_color),
+      should_update = !same_fasta || different_coloring;
+    debugger;
+    if (should_update) {
+      this.initialize(nextProps);
+      return true;
+    }
+    return false;
   }
   initialize(props) {
     if (props.fasta) {
@@ -107,6 +118,7 @@ class Alignment extends Component {
           y_pixel={this.y_pixel}
           scroll_broadcaster={this.scroll_broadcaster}
           molecule={this.props.molecule}
+          onSiteClick={this.props.onSiteClick}
         />
       </div>
     );
@@ -124,7 +136,8 @@ Alignment.defaultProps = {
   sender: "main",
   molecule: mol => mol,
   start_site: 0,
-  onSequenceClick: (label, i) => () => null
+  onSequenceClick: (label, i) => () => null,
+  onSiteClick: () => null
 };
 
 export default Alignment;

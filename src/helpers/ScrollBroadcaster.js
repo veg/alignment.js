@@ -60,14 +60,15 @@ class ScrollBroadcaster {
       element.dispatchEvent(wheel_event);
     });
   }
-  location() {
+  location(sender) {
+    sender = sender || "main";
     return {
-      x_pixel: this["main"].width * this["main"].x_fraction,
-      y_pixel: this["main"].height * this["main"].y_fraction,
-      x_fraction: this["main"].x_fraction,
-      y_fraction: this["main"].y_fraction,
-      x_pad: this["main"].x_pad,
-      y_pad: this["main"].y_pad
+      x_pixel: this[sender].width * this[sender].x_fraction,
+      y_pixel: this[sender].height * this[sender].y_fraction,
+      x_fraction: this[sender].x_fraction,
+      y_fraction: this[sender].y_fraction,
+      x_pad: this[sender].x_pad,
+      y_pad: this[sender].y_pad
     };
   }
 }
