@@ -22,7 +22,9 @@ class AminoAcid extends Component {
     this.state = {
       sequence_data: null,
       clicked_site: null,
-      clicked_sequence: null
+      clicked_sequence: null,
+      hovered_site: null,
+      hovered_sequence: null
     };
   }
   componentDidMount() {
@@ -44,6 +46,14 @@ class AminoAcid extends Component {
             message="Clicked sequence"
             value={this.state.clicked_sequence || "None"}
           />
+          <Display
+            message="Hovered site"
+            value={this.state.hovered_site || "None"}
+          />
+          <Display
+            message="Hovered sequence"
+            value={this.state.hovered_sequence || "None"}
+          />
         </div>
         <Alignment
           fasta={this.state.sequence_data}
@@ -51,6 +61,12 @@ class AminoAcid extends Component {
             this.setState({
               clicked_site: site + 1,
               clicked_sequence: sequence.header
+            });
+          }}
+          onSiteHover={(site, sequence) => {
+            this.setState({
+              hovered_site: site + 1,
+              hovered_sequence: sequence.header
             });
           }}
         />

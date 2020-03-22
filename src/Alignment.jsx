@@ -45,7 +45,6 @@ class Alignment extends Component {
         !_.isEqual(this.props.site_color, nextProps.site_color) ||
         !_.isEqual(this.props.text_color, nextProps.text_color),
       should_update = !same_fasta || different_coloring;
-    debugger;
     if (should_update) {
       this.initialize(nextProps);
       return true;
@@ -119,6 +118,7 @@ class Alignment extends Component {
           scroll_broadcaster={this.scroll_broadcaster}
           molecule={this.props.molecule}
           onSiteClick={this.props.onSiteClick}
+          onSiteHover={this.props.onSiteHover}
         />
       </div>
     );
@@ -137,6 +137,7 @@ Alignment.defaultProps = {
   molecule: mol => mol,
   start_site: 0,
   onSequenceClick: (label, i) => () => null,
+  onSiteHover: () => null,
   onSiteClick: () => null
 };
 

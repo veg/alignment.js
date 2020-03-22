@@ -67,7 +67,7 @@ function FASTALinks(props) {
       <Link to="/fasta-svg" header="SVG alignment" />
       <Link to="/fasta-quasispecies" header="Quasispecies" />
       <Link to="/fasta-ar" header="Artificial Recombination" />
-      <Link to="/fasta-click" header="Click handler" />
+      <Link to="/fasta-click-and-hover" header="Click handler" />
     </Dropdown>
   );
 }
@@ -136,7 +136,10 @@ class App extends Component {
           <Route path="/fasta-svg" component={FASTA.SVGAlignmentExample} />
           <Route path="/fasta-quasispecies" component={FASTA.Quasispecies} />
           <Route path="/fasta-ar" component={FASTA.ArtificialRecombination} />
-          <Route path="/fasta-click" component={FASTA.Click} />
+          <Route
+            path="/fasta-click-and-hover"
+            component={FASTA.ClickAndHover}
+          />
 
           <Route path="/fna-viewer" component={FNA.FNAViewer} />
           <Route path="/fna-immunology" component={FNA.Immunology} />

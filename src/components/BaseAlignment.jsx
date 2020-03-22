@@ -91,6 +91,16 @@ class BaseAlignment extends Component {
       y_sequence = this.props.sequence_data[y_sequence_index];
     this.props.onSiteClick(x_site, y_sequence);
   }
+  handleHover(e) {
+    const { scroll_broadcaster, sender, site_size } = this.props,
+      { x_pixel, y_pixel } = scroll_broadcaster.location(sender),
+      x_click = e.clientX - e.target.offsetLeft + x_pixel,
+      y_click = e.clientY - e.target.offsetTop + y_pixel,
+      x_site = Math.floor(x_click / site_size),
+      y_sequence_index = Math.floor(y_click / site_size),
+      y_sequence = this.props.sequence_data[y_sequence_index];
+    this.props.onSiteHover(x_site, y_sequence);
+  }
   handleWheel(e) {
     e.preventDefault();
     this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
@@ -103,6 +113,7 @@ class BaseAlignment extends Component {
         className="alignmentjs-container"
         onClick={e => this.handleClick(e)}
         onWheel={e => this.handleWheel(e)}
+        onMouseMove={e => this.handleHover(e)}
       >
         <canvas
           width={this.props.width}
@@ -121,7 +132,8 @@ BaseAlignment.defaultProps = {
   site_size: 20,
   id: "alignmentjs",
   sender: "main",
-  onSiteClick: () => null
+  onSiteClick: () => null,
+  onSiteHover: () => null
 };
 
 export default BaseAlignment;
