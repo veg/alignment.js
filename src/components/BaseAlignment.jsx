@@ -1,12 +1,11 @@
 import React, { Component } from "react";
+import _ from "underscore";
 import {
   nucleotide_color,
   nucleotide_text_color,
   amino_acid_color,
   amino_acid_text_color
 } from "./../helpers/colors";
-
-const _ = require("underscore");
 
 class BaseAlignment extends Component {
   constructor(props) {
@@ -23,9 +22,15 @@ class BaseAlignment extends Component {
       this.draw(this.props.x_pixel || 0, this.props.y_pixel || 0);
     }
   }
-  componentDidUpdate() {
-    const { x_pixel, y_pixel } = this.props;
-    if (x_pixel != undefined || y_pixel != undefined) {
+  componentDidUpdate(prevProps) {
+    const { x_pixel, y_pixel } = this.props,
+      pixel_specified = x_pixel != undefined || y_pixel != undefined,
+      data_changed = !_.isEqual(
+        prevProps.sequence_data,
+        this.props.sequence_data
+      ),
+      should_draw = pixel_specified || data_changed;
+    if (should_draw) {
       this.draw(x_pixel || 0, y_pixel || 0);
     }
   }

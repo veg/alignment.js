@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import Placeholder from "./components/Placeholder.jsx";
 import SiteAxis from "./components/SiteAxis.jsx";
