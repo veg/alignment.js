@@ -2,6 +2,11 @@
   "name": "alignment.js",
   "version": "0.3.0",
   "main": "library.js",
+  "keywords": [
+    "fasta",
+    "msa",
+    "bioinformatics"
+  ],
   "license": "MIT",
   "dependencies": {
     "@gmod/bam": "^1.0.18",
