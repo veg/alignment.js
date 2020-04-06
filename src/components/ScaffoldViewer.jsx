@@ -4,10 +4,10 @@ import fastaParser from "./../helpers/fasta";
 import computeLabelWidth from "../helpers/computeLabelWidth";
 import BaseAlignment from "./BaseAlignment.jsx";
 import SiteAxis from "./SiteAxis.jsx";
-import Placeholder from "./Placeholder.jsx";
 import SequenceAxis from "./SequenceAxis.jsx";
 import Scaffold from "./Scaffold.jsx";
 import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
+import css_grid_format from "../helpers/format";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 
 class ScaffoldViewer extends Component {
@@ -18,14 +18,8 @@ class ScaffoldViewer extends Component {
   }
   setScrollingEvents(props) {
     if (props.fasta) {
-      const {
-        width,
-        height,
-        axis_height,
-        alignment_width,
-        alignment_height
-      } = props;
-      const { full_pixel_width, full_pixel_height, label_width } = this;
+      const { alignment_width, alignment_height } = props;
+      const { full_pixel_width, full_pixel_height } = this;
       this.scroll_broadcaster = new ScrollBroadcaster({
         width: full_pixel_width,
         height: full_pixel_height,
@@ -48,7 +42,7 @@ class ScaffoldViewer extends Component {
   }
   initialize(props) {
     if (props.fasta) {
-      const { fasta, site_size, width, height, axis_height } = props;
+      const { fasta, site_size } = props;
       this.sequence_data = fastaParser(fasta);
       const { sequence_data } = this;
       const { label_padding } = this.props;
@@ -64,13 +58,14 @@ class ScaffoldViewer extends Component {
       return <div style={container_style} id="alignmentjs-main-div" />;
     }
     const { alignment_width, alignment_height, scaffold_width } = this.props,
-      gridTemplateColumns = `${
-        this.label_width
-      }px ${alignment_width}px ${scaffold_width}px`,
       container_style = {
         display: "grid",
-        gridTemplateColumns: gridTemplateColumns,
-        gridTemplateRows: `20px 20px ${alignment_height}px`
+        gridTemplateColumns: css_grid_format([
+          this.label_width,
+          alignment_width,
+          scaffold_width
+        ]),
+        gridTemplateRows: css_grid_format([20, 20, alignment_height])
       },
       reference_sequence_data = this.sequence_data.slice(0, 1),
       remaining_sequence_data = this.sequence_data.slice(1);
