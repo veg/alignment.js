@@ -30,7 +30,7 @@ yarn add alignment.js
 
 ## Development
 
-Install a local copy:
+### Installation
 
 ```
 git clone https://github.com/veg/alignment.js
@@ -38,27 +38,37 @@ cd alignment.js
 yarn
 ```
 
+### Application
+
 Start the development server:
 
 ```
-yarn start
+yarn develop
 ```
 
-Visit `localhost:8000` in a browser (will read from environment variable `$PORT`).
+`webpack-dev-server` will find an available port and open up your default browser. Refreshes will automatically occur on writes to files.
 
-Note that this starts `webpack` in watch mode; refresh to observe changes.
+### Library
+
+For testing the library in dependent packages before releases, `alignment.js` uses yalc. The library is built by Babeling `src` into `lib`, and `lib` is published. For convenience, this is encapsulated in the following NPM script:
+
+```
+yarn yalc
+```
 
 ## Deployment
 
 ### Application
 
+Server will read from environment variable `$PORT`.
+
 ```
-yarn build-app
+yarn app
 yarn serve
 ```
 
 ### Library
 
 ```
-yarn build-lib
+yarn library
 ```
