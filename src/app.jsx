@@ -2,13 +2,11 @@ import "./styles.scss";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, NavLink } from "react-router-dom";
-//import "bootstrap";
 
 import Home from "./app/home.jsx";
 import * as FASTA from "./app/FASTA.jsx";
 import * as FNA from "./app/FNA.jsx";
 import * as BAM from "./app/BAM.jsx";
-import Components from "./app/Components.jsx";
 import PreventDefaultPatch from "./prevent_default_patch";
 
 function Divider(props) {
@@ -64,6 +62,7 @@ function FASTALinks(props) {
       <Link to="/fasta-lowercase" header="Lower case alignment" />
       <Link to="/fasta-svg" header="SVG alignment" />
       <Link to="/fasta-quasispecies" header="Quasispecies" />
+      <Link to="/fasta-sequence-bar" header="Sequence Bar Chart" />
       <Link to="/fasta-ar" header="Artificial Recombination" />
       <Link to="/fasta-click-and-hover" header="Click handler" />
     </Dropdown>
@@ -133,6 +132,10 @@ class App extends Component {
           <Route path="/fasta-lowercase" component={FASTA.Lowercase} />
           <Route path="/fasta-svg" component={FASTA.SVGAlignmentExample} />
           <Route path="/fasta-quasispecies" component={FASTA.Quasispecies} />
+          <Route
+            path="/fasta-sequence-bar"
+            component={FASTA.SequenceBarChart}
+          />
           <Route path="/fasta-ar" component={FASTA.ArtificialRecombination} />
           <Route
             path="/fasta-click-and-hover"
