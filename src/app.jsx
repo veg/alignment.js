@@ -63,6 +63,7 @@ function FASTALinks(props) {
       <Link to="/fasta-svg" header="SVG alignment" />
       <Link to="/fasta-quasispecies" header="Quasispecies" />
       <Link to="/fasta-sequence-bar" header="Sequence Bar Chart" />
+      <Link to="/fasta-site-stacked-bar" header="Site Stacked Bar Chart" />
       <Link to="/fasta-ar" header="Artificial Recombination" />
       <Link to="/fasta-click-and-hover" header="Click handler" />
     </Dropdown>
@@ -93,7 +94,6 @@ function BAMLinks(props) {
 }
 
 function NavBar(props) {
-  const show_import_export = props.viewing == "alignment";
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -135,6 +135,10 @@ class App extends Component {
           <Route
             path="/fasta-sequence-bar"
             component={FASTA.SequenceBarChart}
+          />
+          <Route
+            path="/fasta-site-stacked-bar"
+            component={FASTA.SiteStackedBarChart}
           />
           <Route path="/fasta-ar" component={FASTA.ArtificialRecombination} />
           <Route

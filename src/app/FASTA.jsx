@@ -17,6 +17,7 @@ import StartAtSiteAndSequence from "./FASTA/start_at_site_and_sequence.jsx";
 import Lowercase from "./FASTA/lowercase.jsx";
 import Quasispecies from "./FASTA/quasispecies.jsx";
 import SequenceBarChart from "./FASTA/sequence_bar_chart.jsx";
+import SiteStackedBarChart from "./FASTA/site_stacked_bar_chart.jsx";
 import ArtificialRecombination from "./FASTA/artificial_recombination.jsx";
 import ClickAndHover from "./FASTA/click_and_hover.jsx";
 
@@ -194,6 +195,7 @@ export {
   SVGAlignmentExample,
   Quasispecies,
   SequenceBarChart,
+  SiteStackedBarChart,
   ArtificialRecombination,
   ClickAndHover
 };
