@@ -4,9 +4,7 @@ import { scaleLinear } from "d3-scale";
 import { max } from "d3-array";
 
 import BaseAlignment from "./components/BaseAlignment.jsx";
-import SiteAxis from "./components/SiteAxis.jsx";
 import SequenceAxis from "./components/SequenceAxis.jsx";
-import Placeholder from "./components/Placeholder.jsx";
 import BaseSiteStackedBarChart from "./components/BaseSiteStackedBarChart.jsx";
 import fastaParser from "./helpers/fasta";
 import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
@@ -48,7 +46,7 @@ function SiteStackedBarChart(props) {
 
   return (
     <div id="alignmentjs-main-div" style={container_style}>
-      <Placeholder width={label_width} height={bar_height} />
+      <AxisLeft scale={scale} transform={`translate(${label_width - 1}, 0)`} />
       <BaseSiteStackedBarChart
         width={alignment_width}
         height={bar_height}

@@ -21,7 +21,9 @@ function BaseSequenceAxis(props) {
             dy={-site_size / 3}
             key={i}
             fill={props.fill ? props.fill[i] : "black"}
-            onClick={props.onClick(label, i)}
+            onClick={e => {
+              props.onClick(label, i);
+            }}
             fontWeight={props.bold ? "bold" : "normal"}
           >
             {label}

@@ -29,7 +29,16 @@ class BaseAlignment extends Component {
         prevProps.sequence_data,
         this.props.sequence_data
       ),
-      should_draw = pixel_specified || data_changed;
+      site_color_changed = this.props.site_color != prevProps.site_color,
+      text_color_changed = this.props.text_color != prevProps.text_color,
+      molecule_changed = this.props.molecule != prevProps.molecule,
+      should_draw = _.some([
+        pixel_specified,
+        data_changed,
+        site_color_changed,
+        text_color_changed,
+        molecule_changed
+      ]);
     if (should_draw) {
       this.draw(x_pixel || 0, y_pixel || 0);
     }
