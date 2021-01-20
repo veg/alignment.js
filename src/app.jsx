@@ -145,6 +145,7 @@ class App extends Component {
             path="/fasta-click-and-hover"
             component={FASTA.ClickAndHover}
           />
+          <Route path="/fasta-test" component={FASTA.Test} />
 
           <Route path="/fna-viewer" component={FNA.FNAViewer} />
           <Route path="/fna-immunology" component={FNA.Immunology} />

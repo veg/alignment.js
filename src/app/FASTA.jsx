@@ -20,6 +20,7 @@ import SequenceBarChart from "./FASTA/sequence_bar_chart.jsx";
 import SiteStackedBarChart from "./FASTA/site_stacked_bar_chart.jsx";
 import ArtificialRecombination from "./FASTA/artificial_recombination.jsx";
 import ClickAndHover from "./FASTA/click_and_hover.jsx";
+import Test from "./FASTA/test.jsx";
 
 class FASTAViewer extends Component {
   constructor(props) {
@@ -197,5 +198,6 @@ export {
   SequenceBarChart,
   SiteStackedBarChart,
   ArtificialRecombination,
-  ClickAndHover
+  ClickAndHover,
+  Test
 };
