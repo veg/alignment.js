@@ -7,7 +7,7 @@ import BaseAlignment from "./components/BaseAlignment.jsx";
 import SiteAxis from "./components/SiteAxis.jsx";
 import Placeholder from "./components/Placeholder.jsx";
 import SequenceAxis from "./components/SequenceAxis.jsx";
-import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
+import ScrollBroadcaster from "./helpers/scroll_broadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./helpers/colors";
 
 class Alignment extends Component {
@@ -38,6 +38,18 @@ class Alignment extends Component {
       }
     }
   }
+  performCentering() {
+    const { centerOnSite, width, site_size } = this.props;
+    this.x_pixel = site_size * centerOnSite - width / 2 || 0;
+    const { centerOnHeader, height } = this.props;
+    this.y_pixel = centerOnHeader
+      ? site_size *
+          this.sequence_data
+            .map(record => record.header)
+            .indexOf(centerOnHeader) -
+        height / 2
+      : 0;
+  }
   shouldComponentUpdate(nextProps) {
     const same_fasta = _.isEqual(this.props.fasta, nextProps.fasta),
       different_coloring =
@@ -61,16 +73,7 @@ class Alignment extends Component {
       this.full_pixel_width = site_size * this.sequence_data.number_of_sites;
       this.full_pixel_height =
         site_size * this.sequence_data.number_of_sequences;
-
-      const { centerOnSite, centerOnHeader } = props;
-      this.x_pixel = site_size * centerOnSite - width / 2 || 0;
-      this.y_pixel = centerOnHeader
-        ? site_size *
-            this.sequence_data
-              .map(record => record.header)
-              .indexOf(centerOnHeader) -
-          height / 2
-        : 0;
+      this.performCentering();
     }
     this.setScrollingEvents(props);
   }

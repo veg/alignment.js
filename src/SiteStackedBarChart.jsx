@@ -7,7 +7,7 @@ import BaseAlignment from "./components/BaseAlignment.jsx";
 import SequenceAxis from "./components/SequenceAxis.jsx";
 import BaseSiteStackedBarChart from "./components/BaseSiteStackedBarChart.jsx";
 import fastaParser from "./helpers/fasta";
-import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
+import ScrollBroadcaster from "./helpers/scroll_broadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./helpers/colors";
 import computeLabelWidth from "./helpers/computeLabelWidth";
 import css_grid_format from "./helpers/format";

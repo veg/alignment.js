@@ -8,7 +8,9 @@ class StartAtSiteAndSequence extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sequence_data: null
+      sequence_data: null,
+      site: 100,
+      header: "CY010004"
     };
   }
   componentDidMount() {
@@ -23,10 +25,15 @@ class StartAtSiteAndSequence extends Component {
         <div>
           <h1>Begin centered on a given sequence (CY010004) and site (100).</h1>
         </div>
+        <input
+          type="number"
+          value={this.state.site}
+          onChange={e => this.setState({ site: e.target.value })}
+        />
         <Alignment
           fasta={this.state.sequence_data}
-          centerOnSite={100}
-          centerOnHeader={"CY010004"}
+          centerOnSite={this.state.site}
+          centerOnHeader={this.state.header}
         />
       </div>
     );

@@ -4,7 +4,7 @@ import Placeholder from "./components/Placeholder.jsx";
 import SiteAxis from "./components/SiteAxis.jsx";
 import BaseAlignment from "./components/BaseAlignment.jsx";
 import Tree from "./components/Tree.jsx";
-import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
+import ScrollBroadcaster from "./helpers/scroll_broadcaster";
 import { nucleotide_color, nucleotide_text_color } from "./helpers/colors";
 
 function TreeAlignment(props) {

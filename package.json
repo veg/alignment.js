@@ -2,11 +2,7 @@
   "name": "alignment.js",
   "version": "0.3.0",
   "main": "library.js",
-  "keywords": [
-    "fasta",
-    "msa",
-    "bioinformatics"
-  ],
+  "keywords": ["fasta", "msa", "bioinformatics"],
   "license": "MIT",
   "dependencies": {
     "@gmod/bam": "^1.0.18",
@@ -21,7 +17,7 @@
     "popper.js": "^1.14.3",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-phylotree": "0.1.0",
+    "react-phylotree": "0.4.3",
     "react-router-dom": "^4.3.1",
     "sass": "^1.26.2",
     "save-svg-as-png": "^1.4.14",

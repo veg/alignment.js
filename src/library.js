@@ -7,7 +7,7 @@ import SitePlotAxis from "./components/SitePlotAxis.jsx";
 import SequenceAxis from "./components/SequenceAxis.jsx";
 import fastaParser from "./helpers/fasta";
 import computeLabelWidth from "./helpers/computeLabelWidth";
-import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
+import ScrollBroadcaster from "./helpers/scroll_broadcaster";
 import * as colors from "./helpers/colors";
 //import PreventDefaultPatch from "./prevent_default_patch";
 

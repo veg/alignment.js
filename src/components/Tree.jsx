@@ -43,7 +43,12 @@ class Tree extends Component {
           height={tree_height}
           className="alignmentjs-container"
         >
-          <Phylotree tree={tree} width={width} height={tree_height} />
+          <Phylotree
+            tree={tree}
+            transform={`translate(${site_size / 2}, ${site_size / 2})`}
+            width={width - site_size}
+            height={tree_height - site_size}
+          />
         </svg>
       </div>
     );

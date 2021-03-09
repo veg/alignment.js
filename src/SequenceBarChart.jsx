@@ -8,7 +8,7 @@ import SequenceAxis from "./components/SequenceAxis.jsx";
 import Placeholder from "./components/Placeholder.jsx";
 import BaseSequenceBarPlot from "./components/BaseSequenceBarPlot.jsx";
 import fastaParser from "./helpers/fasta";
-import ScrollBroadcaster from "./helpers/ScrollBroadcaster";
+import ScrollBroadcaster from "./helpers/scroll_broadcaster";
 import AxisTop from "./components/AxisTop.jsx";
 import { nucleotide_color, nucleotide_text_color } from "./helpers/colors";
 import computeLabelWidth from "./helpers/computeLabelWidth";

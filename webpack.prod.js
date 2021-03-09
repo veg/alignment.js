@@ -7,11 +7,6 @@ module.exports = {
     path: path.resolve(__dirname, "dist/"),
     publicPath: "/"
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: "HyPhy Coronavirus Visualization"
-    })
-  ],
   module: {
     rules: [
       {

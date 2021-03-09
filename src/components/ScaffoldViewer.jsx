@@ -6,7 +6,7 @@ import BaseAlignment from "./BaseAlignment.jsx";
 import SiteAxis from "./SiteAxis.jsx";
 import SequenceAxis from "./SequenceAxis.jsx";
 import Scaffold from "./Scaffold.jsx";
-import ScrollBroadcaster from "./../helpers/ScrollBroadcaster";
+import ScrollBroadcaster from "./../helpers/scroll_broadcaster";
 import css_grid_format from "../helpers/format";
 import { nucleotide_color, nucleotide_text_color } from "./../helpers/colors";
 
