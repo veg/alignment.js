@@ -25,11 +25,11 @@ class Tree extends Component {
     this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
   }
   render() {
-    const { width, height, tree, site_size } = this.props;
+    const { width, height, tree, site_size, phylotreeProps } = this.props;
     if (!tree) {
       return <div id={this.state.div_id} className="alignmentjs-container" />;
     }
-    const number_of_tips = tree.get_tips().length,
+    const number_of_tips = tree.getTips().length,
       tree_height = number_of_tips * site_size,
       overflow = "scroll hidden";
     return (
@@ -48,6 +48,7 @@ class Tree extends Component {
             transform={`translate(${site_size / 2}, ${site_size / 2})`}
             width={width - site_size}
             height={tree_height - site_size}
+            {...phylotreeProps}
           />
         </svg>
       </div>

@@ -15,11 +15,11 @@ function sortFASTAAndNewick(sequence_data, tree, strict) {
     n["count_depth"] = d;
   });
 
-  tree.resort_children(function(a, b) {
+  tree.resortChildren(function(a, b) {
     return a["count_depth"] - b["count_depth"];
   });
 
-  const ordered_leaf_names = tree.get_tips().map(d => d.data.name);
+  const ordered_leaf_names = tree.getTips().map(d => d.data.name);
 
   sequence_data.sort((a, b) => {
     const a_index = ordered_leaf_names.indexOf(a.header),
