@@ -44,6 +44,7 @@ class BaseSequenceBarPlot extends Component {
     return (
       <div
         id={div_id}
+        className="alignmentjs-container"
         style={container_style}
         onWheel={e => this.handleWheel(e)}
       >
