@@ -56,6 +56,14 @@ For testing the library in dependent packages before releases, `alignment.js` us
 yarn yalc
 ```
 
+### Publishing
+
+```
+yarn library
+cd lib
+npm publish
+```
+
 ## Deployment
 
 ### Application
@@ -65,10 +73,4 @@ Server will read from environment variable `$PORT`.
 ```
 yarn app
 yarn serve
-```
-
-### Library
-
-```
-yarn library
 ```
