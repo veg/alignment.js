@@ -5,7 +5,7 @@ import fastaParser, {
   fastaToText,
   fnaParser,
   fnaToText
-} from "./../src/helpers/fasta";
+} from "./../lib/helpers/fasta";
 
 const internalFastaDataStructure = [
     { header: "Seq1", seq: "ATCGTAATTGCA" },
@@ -31,10 +31,8 @@ test("Imports simple fasta correctly.", () => {
 });
 
 test.only("Import simple fna correctly.", () => {
-  const internalFnaDataStructure = {
-      fasta: internalFastaDataStructure,
-      newick: "((Seq1,Seq2),Seq3);"
-    },
+  const newick = "((Seq1,Seq2),Seq3)",
     parsed_fna = fnaParser(fna);
-  expect(parsed_fna).toEqual(internalFnaDataStructure);
+  expect(parsed_fna.sequence_data).toEqual(internalFastaDataStructure);
+  expect(parsed_fna.tree.newick_string).toEqual(newick);
 });
