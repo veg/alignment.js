@@ -15,7 +15,7 @@ import Highlight from "./FASTA/highlight.jsx";
 import SVGAlignmentExample from "./FASTA/svg_example.jsx";
 import StartAtSiteAndSequence from "./FASTA/start_at_site_and_sequence.jsx";
 import Lowercase from "./FASTA/lowercase.jsx";
-import Quasispecies from "./FASTA/quasispecies.jsx";
+import Intrahost from "./FASTA/intrahost.jsx";
 import SequenceBarChart from "./FASTA/sequence_bar_chart.jsx";
 import SiteStackedBarChart from "./FASTA/site_stacked_bar_chart.jsx";
 import ArtificialRecombination from "./FASTA/artificial_recombination.jsx";
@@ -193,7 +193,7 @@ export {
   StartAtSiteAndSequence,
   Lowercase,
   SVGAlignmentExample,
-  Quasispecies,
+  Intrahost,
   SequenceBarChart,
   SiteStackedBarChart,
   ArtificialRecombination,

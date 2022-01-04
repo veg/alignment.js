@@ -86,7 +86,7 @@ GTCACAATAAAGGTAGGAGGGCAACTAAAGGAAGCTCTATTAGATACAGGAGCAGAT `),
     return record;
   });
 
-function Quasispecies() {
+function Intrahost() {
   const site_size = 15,
     reference_width = 100,
     label_height = 60,
@@ -96,7 +96,7 @@ function Quasispecies() {
   return (
     <div>
       <div>
-        <h1>Quasispecies</h1>
+        <h1>Intrahost</h1>
         <Button
           label="Save as PNG"
           onClick={() =>
@@ -255,4 +255,4 @@ function Quasispecies() {
   );
 }
 
-export default Quasispecies;
+export default Intrahost;
