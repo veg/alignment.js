@@ -96,7 +96,7 @@ function Intrahost() {
   return (
     <div>
       <div>
-        <h1>Intrahost</h1>
+        <h1>Intrahost variation</h1>
         <Button
           label="Save as PNG"
           onClick={() =>
@@ -112,7 +112,7 @@ function Intrahost() {
         <rect x={0} y={0} width={width} height={height} fill="white" />
         <g transform={`translate(${reference_width + 6.5 * site_size}, 20)`}>
           <text textAnchor="middle" fontFamily="Courier">
-            Covariable
+            Intravariant
           </text>
           <line
             x1={0}
@@ -126,7 +126,7 @@ function Intrahost() {
         </g>
         <g transform={`translate(${reference_width + 12.5 * site_size}, 40)`}>
           <text textAnchor="middle" fontFamily="Courier">
-            Covariable
+            Intravariant
           </text>
           <line
             x1={0}
@@ -140,7 +140,7 @@ function Intrahost() {
         </g>
         <g transform={`translate(${reference_width + 17.5 * site_size}, 20)`}>
           <text textAnchor="middle" fontFamily="Courier">
-            Covariable
+            Intravariant
           </text>
           <line
             x1={0}
@@ -168,7 +168,7 @@ function Intrahost() {
         </g>
         <g transform={`translate(${reference_width + 34.5 * site_size}, 20)`}>
           <text textAnchor="middle" fontFamily="Courier">
-            Variable
+            Intervariant
           </text>
           <line
             x1={0}
