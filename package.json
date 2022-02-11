@@ -22,7 +22,7 @@
     "sass": "^1.26.2",
     "save-svg-as-png": "^1.4.14",
     "text-width": "^1.2.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
