@@ -23,7 +23,11 @@ class StartAtSiteAndSequence extends Component {
     return (
       <div>
         <div>
-          <h1>Begin centered on a given sequence (CY010004) and site (100).</h1>
+          <h1>
+            Begin centered on a given sequence (CY010004) and site ({
+              this.state.site
+            }).
+          </h1>
         </div>
         <input
           type="number"
