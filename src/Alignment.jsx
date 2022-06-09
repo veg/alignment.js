@@ -56,8 +56,8 @@ class Alignment extends Component {
         !_.isEqual(this.props.molecule, nextProps.molecule) ||
         !_.isEqual(this.props.site_color, nextProps.site_color) ||
         !_.isEqual(this.props.text_color, nextProps.text_color),
-      newXCoord = _.isEqual(this.props.x_pixel, nextProps.x_pixel),
-      should_update = !same_fasta || different_coloring || newXCoord;
+      new_x_coord = _.isEqual(this.props.x_pixel, nextProps.x_pixel),
+      should_update = !same_fasta || different_coloring || new_x_coord;
     if (should_update) {
       this.initialize(nextProps);
       return true;
