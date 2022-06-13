@@ -78,7 +78,7 @@ class BaseAlignment extends Component {
         })
     );
     const context = document.getElementById(this.canvas_id).getContext("2d");
-    context.font = "14px Courier";
+    context.font = `${this.props.font_size} ${this.props.font_family}`;
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.setTransform(1, 0, 0, 1, -x_pixel, -y_pixel);
@@ -142,6 +142,8 @@ class BaseAlignment extends Component {
 BaseAlignment.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
+  font_size: "14px",
+  font_family: "Courier",
   molecule: mol => mol,
   site_size: 20,
   id: "alignmentjs",
