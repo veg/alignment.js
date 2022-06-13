@@ -45,7 +45,14 @@ class BaseAlignment extends Component {
   }
   draw(x_pixel, y_pixel) {
     if (this.props.disableVerticalScrolling) y_pixel = 0;
-    const { width, height, site_size, molecule } = this.props,
+    const {
+        width,
+        height,
+        site_size,
+        molecule,
+        font_family,
+        font_size
+      } = this.props,
       start_site = Math.floor(x_pixel / site_size),
       end_site = Math.ceil((x_pixel + width) / site_size),
       start_seq = Math.floor(y_pixel / site_size),
@@ -78,7 +85,7 @@ class BaseAlignment extends Component {
         })
     );
     const context = document.getElementById(this.canvas_id).getContext("2d");
-    context.font = `${this.props.font_size} ${this.props.font_family}`;
+    context.font = `${font_size} ${font_family}`;
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.setTransform(1, 0, 0, 1, -x_pixel, -y_pixel);
