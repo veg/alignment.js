@@ -32,7 +32,9 @@ class FASTAViewer extends Component {
     };
   }
   componentDidMount() {
-    text("data/CD2.fasta").then(data => this.loadFASTA(data));
+    const search_params = new URLSearchParams(location.search),
+      url = search_params.get("fastaURL") || "data/CD2.fasta";
+    text(url).then(data => this.loadFASTA(data));
   }
   loadFASTA(fasta) {
     this.setState({
@@ -143,9 +145,10 @@ class FASTAViewer extends Component {
               onChange={e => this.setState({ site_size: e.target.value })}
             />
           </span>
-          <span>
+          <span style={{ width: "100%", maxWidth: "20%" }}>
             <label>Highlight difference from:</label>
             <select
+              style={{ width: "100%", maxWidth: "100%" }}
               value={this.state.show_differences}
               onChange={e =>
                 this.setState({ show_differences: e.target.value })
