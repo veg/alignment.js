@@ -63,6 +63,7 @@ function FASTALinks(props) {
       <Link to="/fasta-svg" header="SVG alignment" />
       <Link to="/fasta-intrahost" header="Intrahost variation" />
       <Link to="/fasta-sequence-bar" header="Sequence Bar Chart" />
+      <Link to="/fasta-line" header="Site Line Chart" />
       <Link to="/fasta-site-stacked-bar" header="Site Stacked Bar Chart" />
       <Link to="/fasta-ar" header="Artificial Recombination" />
       <Link to="/fasta-click-and-hover" header="Click handler" />
@@ -132,6 +133,7 @@ class App extends Component {
           <Route path="/fasta-lowercase" component={FASTA.Lowercase} />
           <Route path="/fasta-svg" component={FASTA.SVGAlignmentExample} />
           <Route path="/fasta-intrahost" component={FASTA.Intrahost} />
+          <Route path="/fasta-line" component={FASTA.SiteLineChart} />
           <Route
             path="/fasta-sequence-bar"
             component={FASTA.SequenceBarChart}

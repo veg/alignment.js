@@ -16,6 +16,7 @@ import SVGAlignmentExample from "./FASTA/svg_example.jsx";
 import StartAtSiteAndSequence from "./FASTA/start_at_site_and_sequence.jsx";
 import Lowercase from "./FASTA/lowercase.jsx";
 import Intrahost from "./FASTA/intrahost.jsx";
+import SiteLineChart from "./FASTA/site_line_chart.jsx";
 import SequenceBarChart from "./FASTA/sequence_bar_chart.jsx";
 import SiteStackedBarChart from "./FASTA/site_stacked_bar_chart.jsx";
 import ArtificialRecombination from "./FASTA/artificial_recombination.jsx";
@@ -197,6 +198,7 @@ export {
   Lowercase,
   SVGAlignmentExample,
   Intrahost,
+  SiteLineChart,
   SequenceBarChart,
   SiteStackedBarChart,
   ArtificialRecombination,
