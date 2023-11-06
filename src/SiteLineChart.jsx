@@ -12,7 +12,7 @@ import { nucleotide_color, nucleotide_text_color } from "./helpers/colors";
 import computeLabelWidth from "./helpers/computeLabelWidth";
 import css_grid_format from "./helpers/format";
 
-function SiteStackedBarChart(props) {
+function SiteLineChart(props) {
   const has_sequence_data = props.fasta || props.sequence_data;
   if (!has_sequence_data || !props.data) return <div />;
   const sequence_data = props.sequence_data || fastaParser(props.fasta),
@@ -75,7 +75,7 @@ function SiteStackedBarChart(props) {
   );
 }
 
-SiteStackedBarChart.defaultProps = {
+SiteLineChart.defaultProps = {
   site_color: nucleotide_color,
   text_color: nucleotide_text_color,
   label_padding: 10,
@@ -90,4 +90,4 @@ SiteStackedBarChart.defaultProps = {
   molecule: mol => mol
 };
 
-export default SiteStackedBarChart;
+export default SiteLineChart;

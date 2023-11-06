@@ -17,7 +17,7 @@ function SVGSiteStackedBarPlot(props) {
     }),
     scale = scaleLinear()
       .domain([0, max(flatten(stacked_data))])
-      .range([height, 0]),
+      .range([height, props.top_padding]),
     width = data.length * site_size;
   return (
     <svg width={width} height={height}>

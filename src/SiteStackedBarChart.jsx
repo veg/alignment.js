@@ -24,9 +24,10 @@ function SiteStackedBarChart(props) {
     base_alignment_height = height - bar_height,
     alignment_width = Math.min(full_pixel_width, base_alignment_width),
     alignment_height = Math.min(full_pixel_height, height - bar_height),
+    top_padding = 10,
     scale = scaleLinear()
-      .domain([0, max(data)])
-      .range([props.left_bar_padding, bar_height - props.right_bar_padding]),
+      .domain([0, 1])
+      .range([bar_height, top_padding]),
     container_style = {
       display: "grid",
       gridTemplateColumns: css_grid_format([label_width, base_alignment_width]),
@@ -46,10 +47,16 @@ function SiteStackedBarChart(props) {
 
   return (
     <div id="alignmentjs-main-div" style={container_style}>
-      <AxisLeft scale={scale} transform={`translate(${label_width - 1}, 0)`} />
+      <svg>
+        <AxisLeft
+          scale={scale}
+          transform={`translate(${label_width - 1}, 0)`}
+        />
+      </svg>
       <BaseSiteStackedBarChart
         width={alignment_width}
         height={bar_height}
+        top_padding={top_padding}
         data={data}
         scroll_broadcaster={scroll_broadcaster}
       />
