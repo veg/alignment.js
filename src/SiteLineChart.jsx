@@ -1,7 +1,7 @@
 import React from "react";
 import { AxisLeft } from "d3-react-axis";
 import { scaleLinear } from "d3-scale";
-import { max } from "d3-array";
+import { min, max } from "d3-array";
 
 import BaseAlignment from "./components/BaseAlignment.jsx";
 import SequenceAxis from "./components/SequenceAxis.jsx";
@@ -25,8 +25,8 @@ function SiteLineChart(props) {
     alignment_width = Math.min(full_pixel_width, base_alignment_width),
     alignment_height = Math.min(full_pixel_height, height - bar_height),
     scale = scaleLinear()
-      .domain([0, max(data)])
-      .range([props.left_bar_padding, bar_height - props.right_bar_padding]),
+      .domain([max(data), min(data)])
+      .range([0, bar_height]),
     container_style = {
       display: "grid",
       gridTemplateColumns: css_grid_format([label_width, base_alignment_width]),
@@ -39,17 +39,22 @@ function SiteLineChart(props) {
       y_pad: base_alignment_height,
       bidirectional: [
         "alignmentjs-alignment",
-        "alignmentjs-stacked-bar",
+        "alignmentjs-site-line",
         "alignmentjs-labels-div"
       ]
     });
 
-  //return <div />;
   return (
     <div id="alignmentjs-main-div" style={container_style}>
-      <AxisLeft scale={scale} transform={`translate(${label_width - 1}, 0)`} />
+      <svg width={label_width} height={bar_height}>
+        <AxisLeft
+          scale={scale}
+          transform={`translate(${label_width - 1}, 0)`}
+        />
+      </svg>
       <BaseSiteLineChart
         width={alignment_width}
+        full_pixel_width={full_pixel_width}
         height={bar_height}
         data={data}
         scroll_broadcaster={scroll_broadcaster}

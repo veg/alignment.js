@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { min, max } from "d3-array";
 import { AxisBottom } from "d3-react-axis";
 import { scaleLinear, line, range } from "d3";
 import $ from "jquery";
@@ -13,41 +14,30 @@ class SiteLinePlot extends Component {
   componentDidMount() {
     const { setState } = this;
     document
-      .getElementById("hyphy-chart-div")
+      .getElementById("alignmentjs-site-line")
       .addEventListener("alignmentjs_wheel_event", function(e) {
-        $("#hyphy-chart-div").scrollLeft(e.detail.x_pixel);
-      });
-    document
-      .getElementById("hyphy-chart-div")
-      .addEventListener("select_site", e => {
-        this.setState({ emphasizedSite: e.detail });
+        $("#alignmentjs-site-line").scrollLeft(e.detail.x_pixel);
       });
   }
   render() {
-    const { emphasizedSite } = this.state,
-      {
-        statIndices,
+    const {
         width,
         height,
         full_pixel_width,
-        scale,
         data,
         site_size,
-        colors,
-        axis_height,
         scrollBroadcaster
       } = this.props,
-      number_of_sites = data[0].length,
-      axis_scale = scaleLinear()
-        .domain([1, number_of_sites])
-        .range([site_size / 2, full_pixel_width - site_size / 2]),
-      tickValues = range(1, data[0].length, 2),
+      number_of_sites = data.length,
+      scale = scaleLinear()
+        .domain([min(data), max(data)])
+        .range([height, 0]),
       plotline = line()
         .x((d, i) => (i + 0.5) * site_size + 0.5)
         .y(d => scale(d));
     return (
       <div
-        id="hyphy-chart-div"
+        id="alignmentjs-site-line"
         className="alignmentjs-container"
         style={{
           overflow: "hidden scroll",
@@ -58,7 +48,9 @@ class SiteLinePlot extends Component {
           scrollBroadcaster.handleWheel(e, "main");
         }}
       >
-        <svg width={full_pixel_width} height={height} />
+        <svg width={full_pixel_width} height={height}>
+          <path stroke={"red"} strokeWidth={3} d={plotline(data)} fill="none" />
+        </svg>
       </div>
     );
   }
