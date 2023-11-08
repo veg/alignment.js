@@ -16,9 +16,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'React/SASS webapp and library'
+      title: 'Alignment UI'
     }),
-  ].concat(devMode ? [] : [
+  ].concat(false ? [] : [
     new MiniCssExtractPlugin({
       filename: 'style.css',
     })
