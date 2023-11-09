@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link as RRLink } from "react-router-dom";
 import { createRoot } from 'react-dom/client';
 
 import './styles.scss';
@@ -88,9 +88,15 @@ function ExamplesLinks(props) {
   </NavDropdown>);
 }
 
+function Link(props) {
+  return (<RRLink className='nav-link' to={props.to}>
+    {props.children}
+  </RRLink>)
+}
+
 function Placeholder(name) {
   return function() {
-    <h1>{name} will go here.</h1>;
+    return <h1>{name} will go here.</h1>;
   }
 }
 
@@ -101,7 +107,7 @@ function NavBar(props) {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Nav.Link href="about">About</Nav.Link>
+          <Link to="/about">About</Link>
           <Nav.Link href="docs">Documentation</Nav.Link>
           <FASTALinks />
           <FNALinks />
@@ -125,11 +131,9 @@ function App() {
       <NavBar />
       <div style={{ maxWidth: 1140 }} className="container-fluid">
         <Routes>
-          <Route path="/about" component={Placeholder('About')} />
-          <Route
-            path="/fasta-site-bar"
-            component={Placeholder('FASTA site bar')}
-          />
+          <Route path="/" element={React.createElement(Placeholder('Home'), null)} />
+          <Route path="/about" element={React.createElement(Placeholder('About'), null)} />
+          <Route path="/docs" element={React.createElement(Placeholder('Documentation'), null)} />
         </Routes>
       </div>
     </div>
@@ -137,9 +141,11 @@ function App() {
 }
 
 function Main(props) {
-  return (<BrowserRouter>
-    <App />
-  </BrowserRouter>);
+  return (<React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>);
 }
 
 //PreventDefaultPatch(document);

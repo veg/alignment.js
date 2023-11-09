@@ -49,7 +49,9 @@ module.exports = {
   mode: devMode ? 'development' : 'production',
   devServer: {
     liveReload: true,
-    hot: false
+    hot: false,
+    static: path.resolve(__dirname, "dist"),
+    historyApiFallback: true
   },
   devtool: devMode ? 'eval-cheap-module-source-map' : false,
   optimization: {
