@@ -9,86 +9,54 @@ import { createRoot } from 'react-dom/client';
 import './styles.scss';
 
 
-function Dropdown(props) {
-  return (<li className="nav-item dropdown">
-    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      {props.title}
-    </a>
-    <ul className="dropdown-menu">
-      {props.children}
-    </ul>
-  </li>);
-}
-
 function DropdownHeader(props) {
   return (<li><h6 className="dropdown-header">{props.label}</h6></li>);
 }
 
+function NavDropdownItem(props) {
+  return (<RRLink className="dropdown-item" to={props.to}>
+    {props.label}
+  </RRLink>);
+}
+
 function FASTALinks(props) {
   return (<NavDropdown title="FASTA" id="basic-nav-dropdown">
-    <NavDropdown.Item href="#action/3.1">Viewer</NavDropdown.Item>
+    <NavDropdownItem to='fasta-viewer' label='Viewer' />
     <NavDropdown.Divider />
     <DropdownHeader label='Widgets' />
-    <NavDropdown.Item href='/fasta-site-bar'>
-      Site bar chart
-    </NavDropdown.Item>
-    <NavDropdown.Divider />
     <DropdownHeader label='Custom' />
-    <NavDropdown.Item href="#action/3.4">
-      Artificial recombination
-    </NavDropdown.Item>
   </NavDropdown>);
 }
 
 function FNALinks(props) {
   return (<NavDropdown title="FNA" id="basic-nav-dropdown">
-    <NavDropdown.Item href="#action/3.1">Viewer</NavDropdown.Item>
+    <NavDropdownItem to='fasta-viewer' label='Viewer' />
     <NavDropdown.Divider />
     <DropdownHeader label='Widgets' />
-    <NavDropdown.Item href="#action/3.2">
-      Site bar chart
-    </NavDropdown.Item>
     <NavDropdown.Divider />
     <DropdownHeader label='Custom' />
-    <NavDropdown.Item href="#action/3.4">
-      Artificial recombination
-    </NavDropdown.Item>
   </NavDropdown>);
 }
 
 function ComponentLinks(props) {
   return (<NavDropdown title="Components" id="basic-nav-dropdown">
-    <NavDropdown.Item href="#action/3.1">Viewer</NavDropdown.Item>
-    <NavDropdown.Divider />
-    <DropdownHeader label='Widgets' />
-    <NavDropdown.Item href="#action/3.2">
-      Site bar chart
-    </NavDropdown.Item>
-    <NavDropdown.Divider />
-    <DropdownHeader label='Custom' />
-    <NavDropdown.Item href="#action/3.4">
-      Artificial recombination
-    </NavDropdown.Item>
+    <NavDropdownItem to='base-alignment' label='Base Alignment' />
+  </NavDropdown>);
+}
+
+function HyPhyLinks(props) {
+  return (<NavDropdown title="HyPhy" id="basic-nav-dropdown">
+    <NavDropdownItem to='/busted-e' label="BUSTED-E (error sink)" />
   </NavDropdown>);
 }
 
 function ExamplesLinks(props) {
   return (<NavDropdown title="Examples" id="basic-nav-dropdown">
-    <NavDropdown.Item href="#action/3.1">Scaffold viewer</NavDropdown.Item>
-    <NavDropdown.Divider />
-    <DropdownHeader label='Widgets' />
-    <NavDropdown.Item href="#action/3.2">
-      Site bar chart
-    </NavDropdown.Item>
-    <NavDropdown.Divider />
-    <DropdownHeader label='Custom' />
-    <NavDropdown.Item href="#action/3.4">
-      Artificial recombination
-    </NavDropdown.Item>
   </NavDropdown>);
 }
 
-function Link(props) {
+function NavLink(props) {
+  // for use within this SPA
   return (<RRLink className='nav-link' to={props.to}>
     {props.children}
   </RRLink>)
@@ -107,15 +75,18 @@ function NavBar(props) {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Link to="/about">About</Link>
-          <Nav.Link href="docs">Documentation</Nav.Link>
+          <NavLink to="/about">About</NavLink>
+          <NavLink to="/docs">Documentation</NavLink>
           <FASTALinks />
           <FNALinks />
           <ComponentLinks />
+          <HyPhyLinks />
           <ExamplesLinks />
         </Nav>
         <Nav>
-          <Nav.Link href="https://stephenshank.com">By Stephen D. Shank, Ph. D.</Nav.Link>
+          <Nav.Link href="https://stephenshank.com">
+            By Stephen D. Shank, Ph. D.
+          </Nav.Link>
           <Nav.Link eventKey={2} href="http://lab.hyphy.org">
             ACME Lab
           </Nav.Link>
@@ -134,6 +105,9 @@ function App() {
           <Route path="/" element={React.createElement(Placeholder('Home'), null)} />
           <Route path="/about" element={React.createElement(Placeholder('About'), null)} />
           <Route path="/docs" element={React.createElement(Placeholder('Documentation'), null)} />
+          <Route path="/fasta-viewer" element={React.createElement(Placeholder('FASTA Viewer'), null)} />
+          <Route path="/base-alignment" element={React.createElement(Placeholder('Base Alignment'), null)} />
+          <Route path="/busted-e" element={React.createElement(Placeholder('BUSTED-E'), null)} />
         </Routes>
       </div>
     </div>
