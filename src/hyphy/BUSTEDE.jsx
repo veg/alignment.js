@@ -68,7 +68,7 @@ TreeAlignment.defaultProps = {
   site_size: 20,
   axis_height: 25,
   width: 960,
-  tree_width: 300,
+  tree_width: 500,
   height: 500,
   sender: "main",
   molecule: mol => mol

@@ -1,22 +1,15 @@
 import React, { Component } from "react";
 import { text } from "d3-fetch";
 import { saveAs } from "file-saver";
+import $ from "jquery";
 
 import TreeAlignment from "../TreeAlignment.jsx";
 import { fnaParser, fnaToText } from "../helpers/fasta";
-import { BaseSVGTreeInstance } from "./Components.jsx";
 import Button from "../components/Button.jsx";
 import FileUploadButton from "./FileUploadButton.jsx";
 import Modal from "./Modal.jsx";
 import { nucleotide_color, nucleotide_difference } from "../helpers/colors";
 
-function Immunology(props) {
-  return <h1>Immunology example will go here.</h1>;
-}
-
-function HIV(props) {
-  return <h1>HIV example will go here.</h1>;
-}
 
 class FNAViewer extends Component {
   constructor(props) {
@@ -134,4 +127,4 @@ class FNAViewer extends Component {
   }
 }
 
-export { FNAViewer, Immunology, HIV, BaseSVGTreeInstance };
+export { FNAViewer };

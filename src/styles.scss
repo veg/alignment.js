@@ -21,3 +21,25 @@ svg#alignmentjs-labels > text {
   font-family: Courier;
   font-size: 14px;
 }
+
+path.rp-branch {
+  transition: all 0.2s;
+  fill: none;
+  shape-rendering: crispEdges;
+}
+
+text.rp-label {
+  font-family: Courier;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.rp-branch-tracer {
+  stroke: #bbb;
+  stroke-dasharray: 3,4;
+  stroke-width: 1px;
+}
+
+path.rp-branch:hover {
+  stroke-width: 10px;
+}

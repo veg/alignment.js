@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import Phylotree from "react-phylotree";
-const $ = require("jquery");
+import $ from "jquery";
+import Phylotree from "./Phylotree.jsx";
+
 
 class Tree extends Component {
   constructor(props) {

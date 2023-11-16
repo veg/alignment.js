@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { scaleLinear, range } from "d3";
-import { AxisTop } from "d3-react-axis";
+import { AxisTop } from "./D3Axis.jsx";
 
 const $ = require("jquery");
 
