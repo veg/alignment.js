@@ -6,7 +6,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { BrowserRouter, Route, Routes, Link as RRLink } from "react-router-dom";
 import { createRoot } from 'react-dom/client';
 
-import { FNAViewer } from './app/FNA.jsx';
+import { FASTAViewer } from './FASTA.jsx';
+import { FNAViewer } from './FNA.jsx';
 
 import './styles.scss';
 
@@ -107,7 +108,7 @@ function App() {
           <Route path="/" element={React.createElement(Placeholder('Home'), null)} />
           <Route path="/about" element={React.createElement(Placeholder('About'), null)} />
           <Route path="/docs" element={React.createElement(Placeholder('Documentation'), null)} />
-          <Route path="/fasta-viewer" element={React.createElement(Placeholder('FASTA Viewer'), null)} />
+          <Route path="/fasta-viewer" element={<FASTAViewer />} />
           <Route path="/fna-viewer" element={<FNAViewer />} />
           <Route path="/base-alignment" element={React.createElement(Placeholder('Base Alignment'), null)} />
           <Route path="/busted-e" element={React.createElement(Placeholder('BUSTED-E'), null)} />

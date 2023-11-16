@@ -3,12 +3,12 @@ import { text } from "d3-fetch";
 import { saveAs } from "file-saver";
 import $ from "jquery";
 
-import TreeAlignment from "../TreeAlignment.jsx";
-import { fnaParser, fnaToText } from "../helpers/fasta";
-import Button from "../components/Button.jsx";
+import TreeAlignment from "../src/TreeAlignment.jsx";
+import { fnaParser, fnaToText } from "../src/helpers/fasta";
+import Button from "../src/components/Button.jsx";
 import FileUploadButton from "./FileUploadButton.jsx";
 import Modal from "./Modal.jsx";
-import { nucleotide_color, nucleotide_difference } from "../helpers/colors";
+import { nucleotide_color, nucleotide_difference } from "../src/helpers/colors";
 
 
 class FNAViewer extends Component {

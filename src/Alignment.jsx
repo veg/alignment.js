@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import _ from "underscore";
 
 import fastaParser from "./helpers/fasta";
-import computeLabelWidth from "./helpers/computeLabelWidth";
+import { text_column_width } from "./helpers/computeLabelWidth";
 import BaseAlignment from "./components/BaseAlignment.jsx";
 import SiteAxis from "./components/SiteAxis.jsx";
 import Placeholder from "./components/Placeholder.jsx";
@@ -69,7 +69,8 @@ class Alignment extends Component {
       this.sequence_data = fastaParser(fasta);
       const { sequence_data } = this;
       const { label_padding } = this.props;
-      this.label_width = computeLabelWidth(sequence_data, label_padding);
+      console.log(this.sequence_data);
+      this.label_width = text_column_width(sequence_data) + label_padding;
       this.full_pixel_width = site_size * this.sequence_data.number_of_sites;
       this.full_pixel_height =
         site_size * this.sequence_data.number_of_sequences;

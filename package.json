@@ -38,7 +38,8 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.18.0"
+    "react-router-dom": "^6.18.0",
+    "save-svg-as-png": "^1.4.17"
   },
   "scripts": {
     "develop": "npx webpack serve --open",

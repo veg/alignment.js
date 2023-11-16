@@ -7,7 +7,7 @@ const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   entry: {
-    main: path.resolve('src', 'app.jsx'),
+    main: path.resolve('app', 'app.jsx'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

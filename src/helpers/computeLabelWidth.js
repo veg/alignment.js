@@ -1,10 +1,15 @@
-const text_width = require("text-width");
+import { max } from 'd3';
 
-function computeLabelWidth(sequence_data, padding) {
-  const label_width = sequence_data
-    .map(record => text_width(record.header, { family: "Courier", size: 14 }))
-    .reduce((a, b) => Math.max(a, b), 0);
-  return padding + label_width;
+
+function text_width(text, size, max_width) {
+  const width = Math.min(max_width, text.length);
+  return width*size*0.60009765625;
 }
 
-export default computeLabelWidth;
+function text_column_width(sequence_data) {
+  return max(sequence_data.map(datum => {
+    return text_width(datum.header, 14, 300);
+  }));
+}
+
+export { text_width, text_column_width };

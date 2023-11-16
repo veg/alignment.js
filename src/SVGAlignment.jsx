@@ -3,7 +3,7 @@ import React from "react";
 import BaseSVGAlignment from "./components/BaseSVGAlignment.jsx";
 import SVGSiteAxis from "./components/SVGSiteAxis.jsx";
 import { BaseSequenceAxis } from "./components/SequenceAxis.jsx";
-import computeLabelWidth from "./helpers/computeLabelWidth";
+import { text_column_width } from "./helpers/computeLabelWidth";
 
 function SVGAlignment(props) {
   const { sequence_data, label_padding, site_size } = props;
@@ -11,7 +11,7 @@ function SVGAlignment(props) {
     return <svg />;
   }
   const { number_of_sites, number_of_sequences } = sequence_data,
-    label_width = computeLabelWidth(sequence_data, label_padding),
+    label_width = text_column_width(sequence_data) + label_padding,
     width = label_width + site_size * number_of_sites,
     height = props.axis_height + site_size * number_of_sequences;
 
