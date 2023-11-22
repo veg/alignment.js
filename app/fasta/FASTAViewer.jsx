@@ -3,26 +3,14 @@ import { text } from "d3-fetch";
 import { saveAs } from "file-saver";
 import { saveSvgAsPng as savePNG } from "save-svg-as-png";
 
-import fastaParser, { fastaToText } from "../src/helpers/fasta";
-import Alignment from "../src/Alignment.jsx";
-import Button from "../src/components/Button.jsx";
-import FileUploadButton from "./FileUploadButton.jsx";
-import Modal from "./Modal.jsx";
-import SVGAlignment from "../src/SVGAlignment.jsx";
-import { nucleotide_color, nucleotide_difference } from "../src/helpers/colors";
-/*
-import AminoAcid from "./FASTA/amino_acid.jsx";
-import Highlight from "./FASTA/highlight.jsx";
-import SVGAlignmentExample from "./FASTA/svg_example.jsx";
-import StartAtSiteAndSequence from "./FASTA/start_at_site_and_sequence.jsx";
-import Lowercase from "./FASTA/lowercase.jsx";
-import Intrahost from "./FASTA/intrahost.jsx";
-import SiteLineChart from "./FASTA/site_line_chart.jsx";
-import SequenceBarChart from "./FASTA/sequence_bar_chart.jsx";
-import SiteStackedBarChart from "./FASTA/site_stacked_bar_chart.jsx";
-import ArtificialRecombination from "./FASTA/artificial_recombination.jsx";
-import ClickAndHover from "./FASTA/click_and_hover.jsx";
-*/
+import fastaParser, { fastaToText } from "../../src/helpers/fasta";
+import Alignment from "../../src/Alignment.jsx";
+import Button from "../../src/components/Button.jsx";
+import FileUploadButton from "../FileUploadButton.jsx";
+import Modal from "../Modal.jsx";
+import SVGAlignment from "../../src/SVGAlignment.jsx";
+import { nucleotide_color, nucleotide_difference } from "../../src/helpers/colors";
+
 
 class FASTAViewer extends Component {
   constructor(props) {
@@ -192,19 +180,4 @@ class FASTAViewer extends Component {
   }
 }
 
-export {
-  FASTAViewer,
-/*
-  AminoAcid,
-  Highlight,
-  StartAtSiteAndSequence,
-  Lowercase,
-  SVGAlignmentExample,
-  Intrahost,
-  SiteLineChart,
-  SequenceBarChart,
-  SiteStackedBarChart,
-  ArtificialRecombination,
-  ClickAndHover
-*/
-};
+export default FASTAViewer;

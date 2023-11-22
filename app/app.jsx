@@ -6,8 +6,9 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { BrowserRouter, Route, Routes, Link as RRLink } from "react-router-dom";
 import { createRoot } from 'react-dom/client';
 
-import { FASTAViewer } from './FASTA.jsx';
-import { FNAViewer } from './FNA.jsx';
+import FASTAViewer from './fasta/FASTAViewer.jsx';
+import FNAViewer from './fna/FNAViewer.jsx';
+import BUSTEDE from './hyphy/BUSTEDE.jsx';
 
 import './styles.scss';
 
@@ -111,7 +112,7 @@ function App() {
           <Route path="/fasta-viewer" element={<FASTAViewer />} />
           <Route path="/fna-viewer" element={<FNAViewer />} />
           <Route path="/base-alignment" element={React.createElement(Placeholder('Base Alignment'), null)} />
-          <Route path="/busted-e" element={React.createElement(Placeholder('BUSTED-E'), null)} />
+          <Route path="/busted-e" element={<BUSTEDE />} />
         </Routes>
       </div>
     </div>
@@ -126,7 +127,6 @@ function Main(props) {
   </React.StrictMode>);
 }
 
-//PreventDefaultPatch(document);
 const root_div = document.body.appendChild(document.createElement("div")),
   root = createRoot(root_div);
 root.render(<Main />);
