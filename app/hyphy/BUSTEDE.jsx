@@ -141,7 +141,8 @@ class BUSTEDE extends Component {
   }
   componentDidMount() {
     const search_params = new URLSearchParams(location.search),
-      url = search_params.get("hyphyURL") || "data/bglobin.nex.BUSTED.json.gz";
+      //url = search_params.get("hyphyURL") || "data/bglobin.nex.BUSTED.json.gz";
+      url = search_params.get("hyphyURL") || "data/Flu.fna.BUSTED.json.gz";
     fetch(url)
       .then(response => {
         if (!response.ok) {
@@ -159,11 +160,24 @@ class BUSTEDE extends Component {
         T.branch_length_accessor = (n)=>busted_e["branch attributes"][i][n.data.name]["Global MG94xREV"];
         return T;
       }),
-      subs = codonComposition(bustede, tree_objects);
-    console.log(subs);
-    debugger;
+      subs = codonComposition(bustede, tree_objects),
+      groups = _.groupBy(subs, sub => {
+        return sub.Key.split('|')[0]
+      }),
+      sequence_data = _.map(groups, (value, key) => {
+        return {
+          header: key,
+          seq: value.map((v, i) => {
+            return v.value.split('').map((c, ci) => {
+              return c == '.' ? groups.root[i].value[ci] : c;
+            }).join('');
+          }).join('')
+        }
+      });
+    sequence_data.number_of_sequences = sequence_data.length;
+    sequence_data.number_of_sites = sequence_data[0].seq.length;
     this.setState({
-      data: fastaParser(fasta),
+      data: sequence_data,
       show_differences: ""
     });
   }
