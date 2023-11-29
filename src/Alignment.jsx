@@ -28,7 +28,7 @@ class Alignment extends Component {
         x_pixel: this.x_pixel || 0,
         y_pixel: this.y_pixel || 0,
         bidirectional: [
-          "alignmentjs-alignment",
+          "alignmentjs-alignment-div",
           "alignmentjs-axis-div",
           "alignmentjs-labels-div"
         ]

@@ -11,13 +11,16 @@ class BaseAlignment extends Component {
   constructor(props) {
     super(props);
     this.canvas_id = props.id + "-alignment";
+    this.event_ref = React.createRef();
   }
   componentDidMount() {
-    document
-      .getElementById(this.canvas_id)
-      .addEventListener("alignmentjs_wheel_event", e => {
-        this.draw(e.detail.x_pixel, e.detail.y_pixel);
-      });
+    this.event_ref.current.addEventListener("wheel", e => {
+      e.preventDefault();
+      this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
+    });
+    this.event_ref.current.addEventListener("alignmentjs_wheel_event", e => {
+      this.draw(e.detail.x_pixel, e.detail.y_pixel);
+    });
     if (this.props.sequence_data) {
       this.draw(this.props.x_pixel || 0, this.props.y_pixel || 0);
     }
@@ -122,18 +125,14 @@ class BaseAlignment extends Component {
       y_sequence = this.props.sequence_data[y_sequence_index];
     this.props.onSiteHover(x_site, y_sequence);
   }
-  handleWheel(e) {
-    e.preventDefault();
-    this.props.scroll_broadcaster.handleWheel(e, this.props.sender);
-  }
   render() {
     const div_id = this.props.id + "-alignment-div";
     return (
       <div
         id={div_id}
         className="alignmentjs-container"
+        ref={this.event_ref}
         onClick={e => this.handleClick(e)}
-        onWheel={e => this.handleWheel(e)}
         onMouseMove={e => this.handleHover(e)}
       >
         <canvas
