@@ -3,7 +3,7 @@ import { text } from "d3-fetch";
 import { saveAs } from "file-saver";
 import { saveSvgAsPng as savePNG } from "save-svg-as-png";
 import pako from "pako";
-import { csvParse } from "d3";
+import { max, min, csvParse, scaleLinear, scaleLog, interpolateRdYlBu } from "d3";
 import _ from "lodash";
 import { phylotree } from "phylotree"
 
@@ -129,6 +129,30 @@ function codonComposition(bustede, tree_objects) {
   return results;
 }
 
+
+function get_error_sink_rate(results_json, tag) {
+  let rd = _.get (results_json, ["fits","Unconstrained model","Rate Distributions", tag, "0"]);
+  return rd;
+}
+
+function posteriorsPerBranchSite(results_json, rate_class, prior_odds) {
+  let results = [];
+  let offset = 0;
+  _.each (results_json["branch attributes"], (data, partition) => {
+      let partition_size = 0;
+      _.each (data, (per_branch, branch)=> {
+          if (per_branch ["Posterior prob omega class by site"]) {
+            _.each (per_branch ["Posterior prob omega class by site"][rate_class], (p,i)=> {
+                results.push ({'Key' : branch + "|" + (i + offset + 1), 'Posterior' : p, 'ER' : (p/(1-p))/prior_odds});
+            });     
+            partition_size = per_branch ["Posterior prob omega class by site"][rate_class].length;
+          }
+      });
+      offset += partition_size;
+  });
+  return results;
+}
+
 class BUSTEDE extends Component {
   constructor(props) {
     super(props);
@@ -164,6 +188,11 @@ class BUSTEDE extends Component {
       groups = _.groupBy(subs, sub => {
         return sub.Key.split('|')[0]
       }),
+      weight = get_error_sink_rate (bustede, "Test")["proportion"],
+      ppbs = posteriorsPerBranchSite (bustede, 0, weight / (1-weight)),
+      ppbs_groups = _.groupBy(ppbs, datum => {
+        return datum.Key.split('|')[0]
+      }),
       sequence_data = _.map(groups, (value, key) => {
         return {
           header: key,
@@ -171,7 +200,8 @@ class BUSTEDE extends Component {
             return v.value.split('').map((c, ci) => {
               return c == '.' ? groups.root[i].value[ci] : c;
             }).join('');
-          }).join('')
+          }).join(''),
+          er: _.map(ppbs_groups[key], 'ER')
         }
       });
     sequence_data.number_of_sequences = sequence_data.length;
@@ -188,11 +218,29 @@ class BUSTEDE extends Component {
     saveAs(blob, "sequences.fasta");
   }
   siteColor() {
-    if (!this.state.show_differences) return nucleotide_color;
-    const desired_record = this.state.data.filter(
-      datum => datum.header == this.state.show_differences
-    )[0];
-    return nucleotide_difference(desired_record);
+    const sequence_data = this.state.data,
+      ers = _.flatten(_.map(sequence_data, 'er')),
+      dataMin = min(ers),
+      dataMax = max(ers),
+      sequence_data_by_header = _.keyBy(sequence_data, 'header'),
+      logScale = scaleLog()
+        .domain([dataMin, 1, dataMax])
+        .range([0, 0.5, 1]),
+      colorScale = scaleLinear()
+        .domain([0, 0.5, 1])
+        .range(['#0000FF', '#EEEEEE', '#FF0000']);
+    //debugger;
+    return function(character, position, header) {
+      try {
+      const er = header == 'root' ?
+        1 :
+        sequence_data_by_header[header].er[Math.floor((position-1)/3)];
+      return colorScale(logScale(er));
+      }
+      catch {
+        debugger;
+      }
+    };
   }
   molecule() {
     if (!this.state.show_differences) return molecule => molecule;
